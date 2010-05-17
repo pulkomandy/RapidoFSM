@@ -37,8 +37,7 @@ LIBS += -LH:\Qt\msys\1.0\local\lib\ \
     -lwx_base-2.8
 
 # Input
-HEADERS += FSMTrackBonus.h \
-    IGraph.h \
+HEADERS += IGraph.h \
     wxEdit.h \
     wxEditGraphNode.h \
     wxGraphContainer.h \
@@ -59,7 +58,7 @@ SOURCES += minimal.cpp \
     wxScriptEditPanel.cpp \
     wxStackedControls.cpp \
     ZString.cpp \
-    ../../../../../../Qt/tinyxml/tinyxmlerror.cpp \
-    ../../../../../../Qt/tinyxml/tinyxml.cpp \
-    ../../../../../../Qt/tinyxml/tinystr.cpp \
-    ../../../../../../Qt/tinyxml/tinyxmlparser.cpp
+    tinyxml/tinyxmlerror.cpp \
+    tinyxml/tinyxml.cpp \
+    tinyxml/tinystr.cpp \
+    tinyxml/tinyxmlparser.cpp

@@ -760,6 +760,7 @@ void MyFrame::DoClearProject()
         mFileName = _("");
 
 }
+
 wxString GenerateCPP();
 
 void MyFrame::OnCompileAll(wxCommandEvent& event)
