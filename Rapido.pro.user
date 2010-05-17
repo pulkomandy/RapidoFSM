@@ -1,0 +1,296 @@
+<!DOCTYPE QtCreatorProject>
+<qtcreator>
+ <data>
+  <variable>RunConfiguration0-Arguments</variable>
+  <valuelist type="QVariantList"/>
+ </data>
+ <data>
+  <variable>RunConfiguration0-BaseEnvironmentBase</variable>
+  <value type="int">2</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-Executable</variable>
+  <value type="QString"></value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-RunConfiguration.name</variable>
+  <value type="QString">Exécutable personnalisé</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-UseTerminal</variable>
+  <value type="bool">false</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-UserEnvironmentChanges</variable>
+  <valuelist type="QVariantList"/>
+ </data>
+ <data>
+  <variable>RunConfiguration0-UserName</variable>
+  <value type="QString"></value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-UserSetName</variable>
+  <value type="bool">false</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-WorkingDirectory</variable>
+  <value type="QString">$BUILDDIR</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-type</variable>
+  <value type="QString">ProjectExplorer.CustomExecutableRunConfiguration</value>
+ </data>
+ <data>
+  <variable>activeRunConfiguration</variable>
+  <value type="int">0</value>
+ </data>
+ <data>
+  <variable>activebuildconfiguration</variable>
+  <value type="QString">Debug</value>
+ </data>
+ <data>
+  <variable>buildConfiguration-Debug</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
+   <value key="QtVersionId" type="int">0</value>
+   <value key="ToolChain" type="int">2</value>
+   <value key="addQDumper" type=""></value>
+   <value key="buildConfiguration" type="int">2</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildConfiguration-Release</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
+   <value key="QtVersionId" type="int">0</value>
+   <value key="ToolChain" type="int">2</value>
+   <value key="addQDumper" type=""></value>
+   <value key="buildConfiguration" type="int">0</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Debug-buildstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList">
+    <value type="QString">ALLUSERSPROFILE=H:\Documents and Settings\All Users</value>
+    <value type="QString">APPDATA=H:\Documents and Settings\PulkoMandy\Application Data</value>
+    <value type="QString">COMMONPROGRAMFILES=H:\Program Files\Fichiers communs</value>
+    <value type="QString">COMPUTERNAME=ATREYU</value>
+    <value type="QString">COMSPEC=H:\WINDOWS\system32\cmd.exe</value>
+    <value type="QString">FP_NO_HOST_CHECK=NO</value>
+    <value type="QString">FTP_PASSIVE=1</value>
+    <value type="QString">HOMEDRIVE=H:</value>
+    <value type="QString">HOMEPATH=\Documents and Settings\PulkoMandy</value>
+    <value type="QString">LOGONSERVER=\\ATREYU</value>
+    <value type="QString">NUMBER_OF_PROCESSORS=1</value>
+    <value type="QString">OS=Windows_NT</value>
+    <value type="QString">PATH=H:\Qt\2010.02.1\mingw\bin;H:\Qt\2010.02.1\qt\bin;H:\Program Files\MiKTeX 2.8\miktex\bin;H:\WINDOWS\system32;H:\WINDOWS;H:\WINDOWS\System32\Wbem;H:\Program Files\Fichiers communs\Lenovo;H:\Program Files\Microchip\MPLAB C30\bin;H:\Program Files\TortoiseSVN\bin;H:\Program Files\GnuWin32\bin;;H:\Program Files\WinMerge;H:\qt\strawberry\c\bin;H:\qt\strawberry\perl\site\bin;H:\qt\strawberry\perl\bin</value>
+    <value type="QString">PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH</value>
+    <value type="QString">PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString">PROCESSOR_IDENTIFIER=x86 Family 6 Model 14 Stepping 8, GenuineIntel</value>
+    <value type="QString">PROCESSOR_LEVEL=6</value>
+    <value type="QString">PROCESSOR_REVISION=0e08</value>
+    <value type="QString">PROGRAMFILES=H:\Program Files</value>
+    <value type="QString">QTDIR=H:/Qt/2010.02.1/qt</value>
+    <value type="QString">SESSIONNAME=Console</value>
+    <value type="QString">SYSTEMDRIVE=H:</value>
+    <value type="QString">SYSTEMROOT=H:\WINDOWS</value>
+    <value type="QString">TEMP=H:\DOCUME~1\PULKOM~1\LOCALS~1\Temp</value>
+    <value type="QString">TERM=dumb</value>
+    <value type="QString">TMP=H:\DOCUME~1\PULKOM~1\LOCALS~1\Temp</value>
+    <value type="QString">TPCCOMMON=H:\PROGRA~1\THINKV~1\PrdCtr</value>
+    <value type="QString">TSMPATH=H:\Program Files\ThinkPad\UltraNav Utility</value>
+    <value type="QString">TVT=H:\Program Files\Lenovo</value>
+    <value type="QString">USERDOMAIN=ATREYU</value>
+    <value type="QString">USERNAME=PulkoMandy</value>
+    <value type="QString">USERPROFILE=H:\Documents and Settings\PulkoMandy</value>
+    <value type="QString">WINDIR=H:\WINDOWS</value>
+   </valuelist>
+   <valuelist key="abstractProcess.arguments" type="QVariantList">
+    <value type="QString">H:/Documents and Settings/PulkoMandy/Mes documents/therush/sources/Rapido/Rapido.pro</value>
+    <value type="QString">-r</value>
+    <value type="QString">-spec</value>
+    <value type="QString">h:\Qt\2010.02.1\qt\mkspecs\win32-g++</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString">h:/qt/2010.02.1/qt/bin/qmake.exe</value>
+   <value key="abstractProcess.enabled" type="bool">false</value>
+   <value key="abstractProcess.workingDirectory" type="QString">H:/Documents and Settings/PulkoMandy/Mes documents/therush/sources/Rapido</value>
+   <valuelist key="qmakeArgs" type="QVariantList">
+    <value type="QString">-spec</value>
+    <value type="QString">h:\Qt\2010.02.1\qt\mkspecs\win32-g++</value>
+   </valuelist>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Debug-buildstep1</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList">
+    <value type="QString">ALLUSERSPROFILE=H:\Documents and Settings\All Users</value>
+    <value type="QString">APPDATA=H:\Documents and Settings\PulkoMandy\Application Data</value>
+    <value type="QString">COMMONPROGRAMFILES=H:\Program Files\Fichiers communs</value>
+    <value type="QString">COMPUTERNAME=ATREYU</value>
+    <value type="QString">COMSPEC=H:\WINDOWS\system32\cmd.exe</value>
+    <value type="QString">FP_NO_HOST_CHECK=NO</value>
+    <value type="QString">FTP_PASSIVE=1</value>
+    <value type="QString">HOMEDRIVE=H:</value>
+    <value type="QString">HOMEPATH=\Documents and Settings\PulkoMandy</value>
+    <value type="QString">LOGONSERVER=\\ATREYU</value>
+    <value type="QString">NUMBER_OF_PROCESSORS=1</value>
+    <value type="QString">OS=Windows_NT</value>
+    <value type="QString">PATH=H:\Qt\2010.02.1\mingw\bin;H:\Qt\2010.02.1\qt\bin;H:\Program Files\MiKTeX 2.8\miktex\bin;H:\WINDOWS\system32;H:\WINDOWS;H:\WINDOWS\System32\Wbem;H:\Program Files\Fichiers communs\Lenovo;H:\Program Files\Microchip\MPLAB C30\bin;H:\Program Files\TortoiseSVN\bin;H:\Program Files\GnuWin32\bin;;H:\Program Files\WinMerge;H:\qt\strawberry\c\bin;H:\qt\strawberry\perl\site\bin;H:\qt\strawberry\perl\bin</value>
+    <value type="QString">PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH</value>
+    <value type="QString">PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString">PROCESSOR_IDENTIFIER=x86 Family 6 Model 14 Stepping 8, GenuineIntel</value>
+    <value type="QString">PROCESSOR_LEVEL=6</value>
+    <value type="QString">PROCESSOR_REVISION=0e08</value>
+    <value type="QString">PROGRAMFILES=H:\Program Files</value>
+    <value type="QString">QTDIR=H:/Qt/2010.02.1/qt</value>
+    <value type="QString">SESSIONNAME=Console</value>
+    <value type="QString">SYSTEMDRIVE=H:</value>
+    <value type="QString">SYSTEMROOT=H:\WINDOWS</value>
+    <value type="QString">TEMP=H:\DOCUME~1\PULKOM~1\LOCALS~1\Temp</value>
+    <value type="QString">TERM=dumb</value>
+    <value type="QString">TMP=H:\DOCUME~1\PULKOM~1\LOCALS~1\Temp</value>
+    <value type="QString">TPCCOMMON=H:\PROGRA~1\THINKV~1\PrdCtr</value>
+    <value type="QString">TSMPATH=H:\Program Files\ThinkPad\UltraNav Utility</value>
+    <value type="QString">TVT=H:\Program Files\Lenovo</value>
+    <value type="QString">USERDOMAIN=ATREYU</value>
+    <value type="QString">USERNAME=PulkoMandy</value>
+    <value type="QString">USERPROFILE=H:\Documents and Settings\PulkoMandy</value>
+    <value type="QString">WINDIR=H:\WINDOWS</value>
+   </valuelist>
+   <value key="abstractProcess.IgnoreReturnValue" type="bool">false</value>
+   <valuelist key="abstractProcess.arguments" type="QVariantList">
+    <value type="QString">-w</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString">H:/Qt/2010.02.1/mingw/bin/mingw32-make.exe</value>
+   <value key="abstractProcess.enabled" type="bool">true</value>
+   <value key="abstractProcess.workingDirectory" type="QString">H:/Documents and Settings/PulkoMandy/Mes documents/therush/sources/Rapido</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Debug-cleanstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList">
+    <value type="QString">ALLUSERSPROFILE=H:\Documents and Settings\All Users</value>
+    <value type="QString">APPDATA=H:\Documents and Settings\PulkoMandy\Application Data</value>
+    <value type="QString">COMMONPROGRAMFILES=H:\Program Files\Fichiers communs</value>
+    <value type="QString">COMPUTERNAME=ATREYU</value>
+    <value type="QString">COMSPEC=H:\WINDOWS\system32\cmd.exe</value>
+    <value type="QString">FP_NO_HOST_CHECK=NO</value>
+    <value type="QString">FTP_PASSIVE=1</value>
+    <value type="QString">HOMEDRIVE=H:</value>
+    <value type="QString">HOMEPATH=\Documents and Settings\PulkoMandy</value>
+    <value type="QString">LOGONSERVER=\\ATREYU</value>
+    <value type="QString">NUMBER_OF_PROCESSORS=1</value>
+    <value type="QString">OS=Windows_NT</value>
+    <value type="QString">PATH=H:\Qt\2010.02.1\mingw\bin;H:\Qt\2010.02.1\qt\bin;H:\Program Files\MiKTeX 2.8\miktex\bin;H:\WINDOWS\system32;H:\WINDOWS;H:\WINDOWS\System32\Wbem;H:\Program Files\Fichiers communs\Lenovo;H:\Program Files\Microchip\MPLAB C30\bin;H:\Program Files\TortoiseSVN\bin;H:\Program Files\GnuWin32\bin;;H:\Program Files\WinMerge;H:\qt\strawberry\c\bin;H:\qt\strawberry\perl\site\bin;H:\qt\strawberry\perl\bin</value>
+    <value type="QString">PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH</value>
+    <value type="QString">PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString">PROCESSOR_IDENTIFIER=x86 Family 6 Model 14 Stepping 8, GenuineIntel</value>
+    <value type="QString">PROCESSOR_LEVEL=6</value>
+    <value type="QString">PROCESSOR_REVISION=0e08</value>
+    <value type="QString">PROGRAMFILES=H:\Program Files</value>
+    <value type="QString">QTDIR=H:/Qt/2010.02.1/qt</value>
+    <value type="QString">SESSIONNAME=Console</value>
+    <value type="QString">SYSTEMDRIVE=H:</value>
+    <value type="QString">SYSTEMROOT=H:\WINDOWS</value>
+    <value type="QString">TEMP=H:\DOCUME~1\PULKOM~1\LOCALS~1\Temp</value>
+    <value type="QString">TERM=dumb</value>
+    <value type="QString">TMP=H:\DOCUME~1\PULKOM~1\LOCALS~1\Temp</value>
+    <value type="QString">TPCCOMMON=H:\PROGRA~1\THINKV~1\PrdCtr</value>
+    <value type="QString">TSMPATH=H:\Program Files\ThinkPad\UltraNav Utility</value>
+    <value type="QString">TVT=H:\Program Files\Lenovo</value>
+    <value type="QString">USERDOMAIN=ATREYU</value>
+    <value type="QString">USERNAME=PulkoMandy</value>
+    <value type="QString">USERPROFILE=H:\Documents and Settings\PulkoMandy</value>
+    <value type="QString">WINDIR=H:\WINDOWS</value>
+   </valuelist>
+   <value key="abstractProcess.IgnoreReturnValue" type="bool">true</value>
+   <valuelist key="abstractProcess.arguments" type="QVariantList">
+    <value type="QString">clean</value>
+    <value type="QString">-w</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString">H:/Qt/2010.02.1/mingw/bin/mingw32-make.exe</value>
+   <value key="abstractProcess.enabled" type="bool">true</value>
+   <value key="abstractProcess.workingDirectory" type="QString">H:/Documents and Settings/PulkoMandy/Mes documents/therush/sources/Rapido</value>
+   <value key="cleanConfig" type="bool">true</value>
+   <valuelist key="makeargs" type="QVariantList">
+    <value type="QString">clean</value>
+   </valuelist>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Release-buildstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
+   <valuelist key="qmakeArgs" type="QVariantList">
+    <value type="QString">-spec</value>
+    <value type="QString">h:\Qt\2010.02.1\qt\mkspecs\win32-g++</value>
+   </valuelist>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Release-buildstep1</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Release-cleanstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfigurations</variable>
+  <valuelist type="QVariantList">
+   <value type="QString">Debug</value>
+   <value type="QString">Release</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>buildstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
+   <value key="mkspec" type="QString"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildstep1</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildsteps</variable>
+  <valuelist type="QVariantList">
+   <value type="QString">trolltech.qt4projectmanager.qmake</value>
+   <value type="QString">trolltech.qt4projectmanager.make</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>cleanstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
+   <value key="clean" type="bool">true</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>cleansteps</variable>
+  <valuelist type="QVariantList">
+   <value type="QString">trolltech.qt4projectmanager.make</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>defaultFileEncoding</variable>
+  <value type="QByteArray">System</value>
+ </data>
+ <data>
+  <variable>project</variable>
+  <valuemap type="QVariantMap"/>
+ </data>
+</qtcreator>

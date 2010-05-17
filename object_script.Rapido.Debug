@@ -1,0 +1,16 @@
+INPUT(
+./debug\minimal.o
+./debug\wxEdit.o
+./debug\wxEditGraphNode.o
+./debug\wxGraphContainer.o
+./debug\wxGraphNode.o
+./debug\wxGraphNodeMessage.o
+./debug\wxGraphNodeState.o
+./debug\wxScriptEditPanel.o
+./debug\wxStackedControls.o
+./debug\ZString.o
+./debug\tinyxmlerror.o
+./debug\tinyxml.o
+./debug\tinystr.o
+./debug\tinyxmlparser.o
+);
