@@ -768,10 +768,10 @@ wxString wxGraphContainer::BuildGraphString()
         for (unsigned int i=0;i<mConnections.size();i++)
 	{
 		const NodeConnection& nc = mConnections[i];
-                res.Printf(_("<Connection nodesrc=\"%d\" nodedst=\"%d\" nodesrcanchor=\"%d\" nodedstanchor=\"%d\" sidesrc=\"%d\" sidedst=\"%d\" />\n"),
-        nc.NodeSrc, nc.NodeDst,
-		nc.NodeSrcAnchor, nc.NodeDstAnchor,
-        nc.SideSrc, nc.SideDst);
+                wxString res2;
+                res2.Printf(_("<Connection nodesrc=\"%d\" nodedst=\"%d\" nodesrcanchor=\"%d\" nodedstanchor=\"%d\" sidesrc=\"%d\" sidedst=\"%d\" />\n"),
+                    nc.NodeSrc, nc.NodeDst, nc.NodeSrcAnchor, nc.NodeDstAnchor, nc.SideSrc, nc.SideDst);
+                res += res2;
 	}
 
 	// end

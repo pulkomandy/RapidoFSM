@@ -602,7 +602,6 @@ void MyFrame::OnFileSaveProject(wxCommandEvent& event)
 	}
 	else
 	{
-
 		wxString mString;
 		for (unsigned int i=0;i<myNotebook->GetPageCount();i++)
 		{

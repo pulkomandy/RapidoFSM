@@ -424,11 +424,8 @@ wxString GenerateCPP()
 		if (strTemplate[cnt] == '\n')
 			aCount++;
 	}
-        wxString GenInfos=_("Generation of ");
-	GenInfos += mScrollV->mOutputFileName.c_str();//"res.h ";
-        GenInfos += _(" OK!\n");
-        GenInfos.Append(aCount);
-        GenInfos += _(" Lines generated.\n");
+        wxString GenInfos;
+        GenInfos.Printf("Generation of %s OK!\n%d lines generated.\n", mScrollV->mOutputFileName.c_str(), aCount);
 	return GenInfos;
 	
 
