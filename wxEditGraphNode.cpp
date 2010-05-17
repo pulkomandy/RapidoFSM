@@ -33,12 +33,12 @@ extern wxGraphContainer *mScrollV;
 void SetScriptToEdit(const wxChar *szName, wxString* pCode);
 void wxZEditNode::BuildInterface(wxGraphNode *pNode)
 {
-	mEditingNode = pNode;
+    mEditingNode = pNode;
 
 
-	BeginPanel();
-	if (mEditingNode)
-	{
+    BeginPanel();
+    if (mEditingNode)
+    {
 		mNodeName = mEditingNode->GetFunctionName();
                 AddFolder(_("Node"));
                 AddTextEdit(_("Name"), &mNodeName, 200);

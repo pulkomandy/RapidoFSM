@@ -51,44 +51,16 @@ OK Affichage du nom de fichier courant dans la barre système + ajouter une * qua
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-/*
-wxGraphNode
-wxGraphContainer
-ZGraphNode
-ZGRaphContainer
-wxGraphNode
-wxGraphContainer
-
-
-*/
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
+#include <iostream>
+#include <wx/ffile.h>
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
-#endif
-
-// ----------------------------------------------------------------------------
-// resources
-// ----------------------------------------------------------------------------
-
-// the application icon (under Windows and OS/2 it is in resources and even
-// though we could still include the XPM here it would be unused)
-#if !defined(__WXMSW__) && !defined(__WXPM__)
-#include "../sample.xpm"
 #endif
 
 #include "wxGraphContainer.h"
@@ -391,19 +363,13 @@ MyFrame::MyFrame(const wxString& title)
 	// toolbar
 
 	wxToolBar* mToolBarEdit = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER);
-    mToolBarEdit->SetToolBitmapSize(wxSize(22,22));
+        mToolBarEdit->SetToolBitmapSize(wxSize(22,22));
 
-#ifdef _DEBUG
-    wxBitmap tb_newMessage("TBNewMessage.bmp", wxBITMAP_TYPE_BMP);
-	wxBitmap tb_newState("TBNewState.bmp", wxBITMAP_TYPE_BMP);
-	wxBitmap tb_generate("TBGenerate.bmp", wxBITMAP_TYPE_BMP);
-	wxBitmap tb_compileAll("TBCompileAll.bmp", wxBITMAP_TYPE_BMP);
-#else
-    wxBitmap tb_newMessage(_("ZenithRes/TBNewMessage.bmp"), wxBITMAP_TYPE_BMP);
-        wxBitmap tb_newState(_("ZenithRes/TBNewState.bmp"), wxBITMAP_TYPE_BMP);
-        wxBitmap tb_generate(_("ZenithRes/TBGenerate.bmp"), wxBITMAP_TYPE_BMP);
-        wxBitmap tb_compileAll(_("ZenithRes/TBCompileAll.bmp"), wxBITMAP_TYPE_BMP);
-#endif
+        wxBitmap tb_newMessage("TBNewMessage.bmp", wxBITMAP_TYPE_BMP);
+        wxBitmap tb_newState("TBNewState.bmp", wxBITMAP_TYPE_BMP);
+        wxBitmap tb_generate("TBGenerate.bmp", wxBITMAP_TYPE_BMP);
+        wxBitmap tb_compileAll("TBCompileAll.bmp", wxBITMAP_TYPE_BMP);
+
     mToolBarEdit->AddTool(wxNode_NewMessage, wxT("New Message"), tb_newMessage);
 	mToolBarEdit->AddTool(wxNode_NewState, wxT("New State"), tb_newState);
 	mToolBarEdit->AddSeparator();
@@ -560,33 +526,31 @@ void MyFrame::OnFileOpenFSM(wxCommandEvent& event)
 wxString LoadStringFromFile(const char *pszFileName)
 {
 	wxString res;
-	FILE *fp = fopen(pszFileName,"rt");
-	if (fp)
+        wxFFile fp(pszFileName,"rt");
+        if (fp.IsOpened())
 	{
-		int len = _filelength(fileno(fp));
-		char *tmps = new char [len+1];
-		tmps[len] = 0;
-		fread(tmps, len, 1, fp);
-		fclose(fp);
-                res.Append(wxString::FromUTF8(tmps));
-		delete [] tmps;
-	}
+            fp.ReadAll(&res);
+        } else {
+            wxMessageDialog m(NULL, "Unable to open file!");
+            m.ShowModal();
+        }
 	return res;
 }
+
+
 void MyFrame::OnFileOpenProject(wxCommandEvent& event)
 {
-	if (!CloseProject())
-		return;
+    if (!CloseProject()) {
+        return;
+    }
 
+    
 	bool mbForOpening = true;
         wxFileDialog fDialog(GetParent(), _("Choose a file"), _(""), _(""), _("*.xml"),
-		mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
+            mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
 
 	if (fDialog.ShowModal() == wxID_OK)
 	{
-		
-		
-
 		DoClearProject();
 		mFileName = fDialog.GetPath();
                 wxString res = LoadStringFromFile(mFileName.mb_str());
@@ -594,12 +558,16 @@ void MyFrame::OnFileOpenProject(wxCommandEvent& event)
 		TiXmlDocument pXmlDoc;
                 if (!pXmlDoc.Parse(res.mb_str()))
 		{
-			return ;
+                    wxMessageDialog m(this, res );
+                    m.ShowModal();
+                    return ;
 		}
 			
-		TiXmlElement* pRootElem = pXmlDoc.RootElement();//"GraphContainer");
+                TiXmlElement* pRootElem = pXmlDoc.RootElement();
+                if (pRootElem == NULL) std::cout << "Not an XML file ?" << std::endl;
 		while(pRootElem)
 		{
+                    std::cout << "adding FSMs..." << std::endl;
 			DoAddNewTab();
 			mScrollV->ParseGraphString(pRootElem);
 			myNotebook->SetPageText(myNotebook->GetSelection(), mScrollV->mGraphName);

@@ -14,7 +14,7 @@
 BEGIN_EVENT_TABLE(wxGraphNode, wxPanel)
 EVT_PAINT(wxGraphNode::OnPaint)
 EVT_SIZE(wxGraphNode::OnSize)
-EVT_LEFT_DOWN(wxGraphNode::OnLButtonDown) 	    //Process a wxEVT_LEFT_DOWN event. The handler of this event should normally call event.Skip() to allow the default processing to take place as otherwise the window under mouse wouldn't get the focus.
+EVT_LEFT_DOWN(wxGraphNode::OnLButtonDown) 	//Process a wxEVT_LEFT_DOWN event. The handler of this event should normally call event.Skip() to allow the default processing to take place as otherwise the window under mouse wouldn't get the focus.
 EVT_LEFT_UP(wxGraphNode::OnLButtonUp) 	        //Process a wxEVT_LEFT_UP event.
 EVT_MOTION(wxGraphNode::OnMouseMotion) 	        //Process a wxEVT_MOTION event.
 EVT_ERASE_BACKGROUND(wxGraphNode::OnEraseBack) 	        
@@ -23,7 +23,7 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 wxGraphNode::wxGraphNode(wxGraphContainer * parent)
-                     : wxPanel((wxGraphContainer*)(parent), -1, wxDefaultPosition, wxDefaultSize, wxNO_BORDER) //,wxGraphNode(parent)
+    : wxPanel((wxGraphContainer*)(parent), -1, wxDefaultPosition, wxDefaultSize, wxNO_BORDER)
 {
     mHeader = _("Header");
     mbHasTumbnail = false;
