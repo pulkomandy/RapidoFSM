@@ -3,7 +3,7 @@
 # #####################################################################
 TEMPLATE = app
 TARGET = Rapido!
-DESTDIR = .
+DESTDIR = ./dist
 DEPENDPATH += .
 INCLUDEPATH += .
 CONFIG -= debug_and_release

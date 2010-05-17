@@ -2,7 +2,9 @@
 <qtcreator>
  <data>
   <variable>RunConfiguration0-Arguments</variable>
-  <valuelist type="QVariantList"/>
+  <valuelist type="QVariantList">
+   <value type="QString">--verbose</value>
+  </valuelist>
  </data>
  <data>
   <variable>RunConfiguration0-BaseEnvironmentBase</variable>
@@ -10,7 +12,7 @@
  </data>
  <data>
   <variable>RunConfiguration0-Executable</variable>
-  <value type="QString">H:\Documents and Settings\PulkoMandy\Mes documents\Projects\Rapido\Rapido!.exe</value>
+  <value type="QString">H:\Documents and Settings\PulkoMandy\Mes documents\Projects\Rapido\dist\Rapido!.exe</value>
  </data>
  <data>
   <variable>RunConfiguration0-RunConfiguration.name</variable>
