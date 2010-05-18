@@ -523,7 +523,7 @@ void MyFrame::OnFileOpenFSM(wxCommandEvent& event)
 	
 }
 
-wxString LoadStringFromFile(const char *pszFileName)
+wxString LoadStringFromFile(const wxChar *pszFileName)
 {
 	wxString res;
         wxFFile fp(pszFileName,"rt");
@@ -553,7 +553,7 @@ void MyFrame::OnFileOpenProject(wxCommandEvent& event)
 	{
 		DoClearProject();
 		mFileName = fDialog.GetPath();
-                wxString res = LoadStringFromFile(mFileName.mb_str());
+        wxString res = LoadStringFromFile(mFileName);
 		
 		TiXmlDocument pXmlDoc;
                 if (!pXmlDoc.Parse(res.mb_str()))
