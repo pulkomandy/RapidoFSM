@@ -11,6 +11,7 @@
 #include <vector>
 #include <wx/aui/aui.h>
 #include <wx/aui/dockart.h>
+#include <wx/ffile.h>
 
 #include "wxEdit.h"
 
@@ -316,21 +317,16 @@ wxString GenerateCPP()
         wxString enumStates = GenerateEnum(mStateList, _(""));
 
 	wxString strTemplate;
-	FILE *fp = fopen("CPPTemplate.template","rb");
-	if (fp)
-	{
-		int len = _filelength(fileno(fp));
-                wxChar *tmps = new wxChar [len+1];
-		
-		fread(tmps, len, 1, fp);
-		tmps[len] = 0;
-		fclose(fp);
 
-		strTemplate = tmps;
-		delete [] tmps;
+	
+    wxFFile fp(_("CPPTemplate.template"),_("rb"));
+	if (fp.IsOpened())
+	{
+		fp.ReadAll(&strTemplate);
 	}
 	else 
-                return _("CPPTemplate.template NOT FOUND!!!");
+        return _("CPPTemplate.template NOT FOUND!!!");
+
 
 	std::map<wxString, wxString> mTokens;
 
@@ -381,27 +377,9 @@ wxString GenerateCPP()
         mTokens[_("%%MEMBERSINIT%%")] = *mScrollV->GetMembersInit();
         mTokens[_("%%MEMBERSDECLARE%%")] = *mScrollV->GetMemberVariables();
 
-	//wxString *GetMemberVariables() { return mMemberVariables; }
+        mTokens[_("%%DATE%%")] = wxDateTime::Today().FormatDate();
+        mTokens[_("%%TIME%%")] = wxDateTime::Today().FormatTime();
 
-	SYSTEMTIME systime;
-	GetSystemTime(&systime);
-
-	int size = ::GetDateFormat(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &systime, NULL, NULL, 0);
-        wxChar *tmpdate = new wxChar [size+1];
-	tmpdate[size] = 0;
-	::GetDateFormat(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &systime, NULL, tmpdate, size);
-
-
-	size = ::GetTimeFormat(LOCALE_USER_DEFAULT, TIME_FORCE24HOURFORMAT, &systime, NULL, NULL, 0);
-        wxChar *tmptime = new wxChar [size+1];
-	tmptime[size] = 0;
-	::GetTimeFormat(LOCALE_USER_DEFAULT, TIME_FORCE24HOURFORMAT, &systime, NULL, tmptime, size);
-
-        mTokens[_("%%DATE%%")] = tmpdate;
-        mTokens[_("%%TIME%%")] = tmptime;
-
-	delete [] tmpdate;
-	delete [] tmptime;
 	// replacing
 	std::map<wxString, wxString>::iterator iter = mTokens.begin();
 
@@ -409,11 +387,11 @@ wxString GenerateCPP()
 		strTemplate.Replace((*iter).first, (*iter).second);
 
 	// write down
-        fp = fopen(mScrollV->mOutputFileName.mb_str(),"wb");
-	if (fp)
+    FILE* fp2 = fopen(mScrollV->mOutputFileName.mb_str(),"wb");
+	if (fp2)
 	{
-		fwrite(strTemplate.c_str(), strTemplate.Len(), 1, fp);
-		fclose(fp);
+		fwrite(strTemplate.c_str(), strTemplate.Len(), 1, fp2);
+		fclose(fp2);
 	}
 
 	// Count "\n"
@@ -424,7 +402,7 @@ wxString GenerateCPP()
 			aCount++;
 	}
         wxString GenInfos;
-        GenInfos.Printf("Generation of %s OK!\n%d lines generated.\n", mScrollV->mOutputFileName.c_str(), aCount);
+        GenInfos.Printf(_("Generation of %s OK!\n%d lines generated.\n"), mScrollV->mOutputFileName.c_str(), aCount);
 	return GenInfos;
 	
 

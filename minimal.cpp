@@ -269,8 +269,6 @@ MyFrame::MyFrame(const wxString& title)
 {
 	GMYframe = this;
 	mbModified = false;
-	// set the frame icon
-	SetIcon(wxICON(sample));
 
 	m_mgr.SetManagedWindow(this);
 
@@ -526,7 +524,7 @@ void MyFrame::OnFileOpenFSM(wxCommandEvent& event)
 wxString LoadStringFromFile(const wxChar *pszFileName)
 {
 	wxString res;
-        wxFFile fp(pszFileName,"rt");
+        wxFFile fp(pszFileName,_("rt"));
         if (fp.IsOpened())
 	{
             fp.ReadAll(&res);
