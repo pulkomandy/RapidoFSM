@@ -367,7 +367,7 @@ MyFrame::MyFrame(const wxString& title)
 
         wxBitmap tb_newMessage(_("TBNewMessage.bmp"), wxBITMAP_TYPE_BMP);
         wxBitmap tb_newState(_("TBNewState.bmp"), wxBITMAP_TYPE_BMP);
-        wxBitmap tb_generate_(("TBGenerate.bmp"), wxBITMAP_TYPE_BMP);
+        wxBitmap tb_generate(_("TBGenerate.bmp"), wxBITMAP_TYPE_BMP);
         wxBitmap tb_compileAll(_("TBCompileAll.bmp"), wxBITMAP_TYPE_BMP);
 
     mToolBarEdit->AddTool(wxNode_NewMessage, wxT("New Message"), tb_newMessage);

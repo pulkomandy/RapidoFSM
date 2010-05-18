@@ -8,7 +8,9 @@ include_directories($(PROJECT_SOURCE_DIR)/tinyxml)
 #add_definitions(${wxWidgets_DEFINITIONS})
  
 if(WIN32)
-	ADD_DEFINITIONS(-fno-exceptions)
+	ADD_DEFINITIONS(-fno-exceptions -fno-rtti)
+	SET(CMAKE_EXE_LINKER_FLAGS -fno-exceptions)
+	SET(CMAKE_EXE_LINKER_FLAGS -fno-rtti)
 endif(WIN32)
 
 # For convenience we define the sources as a variable. You can add 
