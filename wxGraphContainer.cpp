@@ -6,6 +6,7 @@
 // Description : 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <wx/ffile.h>
 #include "wxGraphContainer.h"
 #include <map>
 #include "wxGraphNodeMessage.h"
@@ -951,21 +952,12 @@ void wxGraphContainer::ReadString(const wxString pszFileName)
 {
 	wxString res;
 
-		
-        FILE *fp = fopen(pszFileName.mb_str(),"rt");
-	if (fp)
-	{
-		int len = _filelength(fileno(fp));
-                wxChar *tmps = new wxChar [len+1];
-		tmps[len] = 0;
-		fread(tmps, len, 1, fp);
-		fclose(fp);
-		res += tmps;
-		delete [] tmps;
-	}
+    wxFFile fp(pszFileName,_("rt"));
+    if (fp.IsOpened())
+        fp.ReadAll(&res);
 
 	TiXmlDocument pXmlDoc;
-        if (!pXmlDoc.Parse(res.mb_str()))
+    if (!pXmlDoc.Parse(res.mb_str()))
 	{
         return ;
 	}
