@@ -80,9 +80,7 @@ public:
 	}
 
 	virtual wxString BuildGraphString();
-#ifdef WIN32
     virtual void AddThumbnail(unsigned int sizeX, unsigned int sizeY);
-#endif
 
     wxPoint GetPlugPointByName(const wxString &name);
     wxPoint GetPlugPointIndex(unsigned int side, unsigned int index);
