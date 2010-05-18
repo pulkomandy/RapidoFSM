@@ -261,7 +261,7 @@ void wxZEdit::EditClass(SerializableField *pFields, const char *className, void 
 
 void wxZEdit::UpdateControlFromValue(unsigned int aControlID)
 {
-    tlist<wxZEditStackedControl*>::iterator iter = mStackControls.begin();
+	std::list<wxZEditStackedControl*>::iterator iter = mStackControls.begin();
     for (;iter != mStackControls.end(); ++iter)
     {
         if ( (*iter)->GetID() == aControlID)

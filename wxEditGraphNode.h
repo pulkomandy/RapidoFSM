@@ -2,7 +2,6 @@
 #define WXEDITGRAPHNODE_H__
 
 #include "wxEdit.h"
-#include "ZString.h"
 class wxGraphNode;
 
 class wxZEditNode : public wxZEdit, public wxZEditHandler

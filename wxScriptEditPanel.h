@@ -24,7 +24,6 @@
 #include <wx/laywin.h>
 #include <wx/foldbar/foldpanelbar.h>
 #include "wxStackedControls.h"
-#include "ZString.h"
 
 #define ZEEditClass(x) EditClass(x->mInfosSerializableFields, x->mInfosSerializableName, x)
 

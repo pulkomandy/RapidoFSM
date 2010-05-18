@@ -7,6 +7,10 @@ include( ${wxWidgets_USE_FILE} )
 include_directories($(PROJECT_SOURCE_DIR)/tinyxml)
 #add_definitions(${wxWidgets_DEFINITIONS})
  
+if(WIN32)
+	ADD_DEFINITIONS(-fno-exceptions)
+endif(WIN32)
+
 # For convenience we define the sources as a variable. You can add 
 # header files and cpp/c files and CMake will sort them out
 set(SRCS minimal.cpp wxEdit.cpp wxEditGraphNode.cpp wxGraphContainer.cpp wxGraphNode.cpp wxGraphNodeMessage.cpp wxGraphNodeState.cpp wxScriptEditPanel.cpp wxStackedControls.cpp tinyxml/tinyxml.cpp tinyxml/tinystr.cpp tinyxml/tinystr.h tinyxml/tinyxml.h tinyxml/tinyxmlerror.cpp tinyxml/tinyxmlparser.cpp)

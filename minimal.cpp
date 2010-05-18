@@ -365,10 +365,10 @@ MyFrame::MyFrame(const wxString& title)
 	wxToolBar* mToolBarEdit = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER);
         mToolBarEdit->SetToolBitmapSize(wxSize(22,22));
 
-        wxBitmap tb_newMessage("TBNewMessage.bmp", wxBITMAP_TYPE_BMP);
-        wxBitmap tb_newState("TBNewState.bmp", wxBITMAP_TYPE_BMP);
-        wxBitmap tb_generate("TBGenerate.bmp", wxBITMAP_TYPE_BMP);
-        wxBitmap tb_compileAll("TBCompileAll.bmp", wxBITMAP_TYPE_BMP);
+        wxBitmap tb_newMessage(_("TBNewMessage.bmp"), wxBITMAP_TYPE_BMP);
+        wxBitmap tb_newState(_("TBNewState.bmp"), wxBITMAP_TYPE_BMP);
+        wxBitmap tb_generate_(("TBGenerate.bmp"), wxBITMAP_TYPE_BMP);
+        wxBitmap tb_compileAll(_("TBCompileAll.bmp"), wxBITMAP_TYPE_BMP);
 
     mToolBarEdit->AddTool(wxNode_NewMessage, wxT("New Message"), tb_newMessage);
 	mToolBarEdit->AddTool(wxNode_NewState, wxT("New State"), tb_newState);
@@ -531,7 +531,7 @@ wxString LoadStringFromFile(const char *pszFileName)
 	{
             fp.ReadAll(&res);
         } else {
-            wxMessageDialog m(NULL, "Unable to open file!");
+            wxMessageDialog m(NULL, _("Unable to open file!"));
             m.ShowModal();
         }
 	return res;

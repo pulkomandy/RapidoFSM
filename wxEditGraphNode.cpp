@@ -13,7 +13,6 @@
 #include <wx/aui/dockart.h>
 
 #include "wxEdit.h"
-#include "ZString.h"
 
 #include "wxEditGraphNode.h"
 #include "wxGraphNode.h"

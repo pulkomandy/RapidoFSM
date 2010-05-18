@@ -21,10 +21,11 @@
 #ifndef WXZEDIT_H__
 #define WXZEDIT_H__
 
+#include <list>
+
 #include <wx/laywin.h>
 #include <wx/foldbar/foldpanelbar.h>
 #include "wxStackedControls.h"
-#include "ZString.h"
 
 #define ZEEditClass(x) EditClass(x->mInfosSerializableFields, x->mInfosSerializableName, x)
 
@@ -255,7 +256,7 @@ private:
     wxFoldPanelBar *m_pnl;
     wxZEditHandler *mHandler;
 
-    tlist<wxZEditStackedControl* >mStackControls;
+	std::list<wxZEditStackedControl* >mStackControls;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
