@@ -74,7 +74,7 @@ wxGraphContainer::wxGraphContainer(wxWindow* parent) :
 	wxGraphNode * nGraphNode = AddNode();
     nGraphNode->SetFunctionName("DiffuseMaterial");
     // add plug: a ajouter en param: le type (composante, 3 composante, 4 composantes, plusieurs sorties possibles)
-    // pour les liens, on stocke: le N∞ de node source/dest (index dans la liste), le cotÈ (2 bits), le n∞ d'entree
+    // pour les liens, on stocke: le N¬∞ de node source/dest (index dans la liste), le cot√© (2 bits), le n¬∞ d'entree
     // self linking impossible
     nGraphNode->AddRightPlug("Diffuse",1);
     nGraphNode->AddRightPlug("SelfIllum",1);
@@ -126,26 +126,26 @@ wxGraphContainer::wxGraphContainer(wxWindow* parent) :
     nGraphNode3->SetFunctionName("GameSet_t");
     nGraphNode3->SetPosition(wxPoint(40,40));
 	nGraphNode3->SetCode("tstring mMapName;\nint mNbLaps;\nint mGameMode;\n");
-	nGraphNode3->SetComment("Structure contenant les infos du jeu ‡ lancer: nom du circuit, mode de jeu et nombre de tours a faire.");
+	nGraphNode3->SetComment("Structure contenant les infos du jeu √† lancer: nom du circuit, mode de jeu et nombre de tours a faire.");
 
 
     wxGraphNode * nGraphNode7 = AddMessageNode();
     nGraphNode7->SetFunctionName("ShipSelected_t");
     nGraphNode7->SetPosition(wxPoint(40,240));
 	nGraphNode7->SetCode("tstring mShipName;\n");
-	nGraphNode7->SetComment("Un joueur a choisi un vaisseau. Ce paquet rÈseau est envoyÈ au serveur quand il a validÈ son choix");
+	nGraphNode7->SetComment("Un joueur a choisi un vaisseau. Ce paquet r√©seau est envoy√© au serveur quand il a valid√© son choix");
 
     wxGraphNode * nGraphNode8 = AddMessageNode();
     nGraphNode8->SetFunctionName("PlayerSpectator_t");
     nGraphNode8->SetPosition(wxPoint(40,440));
 	nGraphNode8->SetCode("bool mbPlayerOrSpectator;\n");
-	nGraphNode8->SetComment("Un joueur connectÈ demande d'etre spectateur ou joueur. S'il demande a joueur, on instancie avec rÈplication rÈseau un vaisseau. S'il est spectateur, il n'incrÈmente pas le compteur pour le nombre de joueur minimal pour lancer la partie.");
+	nGraphNode8->SetComment("Un joueur connect√© demande d'etre spectateur ou joueur. S'il demande a joueur, on instancie avec r√©plication r√©seau un vaisseau. S'il est spectateur, il n'incr√©mente pas le compteur pour le nombre de joueur minimal pour lancer la partie.");
 
 
     wxGraphNode * nGraphNode4b = AddStateNode();
     nGraphNode4b->SetFunctionName("Idle");
     nGraphNode4b->SetPosition(wxPoint(240,40));
-	nGraphNode4b->SetComment("Etat initial du serveur. On n'y retourne plus jamais ensuite puisque le serveur est toujours avec une map chargÈe. Cet etat est trËs ÈphÈmËre puisque le serveur, mÍme dÈdiÈ, doit charger un circuit juste aprËs son lancement.");
+	nGraphNode4b->SetComment("Etat initial du serveur. On n'y retourne plus jamais ensuite puisque le serveur est toujours avec une map charg√©e. Cet etat est tr√®s √©ph√©m√®re puisque le serveur, m√™me d√©di√©, doit charger un circuit juste apr√®s son lancement.");
 	*nGraphNode4b->GetCode("On Tick") = "SetState(Map_Loading);";
 
 
@@ -158,7 +158,7 @@ wxGraphContainer::wxGraphContainer(wxWindow* parent) :
     wxGraphNode * nGraphNode6 = AddStateNode();
     nGraphNode6->SetFunctionName("Waiting_Players");
     nGraphNode6->SetPosition(wxPoint(640,40));
-	nGraphNode6->SetComment("En attente de validation de vaisseau des players connectÈs");
+	nGraphNode6->SetComment("En attente de validation de vaisseau des players connect√©s");
 
 	*GetIncludes() = "#include <stdio.h>\n#include <math.h>";
 	*this->GetMemberVariables() = "int toto;\nchar zob;\n";

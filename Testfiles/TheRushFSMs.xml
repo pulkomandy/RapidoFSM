@@ -6,7 +6,8 @@
  TickHasTime="1"
  Output="FSMTrackBonus.h"
  includes=""
- membervariables="int mUnactiveTimer;
+ membervariables="int mUnactiveTimer;
+
 ZTransform *mBonusTransform;"
  memberinit="" >
 <GraphNode Type="STATE" >
@@ -14,9 +15,12 @@ ZTransform *mBonusTransform;"
 	<Event name="" code="" />
 	<Event name="Enter" code="" />
 	<Event name="Leave" code="" />
-	<Event name="ShipTrigger" code="// set bonus to ship
-
-// disable the bonus for now
+	<Event name="ShipTrigger" code="// set bonus to ship
+
+
+
+// disable the bonus for now
+
 SetState(NotActive);" />
 	<Event name="Tick" code="" />
 </GraphNode>
@@ -26,17 +30,25 @@ SetState(NotActive);" />
 <GraphNode Type="STATE" >
 <Node name="NotActive" comment="" code="" posx="429" posy="71" width="180" height="120" />
 	<Event name="" code="" />
-	<Event name="Enter" code="// Set bonus shader change
-mBonusTransform-&gt;SetVisible(false);
-// Create Timer which will tick in 6 seconds
+	<Event name="Enter" code="// Set bonus shader change
+
+mBonusTransform-&gt;SetVisible(false);
+
+// Create Timer which will tick in 6 seconds
+
 mUnactiveTimer = NewTimer(6.f);" />
-	<Event name="Leave" code="// set active shader
+	<Event name="Leave" code="// set active shader
+
 mBonusTransform-&gt;SetVisible(true);" />
 	<Event name="ShipTrigger" code="" />
-	<Event name="Tick" code="if (OnTimer(mUnactiveTimer))
-{
-    RemoveTimer(mUnactiveTimer);
-    SetState(Active);
+	<Event name="Tick" code="if (OnTimer(mUnactiveTimer))
+
+{
+
+    RemoveTimer(mUnactiveTimer);
+
+    SetState(Active);
+
 }" />
 </GraphNode>
 <Connection nodesrc="0" nodedst="1" nodesrcanchor="3" nodedstanchor="0" sidesrc="0" sidedst="1" />
@@ -58,40 +70,74 @@ mBonusTransform-&gt;SetVisible(true);" />
 	<Event name="" code="" />
 	<Event name="Enter" code="" />
 	<Event name="Leave" code="" />
-	<Event name="NewBonus" code="switch (mes.mBonusIndex)
-{
-case 1:
-    SetState(Missile);
-    break;
-case 2:
-    SetState(HomingMissile);
-    break;
-case 3:
-    SetState(Mines);
-    break;
-case 4:
-    SetState(Shield);
-    break;
-case 5:
-    SetState(DestructionShield);
-    break;
-case 6:
-    SetState(Autopilot);
-    break;
-case 7:
-    SetState(MoreEnergy);
-    break;
-case 8:
-    SetState(GravityGrip);
-    break;
-case 9:
-    SetState(Booster);
-    break;
-case 10:
-    SetState(MachineGun);
-    break;
-
-}
+	<Event name="NewBonus" code="switch (mes.mBonusIndex)
+
+{
+
+case 1:
+
+    SetState(Missile);
+
+    break;
+
+case 2:
+
+    SetState(HomingMissile);
+
+    break;
+
+case 3:
+
+    SetState(Mines);
+
+    break;
+
+case 4:
+
+    SetState(Shield);
+
+    break;
+
+case 5:
+
+    SetState(DestructionShield);
+
+    break;
+
+case 6:
+
+    SetState(Autopilot);
+
+    break;
+
+case 7:
+
+    SetState(MoreEnergy);
+
+    break;
+
+case 8:
+
+    SetState(GravityGrip);
+
+    break;
+
+case 9:
+
+    SetState(Booster);
+
+    break;
+
+case 10:
+
+    SetState(MachineGun);
+
+    break;
+
+
+
+}
+
 " />
 	<Event name="Tick" code="" />
 	<Event name="TriggerBonus" code="" />
@@ -106,7 +152,8 @@ case 10:
 	<Event name="Leave" code="" />
 	<Event name="NewBonus" code="" />
 	<Event name="Tick" code="" />
-	<Event name="TriggerBonus" code="SetState(NoBonus);
+	<Event name="TriggerBonus" code="SetState(NoBonus);
+
 " />
 </GraphNode>
 <GraphNode Type="MESSAGE" >
@@ -119,7 +166,8 @@ case 10:
 	<Event name="Leave" code="" />
 	<Event name="NewBonus" code="" />
 	<Event name="Tick" code="" />
-	<Event name="TriggerBonus" code="SetState(NoBonus);
+	<Event name="TriggerBonus" code="SetState(NoBonus);
+
 " />
 </GraphNode>
 <GraphNode Type="STATE" >
@@ -129,7 +177,8 @@ case 10:
 	<Event name="Leave" code="" />
 	<Event name="NewBonus" code="" />
 	<Event name="Tick" code="" />
-	<Event name="TriggerBonus" code="SetState(MinesDropping);
+	<Event name="TriggerBonus" code="SetState(MinesDropping);
+
 " />
 </GraphNode>
 <GraphNode Type="STATE" >
@@ -138,7 +187,8 @@ case 10:
 	<Event name="Enter" code="" />
 	<Event name="Leave" code="" />
 	<Event name="NewBonus" code="" />
-	<Event name="Tick" code="SetState(NoBonus);
+	<Event name="Tick" code="SetState(NoBonus);
+
 " />
 	<Event name="TriggerBonus" code="" />
 </GraphNode>
@@ -149,7 +199,8 @@ case 10:
 	<Event name="Leave" code="" />
 	<Event name="NewBonus" code="" />
 	<Event name="Tick" code="" />
-	<Event name="TriggerBonus" code="SetState(ShieldActivated);
+	<Event name="TriggerBonus" code="SetState(ShieldActivated);
+
 " />
 </GraphNode>
 <GraphNode Type="STATE" >
@@ -158,7 +209,8 @@ case 10:
 	<Event name="Enter" code="" />
 	<Event name="Leave" code="" />
 	<Event name="NewBonus" code="" />
-	<Event name="Tick" code="SetState(NoBonus);
+	<Event name="Tick" code="SetState(NoBonus);
+
 " />
 	<Event name="TriggerBonus" code="" />
 </GraphNode>
@@ -187,7 +239,8 @@ case 10:
 	<Event name="Leave" code="" />
 	<Event name="NewBonus" code="" />
 	<Event name="Tick" code="" />
-	<Event name="TriggerBonus" code="SetState(AutopilotActivated);
+	<Event name="TriggerBonus" code="SetState(AutopilotActivated);
+
 " />
 </GraphNode>
 <GraphNode Type="STATE" >
@@ -206,7 +259,8 @@ case 10:
 	<Event name="Leave" code="" />
 	<Event name="NewBonus" code="" />
 	<Event name="Tick" code="" />
-	<Event name="TriggerBonus" code="SetState(NoBonus);
+	<Event name="TriggerBonus" code="SetState(NoBonus);
+
 " />
 </GraphNode>
 <GraphNode Type="STATE" >
@@ -224,7 +278,8 @@ case 10:
 	<Event name="Enter" code="" />
 	<Event name="Leave" code="" />
 	<Event name="NewBonus" code="" />
-	<Event name="Tick" code="SetState(NoBonus);
+	<Event name="Tick" code="SetState(NoBonus);
+
 " />
 	<Event name="TriggerBonus" code="" />
 </GraphNode>
@@ -243,7 +298,8 @@ case 10:
 	<Event name="Enter" code="" />
 	<Event name="Leave" code="" />
 	<Event name="NewBonus" code="" />
-	<Event name="Tick" code="SetState(NoBonus);
+	<Event name="Tick" code="SetState(NoBonus);
+
 " />
 	<Event name="TriggerBonus" code="" />
 </GraphNode>
@@ -315,13 +371,19 @@ case 10:
  RaknetMessage="1"
  TickHasTime="1"
  Output="FSMClientBase.h"
- includes="#include &quot;FSMClientFFA.h&quot;
+ includes="#include &quot;FSMClientFFA.h&quot;
+
 #include &quot;FSMClientLanChoseShip.h&quot;"
- membervariables="ZRushGame *mGame;
-// All the sub FSM
-FSMClientFFA mFSMClientFFA;
-FSMClientLanChoseShip mFSMClientLCS;
-FSMClientRaceStart mFSMClientRaceStart;
+ membervariables="ZRushGame *mGame;
+
+// All the sub FSM
+
+FSMClientFFA mFSMClientFFA;
+
+FSMClientLanChoseShip mFSMClientLCS;
+
+FSMClientRaceStart mFSMClientRaceStart;
+
 int mGameMode;"
  memberinit="mGameMode = -1;" >
 <GraphNode Type="STATE" >
@@ -342,21 +404,31 @@ int mGameMode;"
 <Node name="LoadingMap" comment="" code="" posx="483" posy="161" width="180" height="149" />
 	<Event name="" code="" />
 	<Event name="ClientMapLoaded" code="SetState(MapLoaded);" />
-	<Event name="Enter" code="mFSMClientFFA.Init();
-mFSMClientLCS.Init();
-mFSMClientRaceStart.Init();
-mGame-&gt;ShowHUD(false);
-mGame-&gt;AllowInGameMenu(false);
-GProtoGui-&gt;HideEndResults();
-mGame-&gt;HandleNewGameSet();
-
-
+	<Event name="Enter" code="mFSMClientFFA.Init();
+
+mFSMClientLCS.Init();
+
+mFSMClientRaceStart.Init();
+
+mGame-&gt;ShowHUD(false);
+
+mGame-&gt;AllowInGameMenu(false);
+
+GProtoGui-&gt;HideEndResults();
+
+mGame-&gt;HandleNewGameSet();
+
+
+
+
+
 " />
 	<Event name="GotSlot" code="" />
 	<Event name="Leave" code="" />
 	<Event name="NewGameSet" code="" />
 	<Event name="ServerMapLoaded" code="SetState(LoadingMapServerFinishedLoading);" />
-	<Event name="Tick" code="
+	<Event name="Tick" code="
+
 " />
 </GraphNode>
 <GraphNode Type="MESSAGE" >
@@ -365,7 +437,8 @@ mGame-&gt;HandleNewGameSet();
 <GraphNode Type="STATE" >
 <Node name="LoadingMapServerFinishedLoading" comment="" code="" posx="759" posy="-10" width="180" height="129" />
 	<Event name="" code="" />
-	<Event name="ClientMapLoaded" code="mGame-&gt;SendNetMessage(ZNMSG_ClientMapLoadingDone());
+	<Event name="ClientMapLoaded" code="mGame-&gt;SendNetMessage(ZNMSG_ClientMapLoadingDone());
+
 SetState(ReadyForGame);" />
 	<Event name="Enter" code="" />
 	<Event name="GotSlot" code="" />
@@ -381,9 +454,11 @@ SetState(ReadyForGame);" />
 	<Event name="Enter" code="mGame-&gt;SendNetMessage(ZNMSG_ClientMapLoadingDone());" />
 	<Event name="GotSlot" code="" />
 	<Event name="Leave" code="" />
-	<Event name="NewGameSet" code="SetState(LoadingMap);
+	<Event name="NewGameSet" code="SetState(LoadingMap);
+
 " />
-	<Event name="ServerMapLoaded" code="SetState(ReadyForGame); 
+	<Event name="ServerMapLoaded" code="SetState(ReadyForGame); 
+
 " />
 	<Event name="Tick" code="" />
 </GraphNode>
@@ -391,50 +466,89 @@ SetState(ReadyForGame);" />
 <Node name="ReadyForGame" comment="" code="" posx="1150" posy="131" width="180" height="129" />
 	<Event name="" code="" />
 	<Event name="ClientMapLoaded" code="" />
-	<Event name="Enter" code="
-
-mGame-&gt;HandleLoadingDone();
-gCameraMotion.SetCameraMapObserver();
-
-bool bIsSoloGame = mGame-&gt;IsSoloGame();
-// new sub state
-switch (mGameMode)
-{
-case 0: // Raw
-    mFSMClientFFA.mGame = mGame;
-    mFSMClientFFA.SetState(FSMClientFFA::FFAAskSlot);
-    GProtoGui-&gt;PlayNewMusic();
-break;
-case 1:// Classing Race
-    if (bIsSoloGame)
-    {
-        mFSMClientFFA.mGame = mGame;
-        mFSMClientFFA.SetState(FSMClientFFA::FFAAskSlot);
-    }
-    else
-    {
-        mFSMClientLCS.mGame = mGame;
-        mFSMClientLCS.SetState(FSMClientLanChoseShip::PlayerOrSpectator);
-    }
-    GProtoGui-&gt;PlayNewMusic();
-    break;
-case 2: // menu
-    //gCameraMotion.SetCameraMapObserver();
-    gCameraMotion.SetCameraMapObserverMenu();
-    GProtoGui-&gt;ShowMainMenu();
-    GProtoGui-&gt;PlayNewMusic();
-    break;
-case 3: // Editor
-    gCameraMotion.SetCameraUnused();
-default:
-break;
+	<Event name="Enter" code="
+
+
+
+mGame-&gt;HandleLoadingDone();
+
+gCameraMotion.SetCameraMapObserver();
+
+
+
+bool bIsSoloGame = mGame-&gt;IsSoloGame();
+
+// new sub state
+
+switch (mGameMode)
+
+{
+
+case 0: // Raw
+
+    mFSMClientFFA.mGame = mGame;
+
+    mFSMClientFFA.SetState(FSMClientFFA::FFAAskSlot);
+
+    GProtoGui-&gt;PlayNewMusic();
+
+break;
+
+case 1:// Classing Race
+
+    if (bIsSoloGame)
+
+    {
+
+        mFSMClientFFA.mGame = mGame;
+
+        mFSMClientFFA.SetState(FSMClientFFA::FFAAskSlot);
+
+    }
+
+    else
+
+    {
+
+        mFSMClientLCS.mGame = mGame;
+
+        mFSMClientLCS.SetState(FSMClientLanChoseShip::PlayerOrSpectator);
+
+    }
+
+    GProtoGui-&gt;PlayNewMusic();
+
+    break;
+
+case 2: // menu
+
+    //gCameraMotion.SetCameraMapObserver();
+
+    gCameraMotion.SetCameraMapObserverMenu();
+
+    GProtoGui-&gt;ShowMainMenu();
+
+    GProtoGui-&gt;PlayNewMusic();
+
+    break;
+
+case 3: // Editor
+
+    gCameraMotion.SetCameraUnused();
+
+default:
+
+break;
+
 }" />
 	<Event name="GotSlot" code="" />
-	<Event name="Leave" code="//mGameMode = -1; -&gt; le chargement de map en mode solo appelle cette méthode après le setcurrent game mode-&gt;cette méthode écrase le gamemode et donc ne permet pas le on enter " />
+	<Event name="Leave" code="//mGameMode = -1; -&gt; le chargement de map en mode solo appelle cette mÃ©thode aprÃ¨s le setcurrent game mode-&gt;cette mÃ©thode Ã©crase le gamemode et donc ne permet pas le on enter " />
 	<Event name="NewGameSet" code="SetState(LoadingMap);" />
 	<Event name="ServerMapLoaded" code="" />
-	<Event name="Tick" code="mFSMClientFFA.Tick(timeEllapsed);
-mFSMClientLCS.Tick(timeEllapsed);
+	<Event name="Tick" code="mFSMClientFFA.Tick(timeEllapsed);
+
+mFSMClientLCS.Tick(timeEllapsed);
+
     " />
 </GraphNode>
 <GraphNode Type="MESSAGE" >
@@ -462,9 +576,11 @@ mFSMClientLCS.Tick(timeEllapsed);
  RaknetMessage="1"
  TickHasTime="1"
  Output="FSMServerBase.h"
- includes="#include &quot;../libplatform/ZenFWManager.h&quot;
+ includes="#include &quot;../libplatform/ZenFWManager.h&quot;
+
 #include &quot;FSMServerClassicRace.h&quot;"
- membervariables="ZRushGame *mGame;
+ membervariables="ZRushGame *mGame;
+
 FSMServerClassicRace mFSMServerClassicRace;"
  memberinit="" >
 <GraphNode Type="STATE" >
@@ -484,34 +600,54 @@ FSMServerClassicRace mFSMServerClassicRace;"
 	<Event name="Enter" code="mGame-&gt;HandleNewGameSet();" />
 	<Event name="Leave" code="" />
 	<Event name="NewGameSet" code="" />
-	<Event name="Tick" code="if (LoadingPipeIsEmpty())
+	<Event name="Tick" code="if (LoadingPipeIsEmpty())
+
     SetState(ReadyForGame);" />
 </GraphNode>
 <GraphNode Type="STATE" >
 <Node name="ReadyForGame" comment="" code="" posx="761" posy="400" width="180" height="129" />
 	<Event name="" code="" />
-	<Event name="Enter" code="mGame-&gt;HandleLoadingDone();
-mGame-&gt;SendNetMessage(ZNMSG_SlotsAvailable(GTrack-&gt;GetSpawnMatrices().size()));
-switch( mGame-&gt;GetGameSet().mGameType)
-{
-case 0: //Raw
-break;
-case 1: // Classic Race
-mFSMServerClassicRace.mGame = mGame;
-mFSMServerClassicRace.SetState(FSMServerClassicRace::WaitingEnoughPlayer);
-break;
-
+	<Event name="Enter" code="mGame-&gt;HandleLoadingDone();
+
+mGame-&gt;SendNetMessage(ZNMSG_SlotsAvailable(GTrack-&gt;GetSpawnMatrices().size()));
+
+switch( mGame-&gt;GetGameSet().mGameType)
+
+{
+
+case 0: //Raw
+
+break;
+
+case 1: // Classic Race
+
+mFSMServerClassicRace.mGame = mGame;
+
+mFSMServerClassicRace.SetState(FSMServerClassicRace::WaitingEnoughPlayer);
+
+break;
+
+
+
 }" />
 	<Event name="Leave" code="" />
 	<Event name="NewGameSet" code="SetState(LoadingMap);" />
-	<Event name="Tick" code="switch( mGame-&gt;GetGameSet().mGameType)
-{
-case 0: //Raw
-break;
-case 1: // Classic Race
-mFSMServerClassicRace.Tick(timeEllapsed);
-break;
-
+	<Event name="Tick" code="switch( mGame-&gt;GetGameSet().mGameType)
+
+{
+
+case 0: //Raw
+
+break;
+
+case 1: // Classic Race
+
+mFSMServerClassicRace.Tick(timeEllapsed);
+
+break;
+
+
+
 }" />
 </GraphNode>
 <Connection nodesrc="0" nodedst="1" nodesrcanchor="3" nodedstanchor="0" sidesrc="0" sidedst="1" />
@@ -528,13 +664,15 @@ break;
  TickHasTime="1"
  Output="FSMClientFFA.h"
  includes="#include &quot;FSMClientRaceStart.h&quot;"
- membervariables="ZRushGame *mGame;
+ membervariables="ZRushGame *mGame;
+
 FSMClientRaceStart mFSMClientRaceStart;"
  memberinit="mGame = NULL;" >
 <GraphNode Type="STATE" >
 <Node name="FFAAskSlot" comment="" code="" posx="375" posy="159" width="180" height="129" />
 	<Event name="" code="" />
-	<Event name="Enter" code="if (mGame)
+	<Event name="Enter" code="if (mGame)
+
     mGame-&gt;SendNetMessage(ZNMSG_AskSlot());" />
 	<Event name="GotSlot" code="SetState(FFAPlaying);" />
 	<Event name="Leave" code="" />
@@ -546,28 +684,50 @@ FSMClientRaceStart mFSMClientRaceStart;"
 <GraphNode Type="STATE" >
 <Node name="FFAPlaying" comment="" code="" posx="651" posy="177" width="180" height="120" />
 	<Event name="" code="" />
-	<Event name="Enter" code="ZShip *pClientShip = mGame-&gt;GetClientShip();
-
-bool bIsSoloGame = mGame-&gt;IsSoloGame();
-// new sub state
-switch (mGame-&gt;GetGameSet().mGameType)
-{
-case 0: // Raw
-    //pClientShip-&gt;SetInteractionType(INTERACTION_USER_INPUT);
-    mGame-&gt;EnableAllShipsControls();
-    gCameraMotion.SetCameraPiloting(pClientShip-&gt;GetTransform());
-    mGame-&gt;ShowHUD(true);
-    mGame-&gt;AllowInGameMenu(true);
-break;
-case 1:// Classing Race in Solo
-        mFSMClientRaceStart.mGame = mGame;
-        mFSMClientRaceStart.SetState(FSMClientRaceStart::SoloPreCountDownTransition);
-        mGame-&gt;ShowHUD(false);
-break;
-case 3: // Editor mode
-    mGame-&gt;EnableAllShipsControls();
-    gCameraMotion.SetCameraPiloting(pClientShip-&gt;GetTransform());
-break;
+	<Event name="Enter" code="ZShip *pClientShip = mGame-&gt;GetClientShip();
+
+
+
+bool bIsSoloGame = mGame-&gt;IsSoloGame();
+
+// new sub state
+
+switch (mGame-&gt;GetGameSet().mGameType)
+
+{
+
+case 0: // Raw
+
+    //pClientShip-&gt;SetInteractionType(INTERACTION_USER_INPUT);
+
+    mGame-&gt;EnableAllShipsControls();
+
+    gCameraMotion.SetCameraPiloting(pClientShip-&gt;GetTransform());
+
+    mGame-&gt;ShowHUD(true);
+
+    mGame-&gt;AllowInGameMenu(true);
+
+break;
+
+case 1:// Classing Race in Solo
+
+        mFSMClientRaceStart.mGame = mGame;
+
+        mFSMClientRaceStart.SetState(FSMClientRaceStart::SoloPreCountDownTransition);
+
+        mGame-&gt;ShowHUD(false);
+
+break;
+
+case 3: // Editor mode
+
+    mGame-&gt;EnableAllShipsControls();
+
+    gCameraMotion.SetCameraPiloting(pClientShip-&gt;GetTransform());
+
+break;
+
 }" />
 	<Event name="GotSlot" code="" />
 	<Event name="Leave" code="" />
@@ -592,24 +752,32 @@ break;
  TickHasTime="1"
  Output="FSMClientLanChoseShip.h"
  includes="#include &quot;FSMClientRaceStart.h&quot;"
- membervariables="ZRushGame *mGame;
-FSMClientRaceStart mFSMClientRaceStart;
+ membervariables="ZRushGame *mGame;
+
+FSMClientRaceStart mFSMClientRaceStart;
+
 bool mbCountDownStarts;"
- memberinit="mGame = NULL;
+ memberinit="mGame = NULL;
+
 mbCountDownStarts = false;" >
 <GraphNode Type="STATE" >
 <Node name="PlayerOrSpectator" comment="" code="" posx="207" posy="111" width="180" height="169" />
 	<Event name="" code="" />
 	<Event name="CountDownStarts" code="SetState(Spectator);" />
-	<Event name="Enter" code="GProtoGui-&gt;BuildSpectatorPlayerGui();
+	<Event name="Enter" code="GProtoGui-&gt;BuildSpectatorPlayerGui();
+
 " />
 	<Event name="GotSlot" code="" />
 	<Event name="LCSGotSlot" code="" />
 	<Event name="Leave" code="" />
-	<Event name="PlayerAskedSlot" code="//Ask slot message
-mGame-&gt;SendNetMessage(ZNMSG_AskSlot());
-
-SetState(WaitingForSlot);
+	<Event name="PlayerAskedSlot" code="//Ask slot message
+
+mGame-&gt;SendNetMessage(ZNMSG_AskSlot());
+
+
+
+SetState(WaitingForSlot);
+
 mGame-&gt;AllowInGameMenu(false);" />
 	<Event name="PlayerAskedSpectator" code="SetState(Spectator);" />
 	<Event name="ServerHasEnoughPlayers" code="" />
@@ -620,15 +788,20 @@ mGame-&gt;AllowInGameMenu(false);" />
 <Node name="Spectator" comment="" code="" posx="490" posy="261" width="180" height="129" />
 	<Event name="" code="" />
 	<Event name="CountDownStarts" code="" />
-	<Event name="Enter" code="GProtoGui-&gt;ShowSpectator();
+	<Event name="Enter" code="GProtoGui-&gt;ShowSpectator();
+
 mGame-&gt;AllowInGameMenu(true);" />
 	<Event name="GotSlot" code="" />
 	<Event name="LCSGotSlot" code="" />
 	<Event name="Leave" code="" />
-	<Event name="PlayerAskedSlot" code="//Ask slot message
-mGame-&gt;SendNetMessage(ZNMSG_AskSlot());
-
-SetState(WaitingForSlot);
+	<Event name="PlayerAskedSlot" code="//Ask slot message
+
+mGame-&gt;SendNetMessage(ZNMSG_AskSlot());
+
+
+
+SetState(WaitingForSlot);
+
 mGame-&gt;AllowInGameMenu(false);" />
 	<Event name="PlayerAskedSpectator" code="" />
 	<Event name="ServerHasEnoughPlayers" code="" />
@@ -641,7 +814,8 @@ mGame-&gt;AllowInGameMenu(false);" />
 	<Event name="CountDownStarts" code="" />
 	<Event name="Enter" code="" />
 	<Event name="GotSlot" code="SetState(ChosingShip);" />
-	<Event name="LCSGotSlot" code="SetState(ChosingShip);
+	<Event name="LCSGotSlot" code="SetState(ChosingShip);
+
 " />
 	<Event name="Leave" code="" />
 	<Event name="PlayerAskedSlot" code="" />
@@ -653,11 +827,15 @@ mGame-&gt;AllowInGameMenu(false);" />
 <GraphNode Type="STATE" >
 <Node name="ChosingShip" comment="" code="" posx="815" posy="97" width="180" height="149" />
 	<Event name="" code="" />
-	<Event name="CountDownStarts" code="mbCountDownStarts = true;
-GProtoGui-&gt;ValidateLanSelShip();
+	<Event name="CountDownStarts" code="mbCountDownStarts = true;
+
+GProtoGui-&gt;ValidateLanSelShip();
+
 SetState(RaceStarts);" />
-	<Event name="Enter" code="gCameraMotion.SetCameraOrbitingClose(mGame-&gt;GetClientShip()-&gt;GetTransform());
-GProtoGui-&gt;ShowLanShipSelection();
+	<Event name="Enter" code="gCameraMotion.SetCameraOrbitingClose(mGame-&gt;GetClientShip()-&gt;GetTransform());
+
+GProtoGui-&gt;ShowLanShipSelection();
+
 " />
 	<Event name="GotSlot" code="" />
 	<Event name="LCSGotSlot" code="" />
@@ -665,19 +843,26 @@ GProtoGui-&gt;ShowLanShipSelection();
 	<Event name="PlayerAskedSlot" code="" />
 	<Event name="PlayerAskedSpectator" code="" />
 	<Event name="ServerHasEnoughPlayers" code="" />
-	<Event name="ShipSelected" code="if (!mbCountDownStarts)
-    GProtoGui-&gt;ShowWaitingForPlayers();
-
-mGame-&gt;AllowInGameMenu(true);
-
+	<Event name="ShipSelected" code="if (!mbCountDownStarts)
+
+    GProtoGui-&gt;ShowWaitingForPlayers();
+
+
+
+mGame-&gt;AllowInGameMenu(true);
+
+
+
 SetState(WaitingForCountDown);" />
 	<Event name="Tick" code="" />
 </GraphNode>
 <GraphNode Type="STATE" >
 <Node name="WaitingForCountDown" comment="" code="" posx="1054" posy="213" width="180" height="129" />
 	<Event name="" code="" />
-	<Event name="CountDownStarts" code="// Hard wired code
-//GProtoGui-&gt;ValidateLanSelShip();
+	<Event name="CountDownStarts" code="// Hard wired code
+
+//GProtoGui-&gt;ValidateLanSelShip();
+
 SetState(RaceStarts);" />
 	<Event name="Enter" code="" />
 	<Event name="GotSlot" code="" />
@@ -693,7 +878,8 @@ SetState(RaceStarts);" />
 <Node name="RaceStarts" comment="" code="" posx="1276" posy="107" width="180" height="120" />
 	<Event name="" code="" />
 	<Event name="CountDownStarts" code="" />
-	<Event name="Enter" code="mFSMClientRaceStart.mGame = mGame;
+	<Event name="Enter" code="mFSMClientRaceStart.mGame = mGame;
+
 mFSMClientRaceStart.SetState(FSMClientRaceStart::Count3);" />
 	<Event name="GotSlot" code="" />
 	<Event name="LCSGotSlot" code="" />
@@ -758,71 +944,110 @@ mFSMClientRaceStart.SetState(FSMClientRaceStart::Count3);" />
  TickHasTime="1"
  Output="FSMClientRaceStart.h"
  includes="#include &quot;FSMClientClassicRace.h&quot;"
- membervariables="ZRushGame *mGame;
-int mTimerCountDown;
+ membervariables="ZRushGame *mGame;
+
+int mTimerCountDown;
+
 FSMClientClassicRace mFSMClientClassicRace;"
  memberinit="mGame = NULL;" >
 <GraphNode Type="STATE" >
 <Node name="Count3" comment="" code="" posx="273" posy="119" width="180" height="120" />
 	<Event name="" code="" />
-	<Event name="Enter" code="//sound
-//camera motion
-gCameraMotion.SetCameraStartupMode(1);
-
+	<Event name="Enter" code="//sound
+
+//camera motion
+
+gCameraMotion.SetCameraStartupMode(1);
+
+
+
 mTimerCountDown = NewTimer(1.f);" />
 	<Event name="Leave" code="RemoveTimer(mTimerCountDown);" />
-	<Event name="Tick" code="if (OnTimer(mTimerCountDown))
-{
-SetState(Count2);
+	<Event name="Tick" code="if (OnTimer(mTimerCountDown))
+
+{
+
+SetState(Count2);
+
 }" />
 </GraphNode>
 <GraphNode Type="STATE" >
 <Node name="Count2" comment="" code="" posx="524" posy="117" width="180" height="120" />
 	<Event name="" code="" />
-	<Event name="Enter" code="gCameraMotion.SetCameraStartupMode(1);
-
+	<Event name="Enter" code="gCameraMotion.SetCameraStartupMode(1);
+
+
+
 mTimerCountDown = NewTimer(1.f);" />
 	<Event name="Leave" code="RemoveTimer(mTimerCountDown);" />
-	<Event name="Tick" code="if (OnTimer(mTimerCountDown))
-{
-SetState(Count1);
+	<Event name="Tick" code="if (OnTimer(mTimerCountDown))
+
+{
+
+SetState(Count1);
+
 }" />
 </GraphNode>
 <GraphNode Type="STATE" >
 <Node name="Count1" comment="" code="" posx="785" posy="118" width="180" height="120" />
 	<Event name="" code="" />
-	<Event name="Enter" code="gCameraMotion.SetCameraStartupMode(1);
-
+	<Event name="Enter" code="gCameraMotion.SetCameraStartupMode(1);
+
+
+
 mTimerCountDown = NewTimer(1.f);" />
 	<Event name="Leave" code="RemoveTimer(mTimerCountDown);" />
-	<Event name="Tick" code="if (OnTimer(mTimerCountDown))
-{
-SetState(Go);
+	<Event name="Tick" code="if (OnTimer(mTimerCountDown))
+
+{
+
+SetState(Go);
+
 }" />
 </GraphNode>
 <GraphNode Type="STATE" >
 <Node name="Go" comment="" code="" posx="1038" posy="119" width="180" height="120" />
 	<Event name="" code="" />
-	<Event name="Enter" code="ZShip *pShip = mGame-&gt;GetClientShip();
-gCameraMotion.SetCameraPiloting(pShip-&gt;GetTransform());
-mGame-&gt;EnableAllShipsControls();
-mGame-&gt;EnableLapTimeComputationForEveryShip();
-mGame-&gt;ShowHUD(true);
-mGame-&gt;AllowInGameMenu(true);
-switch (mGame-&gt;GetGameSet().mGameType)
-{
-case 0: // Raw
-break;
-case 1:// Classing Race
-mFSMClientClassicRace.mGame = mGame;
-mFSMClientClassicRace.SetState(FSMClientClassicRace::Racing);
-break;
-default:
-break;
-}
-
-
-
+	<Event name="Enter" code="ZShip *pShip = mGame-&gt;GetClientShip();
+
+gCameraMotion.SetCameraPiloting(pShip-&gt;GetTransform());
+
+mGame-&gt;EnableAllShipsControls();
+
+mGame-&gt;EnableLapTimeComputationForEveryShip();
+
+mGame-&gt;ShowHUD(true);
+
+mGame-&gt;AllowInGameMenu(true);
+
+switch (mGame-&gt;GetGameSet().mGameType)
+
+{
+
+case 0: // Raw
+
+break;
+
+case 1:// Classing Race
+
+mFSMClientClassicRace.mGame = mGame;
+
+mFSMClientClassicRace.SetState(FSMClientClassicRace::Racing);
+
+break;
+
+default:
+
+break;
+
+}
+
+
+
+
+
+
+
 " />
 	<Event name="Leave" code="" />
 	<Event name="Tick" code="mFSMClientClassicRace.Tick(timeEllapsed);" />
@@ -837,12 +1062,16 @@ break;
 <GraphNode Type="STATE" >
 <Node name="SoloPreCountDownTransition" comment="" code="" posx="26" posy="118" width="180" height="120" />
 	<Event name="" code="" />
-	<Event name="Enter" code="gCameraMotion.SetCameraMapObserver();
+	<Event name="Enter" code="gCameraMotion.SetCameraMapObserver();
+
 mTimerCountDown = NewTimer(5.f);" />
 	<Event name="Leave" code="RemoveTimer(mTimerCountDown);" />
-	<Event name="Tick" code="if (OnTimer(mTimerCountDown))
-{
-SetState(Count3);
+	<Event name="Tick" code="if (OnTimer(mTimerCountDown))
+
+{
+
+SetState(Count3);
+
 }" />
 </GraphNode>
 <Connection nodesrc="1" nodedst="0" nodesrcanchor="0" nodedstanchor="1" sidesrc="0" sidedst="1" />
@@ -858,8 +1087,10 @@ SetState(Count3);
  TickHasTime="1"
  Output="FSMClientClassicRace.h"
  includes=""
- membervariables="ZRushGame *mGame;
-int mTimerEndRace;
+ membervariables="ZRushGame *mGame;
+
+int mTimerEndRace;
+
 int mNbLapsToDo;"
  memberinit="mGame = NULL;" >
 <GraphNode Type="STATE" >
@@ -867,32 +1098,46 @@ int mNbLapsToDo;"
 	<Event name="" code="" />
 	<Event name="Enter" code="mNbLapsToDo = mGame-&gt;GetGameSet().mNbLaps;" />
 	<Event name="Leave" code="" />
-	<Event name="Tick" code="ZShip *pShip = mGame-&gt;GetClientShip();
-if (pShip-&gt;GetCurrentLap() &gt; mGame-&gt;GetGameSet().mNbLaps)
-{
-        SetState(RacingOverAutopilot);
+	<Event name="Tick" code="ZShip *pShip = mGame-&gt;GetClientShip();
+
+if (pShip-&gt;GetCurrentLap() &gt; mGame-&gt;GetGameSet().mNbLaps)
+
+{
+
+        SetState(RacingOverAutopilot);
+
 }" />
 </GraphNode>
 <GraphNode Type="STATE" >
 <Node name="RacingOverAutopilot" comment="" code="" posx="382" posy="151" width="180" height="120" />
 	<Event name="" code="" />
-	<Event name="Enter" code="mTimerEndRace = NewTimer(5.f);
-
-ZShip *pShip = mGame-&gt;GetClientShip();
-pShip-&gt;SetInteractionType(INTERACTION_IA);
-pShip-&gt;EnableLapTimeComputation(false);
+	<Event name="Enter" code="mTimerEndRace = NewTimer(5.f);
+
+
+
+ZShip *pShip = mGame-&gt;GetClientShip();
+
+pShip-&gt;SetInteractionType(INTERACTION_IA);
+
+pShip-&gt;EnableLapTimeComputation(false);
+
 mGame-&gt;ShowHUD(false);" />
 	<Event name="Leave" code="RemoveTimer(mTimerEndRace);" />
-	<Event name="Tick" code="if (OnTimer(mTimerEndRace))
-{
-SetState(RacingOverDisplayEndInfos);
+	<Event name="Tick" code="if (OnTimer(mTimerEndRace))
+
+{
+
+SetState(RacingOverDisplayEndInfos);
+
 }" />
 </GraphNode>
 <GraphNode Type="STATE" >
 <Node name="RacingOverDisplayEndInfos" comment="" code="" posx="636" posy="156" width="180" height="120" />
 	<Event name="" code="" />
-	<Event name="Enter" code="GProtoGui-&gt;ShowEndResult();
-mGame-&gt;AllowInGameMenu(false);
+	<Event name="Enter" code="GProtoGui-&gt;ShowEndResult();
+
+mGame-&gt;AllowInGameMenu(false);
+
 gCameraMotion.SetCameraTransitionedObserver(mGame-&gt;GetClientShip());" />
 	<Event name="Leave" code="" />
 	<Event name="Tick" code="" />
@@ -915,8 +1160,10 @@ gCameraMotion.SetCameraTransitionedObserver(mGame-&gt;GetClientShip());" />
  TickHasTime="1"
  Output="FSMServerClassicRace.h"
  includes=""
- membervariables="ZRushGame *mGame;
-int mMinimalPlayersNumber;
+ membervariables="ZRushGame *mGame;
+
+int mMinimalPlayersNumber;
+
 int mWaitingTime;"
  memberinit="mMinimalPlayersNumber = 1;" >
 <GraphNode Type="STATE" >
@@ -924,9 +1171,12 @@ int mWaitingTime;"
 	<Event name="" code="" />
 	<Event name="Enter" code="" />
 	<Event name="Leave" code="" />
-	<Event name="Tick" code="if (mGame-&gt;GetClientCount() &gt;= mMinimalPlayersNumber)
-{
-    SetState(WaitingCountDown);
+	<Event name="Tick" code="if (mGame-&gt;GetClientCount() &gt;= mMinimalPlayersNumber)
+
+{
+
+    SetState(WaitingCountDown);
+
 }" />
 </GraphNode>
 <GraphNode Type="STATE" >
@@ -939,17 +1189,26 @@ int mWaitingTime;"
 <GraphNode Type="STATE" >
 <Node name="WaitingCountDown" comment="" code="" posx="452" posy="125" width="180" height="120" />
 	<Event name="" code="" />
-	<Event name="Enter" code="float timeToWait = 10.f;
-mWaitingTime = NewTimer(timeToWait);
-mGame-&gt;SendNetMessage(ZNMSG_RaceStartsInNSeconds(timeToWait));
-
-
+	<Event name="Enter" code="float timeToWait = 10.f;
+
+mWaitingTime = NewTimer(timeToWait);
+
+mGame-&gt;SendNetMessage(ZNMSG_RaceStartsInNSeconds(timeToWait));
+
+
+
+
+
 " />
 	<Event name="Leave" code="RemoveTimer(mWaitingTime);" />
-	<Event name="Tick" code="if (OnTimer(mWaitingTime))
-{
-    SetState(CountDownAndRacing);
-}
+	<Event name="Tick" code="if (OnTimer(mWaitingTime))
+
+{
+
+    SetState(CountDownAndRacing);
+
+}
+
 " />
 </GraphNode>
 <GraphNode Type="STATE" >
@@ -957,22 +1216,31 @@ mGame-&gt;SendNetMessage(ZNMSG_RaceStartsInNSeconds(timeToWait));
 	<Event name="" code="" />
 	<Event name="Enter" code="mGame-&gt;SendNetMessage(ZNMSG_CountDownStarts());" />
 	<Event name="Leave" code="" />
-	<Event name="Tick" code="if (mGame-&gt;GetClientCount() &lt; mMinimalPlayersNumber)
-{
-    SetState(NotEnoughPlayerToContinue);
+	<Event name="Tick" code="if (mGame-&gt;GetClientCount() &lt; mMinimalPlayersNumber)
+
+{
+
+    SetState(NotEnoughPlayerToContinue);
+
 }" />
 </GraphNode>
 <GraphNode Type="STATE" >
 <Node name="NotEnoughPlayerToContinue" comment="" code="" posx="1096" posy="127" width="180" height="120" />
 	<Event name="" code="" />
-	<Event name="Enter" code="float mSecondsBeforeRaceEnds = 5.f;
-mGame-&gt;SendNetMessage(ZNMSG_RaceEndsInNSeconds(mSecondsBeforeRaceEnds));
-mWaitingTime = NewTimer(mSecondsBeforeRaceEnds);
+	<Event name="Enter" code="float mSecondsBeforeRaceEnds = 5.f;
+
+mGame-&gt;SendNetMessage(ZNMSG_RaceEndsInNSeconds(mSecondsBeforeRaceEnds));
+
+mWaitingTime = NewTimer(mSecondsBeforeRaceEnds);
+
 " />
 	<Event name="Leave" code="RemoveTimer(mWaitingTime);" />
-	<Event name="Tick" code="if ((mGame-&gt;GetClientCount() == 0)||(OnTimer(mWaitingTime)))
-{
-    mGame-&gt;SetGameSet(GDedicatedGames-&gt;GetNextGame());
+	<Event name="Tick" code="if ((mGame-&gt;GetClientCount() == 0)||(OnTimer(mWaitingTime)))
+
+{
+
+    mGame-&gt;SetGameSet(GDedicatedGames-&gt;GetNextGame());
+
 }" />
 </GraphNode>
 <Connection nodesrc="2" nodedst="0" nodesrcanchor="0" nodedstanchor="1" sidesrc="0" sidedst="1" />

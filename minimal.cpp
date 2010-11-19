@@ -9,7 +9,7 @@ OK charger un projet
 ? merger un tab
 OK members, membersinit dans le graphedit et pas dans l'edit de message/state
 - ne pas pouvoir avoir de lien d'une sortie de state vers 1 entree du meme state
-ÒK ne pas dessiner les liens pendant 1 déplacement de node ou de scroll
+Ã’K ne pas dessiner les liens pendant 1 dÃ©placement de node ou de scroll
 - ne pas ralentir tant que ca quand on tape du texte (trop de redraw)
 - on peux mettre 1 message dans le 1er leftanchor d'un etat
 - 2 couleurs pour les lignes: 1 pour message->state, 1 pour state->state
@@ -18,22 +18,22 @@ OK on ne peut pas supprimer la liaison entre 2 etats en enlevant le code 'setsta
 OK quand on supprime 1 message, ca ne supprime pas le bouton 'on machin'
 VIRE l'edition d'un nom de state (et de message?) rajoute des 0 
 OK link message vers state, puis renomage du message-> on update pas le bouton
-OK Renommer un état/message après avoir fait les liens fout la merde
+OK Renommer un Ã©tat/message aprÃ¨s avoir fait les liens fout la merde
 
-OK On ne peut pas supprimer un lien ‘message vers state’. Il faut supprimer le message et le recréer -> ajout d'un bouton X dans l'editeur de script. On selection le "on message" qu'on veut degager et on click sur X.
-OK On peut ajouter plusieurs fois le même message à un état
-OK Le nom de fichier pour le code généré est toujours ‘res.h’
-VIRE On peut avoir plusieurs états/messages avec le même nom -> a l'utilisateur de se demerder
-OK Pas de sauvegarde/restauration du layout de fenêtres
+OK On ne peut pas supprimer un lien Â‘message vers stateÂ’. Il faut supprimer le message et le recrÃ©er -> ajout d'un bouton X dans l'editeur de script. On selection le "on message" qu'on veut degager et on click sur X.
+OK On peut ajouter plusieurs fois le mÃªme message Ã  un Ã©tat
+OK Le nom de fichier pour le code gÃ©nÃ©rÃ© est toujours Â‘res.hÂ’
+VIRE On peut avoir plusieurs Ã©tats/messages avec le mÃªme nom -> a l'utilisateur de se demerder
+OK Pas de sauvegarde/restauration du layout de fenÃªtres
 OK La perte de focus foire un peu (le curseur peut apparaitre dans plusieurs edition de texte)
-OK La touche Suppr dans l’editeur de texte (code, commentaire,…) supprime le noeud selectionné
-OK Pas de coloration C/C++ et zone d’edition trop petites
-OK Les paramètres du paneau de génération ne sont pas sauvés dans l’xml
-OK Pas de demande de confirmation quand on quitte avec un fichier modifié (ou quand on en ouvre un autre)
-OK Ajouter un bouton dans la toolbar pour générer le code (ne plus passer par le panneau de génération de code)
-OK A l’écriture/chargement du XML du modèle, remplacer les < > ” et autres trucs qui foutent le Bronx
+OK La touche Suppr dans l'editeur de texte (code, commentaire, ...) supprime le noeud selectionnÃ©
+OK Pas de coloration C/C++ et zone d'Ã©dition trop petites
+OK Les paramÃ¨tres du paneau de gÃ©nÃ©ration ne sont pas sauvÃ©s dans lÂ’xml
+OK Pas de demande de confirmation quand on quitte avec un fichier modifiÃ© (ou quand on en ouvre un autre)
+OK Ajouter un bouton dans la toolbar pour gÃ©nÃ©rer le code (ne plus passer par le panneau de gÃ©nÃ©ration de code)
+OK A l'Ã©criture/chargement du XML du modÃ¨le, remplacer les < > Â” et autres trucs qui foutent le Bronx
 OK Ca crash quand on quitte
-OK Affichage du nom de fichier courant dans la barre système + ajouter une * quand il y a modification
+OK Affichage du nom de fichier courant dans la barre systÃ¨me + ajouter une * quand il y a modification
 
 */
 

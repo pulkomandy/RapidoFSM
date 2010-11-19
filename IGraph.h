@@ -16,7 +16,7 @@ class wxGraphContainer;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /*
 Trucs a faire:
-- definir des props en lua qui seront serilisées en xml/binary (classe scripttable?)
+- definir des props en lua qui seront serilisÃ©es en xml/binary (classe scripttable?)
 -> extension d1 classe c++ par lua????
 
 - on ne pas pas rajouter, 1 final node quand yen a deja 1
@@ -27,7 +27,7 @@ Trucs a faire:
 - serialisation (xml/binary)
 - generation cgfx + compilation (possible avant integration avec le moteur)
 - affichage du resultat (apres le render target/swpachain du moteur)
-- edition des proprietes de nodes (declarées en lua) + serialisation (avec le node inspector)
+- edition des proprietes de nodes (declarÃ©es en lua) + serialisation (avec le node inspector)
 ex:
 nNode:persistent = {blablabla}
 print("props Z = "..nNode:persistent.z)

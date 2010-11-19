@@ -9,8 +9,24 @@ include_directories($(PROJECT_SOURCE_DIR)/tinyxml)
 
 # For convenience we define the sources as a variable. You can add 
 # header files and cpp/c files and CMake will sort them out
-set(SRCS minimal.cpp wxEdit.cpp wxEditGraphNode.cpp wxGraphContainer.cpp wxGraphNode.cpp wxGraphNodeMessage.cpp wxGraphNodeState.cpp wxScriptEditPanel.cpp wxStackedControls.cpp tinyxml/tinyxml.cpp tinyxml/tinystr.cpp tinyxml/tinystr.h tinyxml/tinyxml.h tinyxml/tinyxmlerror.cpp tinyxml/tinyxmlparser.cpp)
- 
-add_executable(Rapido WIN32 ${SRCS})
+set(SRCS
+	minimal.cpp
+	wxEdit.cpp
+	wxEditGraphNode.cpp
+	wxGraphContainer.cpp
+	wxGraphNode.cpp
+	wxGraphNodeMessage.cpp
+	wxGraphNodeState.cpp
+	wxScriptEditPanel.cpp
+	wxStackedControls.cpp
+	tinyxml/tinyxml.cpp
+	tinyxml/tinystr.cpp
+	tinyxml/tinystr.h
+	tinyxml/tinyxml.h
+	tinyxml/tinyxmlerror.cpp
+	tinyxml/tinyxmlparser.cpp
+	)
+
+add_executable(Rapido ${SRCS})
 target_link_libraries(Rapido ${wxWidgets_LIBRARIES})
 

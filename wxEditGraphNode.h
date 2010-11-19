@@ -4,41 +4,31 @@
 #include "wxEdit.h"
 class wxGraphNode;
 
-class wxZEditNode : public wxZEdit, public wxZEditHandler
-{
+class wxZEditNode : public wxZEdit, public wxZEditHandler {
 public:
 
 	wxZEditNode(wxWindow* parent, wxAuiManager* mgr = NULL) :
-	  wxZEdit(parent,  this)
-	  {
-		  this->Connect(-1, 14000, (wxObjectEventFunction)&wxZEditNode::OnRefresh);
+		wxZEdit(parent, this)
+		{
+			this->Connect(-1, 14000, (wxObjectEventFunction)&wxZEditNode::OnRefresh);
 
-		  mEditingNode = NULL;
+			mEditingNode = NULL;
 
+			mFileExport = _("testExport");
+		}
 
-                  mFileExport = _("testExport");
+	virtual ~wxZEditNode() {}
+	void OnRefresh(wxEvent& event) {}
 
-		  
+	void HandleValueChanged(unsigned int);
 
-	  }
+	void BuildInterface(wxGraphNode *pNode);
+	void BuildInterfaceForCodeGeneration();
 
-	  virtual ~wxZEditNode() {}
-	  void OnRefresh(wxEvent& event) {}
+	wxString mNodeName;
+	wxGraphNode *mEditingNode;
 
-	  void HandleValueChanged(unsigned int);
-
-	  void BuildInterface(wxGraphNode *pNode);
-	  void BuildInterfaceForCodeGeneration();
-
-          wxString mNodeName;
-	  wxGraphNode *mEditingNode;
-
-
-          wxString mFileExport;
-	 
-
-	  
-
+	wxString mFileExport;
 
 	virtual void HandleButtonClick(unsigned int aButtonID);
 	virtual void HandleLostFocus(unsigned int aID);
