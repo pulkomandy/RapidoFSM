@@ -1,4 +1,26 @@
 /*
+ *                            COPYRIGHT
+ *
+ * This is a part of Rapido!
+ *
+ *  Copyright (C) 2006 Cedric Guillemet
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+/*
 OK pouvoir creer 1 nouveau tab
 OK pouvoir renomer 1 tab
 OK pouvoir fermer 1 tab (supprimer)
@@ -16,7 +38,7 @@ OK members, membersinit dans le graphedit et pas dans l'edit de message/state
 OK on ne peut pas supprimer la liaison entre 2 etats en enlevant le code 'setstate' ni en cliquant sur la croix
 
 OK quand on supprime 1 message, ca ne supprime pas le bouton 'on machin'
-VIRE l'edition d'un nom de state (et de message?) rajoute des 0 
+VIRE l'edition d'un nom de state (et de message?) rajoute des 0
 OK link message vers state, puis renomage du message-> on update pas le bouton
 OK Renommer un état/message après avoir fait les liens fout la merde
 
@@ -143,11 +165,11 @@ public:
 private:
 	// any class wishing to process wxWidgets events must use this macro
 	DECLARE_EVENT_TABLE()
-	
+
 	wxAuiManager m_mgr;
 public:
-	
-	
+
+
 	wxString mFileName;
 	bool CloseProject();
 	void DoClearProject();
@@ -246,7 +268,7 @@ bool MyApp::OnInit()
 
 	// create the main application window
 	MyFrame *frame = new MyFrame(RapidoTitleBar);
-	
+
 
 	// and show it (the frames, unlike simple controls, are not shown when
 	// created initially)
@@ -279,7 +301,7 @@ MyFrame::MyFrame(const wxString& title)
 	// the "About" item should be in the help menu
 	wxMenu *helpMenu = new wxMenu;
 	helpMenu->Append(Minimal_About, _T("&About...\tF1"), _T("Show about dialog"));
-	
+
 
 	fileMenu->Append(Minimal_NewProject, _T("New Project"), _T("New FSM collection"));
 	fileMenu->Append(Minimal_NewTab, _T("New FSM\tCTRL+N"), _T("New FSM"));
@@ -323,9 +345,9 @@ MyFrame::MyFrame(const wxString& title)
 
 
 
-	
+
 	myNotebook = new wxNotebook( this, IDC_NOTEBOOK, wxDefaultPosition, wxSize(500, 500), 0 );
-	
+
 	/*
 	LUA()->Init();
 	LUA()->DoFile("script1.lua");
@@ -351,7 +373,7 @@ MyFrame::MyFrame(const wxString& title)
 		Name(wxT("Nodes")).Caption(wxT("Nodes")).
 		CenterPane());
 
-	
+
 
 	mEditNode = new wxZEditNode(this, &m_mgr);
 	m_mgr.AddPane(mEditNode, wxAuiPaneInfo().Name(wxT("Edit Node")).Caption(wxT("Edit Node")).Right());
@@ -518,7 +540,7 @@ void MyFrame::OnFileOpenFSM(wxCommandEvent& event)
 	}
 
 
-	
+
 }
 
 wxString LoadStringFromFile(const wxChar *pszFileName)
@@ -542,7 +564,7 @@ void MyFrame::OnFileOpenProject(wxCommandEvent& event)
         return;
     }
 
-    
+
 	bool mbForOpening = true;
         wxFileDialog fDialog(GetParent(), _("Choose a file"), _(""), _(""), _("*.xml"),
             mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
@@ -552,7 +574,7 @@ void MyFrame::OnFileOpenProject(wxCommandEvent& event)
 		DoClearProject();
 		mFileName = fDialog.GetPath();
         wxString res = LoadStringFromFile(mFileName);
-		
+
 		TiXmlDocument pXmlDoc;
                 if (!pXmlDoc.Parse(res.mb_str()))
 		{
@@ -560,7 +582,7 @@ void MyFrame::OnFileOpenProject(wxCommandEvent& event)
                     m.ShowModal();
                     return ;
 		}
-			
+
                 TiXmlElement* pRootElem = pXmlDoc.RootElement();
                 if (pRootElem == NULL) std::cout << "Not an XML file ?" << std::endl;
 		while(pRootElem)
@@ -589,7 +611,7 @@ void MyFrame::OnFileOpenProject(wxCommandEvent& event)
 	}
 
 
-	
+
 }
 
 void MyFrame::OnFileSaveProject(wxCommandEvent& event)
@@ -680,7 +702,7 @@ void MyFrame::OnFileNewTab(wxCommandEvent& event)
 void MyFrame::OnFileNewProject(wxCommandEvent& event)
 {
 	OnFileCloseProject(event);
-	
+
 }
 
 void MyFrame::OnNotebookChange(wxNotebookEvent& event)

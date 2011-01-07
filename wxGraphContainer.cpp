@@ -1,10 +1,31 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// Zenith Engine
+/*
+ *                            COPYRIGHT
+ *
+ * This is a part of Rapido!
+ *
+ *  Copyright (C) 2006 Cedric Guillemet
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+////////////////////////////////////////////////////////////////////////////////
 // File Name : wxGraphContainer.cpp
 // Creation : 22/06/2007
 // Author : Cedric Guillemet
-// Description : 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+// Description :
+////////////////////////////////////////////////////////////////////////////////
 
 #include <wx/ffile.h>
 #include "wxGraphContainer.h"
@@ -17,9 +38,9 @@
 
 BEGIN_EVENT_TABLE(wxGraphContainer, wxNotebookPage) //wxPanel)
 EVT_PAINT(wxGraphContainer::OnPaint)
-EVT_ERASE_BACKGROUND(wxGraphContainer::OnEraseBack) 
-EVT_SCROLLWIN(wxGraphContainer::OnScroll) 
-EVT_SIZE(wxGraphContainer::OnSize) 
+EVT_ERASE_BACKGROUND(wxGraphContainer::OnEraseBack)
+EVT_SCROLLWIN(wxGraphContainer::OnScroll)
+EVT_SIZE(wxGraphContainer::OnSize)
 EVT_LEFT_DOWN(wxGraphContainer::OnLButtonDown) 	    //Process a wxEVT_LEFT_DOWN event. The handler of this event should normally call event.Skip() to allow the default processing to take place as otherwise the window under mouse wouldn't get the focus.
 EVT_LEFT_UP(wxGraphContainer::OnLButtonUp) 	        //Process a wxEVT_LEFT_UP event.
 EVT_MOTION(wxGraphContainer::OnMouseMotion) 	        //Process a wxEVT_MOTION event.
@@ -28,9 +49,9 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 wxGraphContainer * gContainer = NULL;
-wxGraphContainer * GetContainer() 
-{ 
-	return gContainer; 
+wxGraphContainer * GetContainer()
+{
+	return gContainer;
 }
 
 wxString CodeToXML(const wxString & str)
@@ -163,7 +184,7 @@ wxGraphContainer::wxGraphContainer(wxWindow* parent) :
 	*GetIncludes() = "#include <stdio.h>\n#include <math.h>";
 	*this->GetMemberVariables() = "int toto;\nchar zob;\n";
 	*this->GetMembersInit() = "toto = 4;";
-  /*  
+  /*
     AddConnection(1,2,0,0,1,0);
     AddConnection(3,1,0,1,0,1);
     AddConnection(1,0,0,0,0,1);
@@ -215,7 +236,7 @@ bool wxGraphContainer::GetConnected(wxGraphNode *pNodeDst, wxGraphNode **pNodeSr
 
     for (i=0;i<mConnections.size(); i++)
     {
-        if ((mNodes[mConnections[i].NodeDst] == pNodeDst)&&(mConnections[i].NodeDstAnchor == aPlugDst )) 
+        if ((mNodes[mConnections[i].NodeDst] == pNodeDst)&&(mConnections[i].NodeDstAnchor == aPlugDst ))
         {
             (*pNodeSrc) = mNodes[mConnections[i].NodeSrc];
             aPlugSrc = mConnections[i].NodeSrcAnchor;
@@ -251,7 +272,7 @@ wxString wxGraphContainer::BuildCall(wxGraphNode *pNode)
 wxString wxGraphContainer::BuildScript()
 {
     /*unsigned int i;
-    
+
     std::map<wxGraphNode*, unsigned int> nodeCounting;
 
     // count node use
@@ -269,7 +290,7 @@ wxString wxGraphContainer::BuildScript()
     {
         if (nodeCounting[mNodes[i]]>1)
         {
-            script+=wxString::Format("%sVar = 
+            script+=wxString::Format("%sVar =
         }
     }*/
     // make big function call
@@ -413,7 +434,7 @@ void wxGraphContainer::GetGraphSize(wxPoint &minPos, wxPoint &maxPos)
         if (rc.GetBottom()+10>maxPos.y) maxPos.y = rc.GetBottom()+10;
     }
     // client view
-    wxRect clientRect = GetRect(); 
+    wxRect clientRect = GetRect();
     if ( (clientRect.GetWidth()+mCurrentPos.x) > maxPos.x) maxPos.x = (clientRect.GetWidth()+mCurrentPos.x);
     if ( mCurrentPos.x < minPos.x) minPos.x = mCurrentPos.y;
     if ( (clientRect.GetHeight()+mCurrentPos.y) > maxPos.y) maxPos.y = (clientRect.GetHeight()+mCurrentPos.y);
@@ -495,7 +516,7 @@ void wxGraphContainer::SetSelectedNode(wxGraphNode *pNode)
 
     mSelectedNode = pNode;
 	RefreshSelectedNode(mSelectedNode);
-	
+
     if (mSelectedNode)
     {
         mSelectedNode->SetSelected(true);
@@ -572,7 +593,7 @@ void wxGraphContainer::CancelNewConnection()
 
 wxGraphNode *wxGraphContainer::GetNode(wxPoint aPoint)
 {
-    
+
     for (unsigned int i=0;i<mNodes.size(); i++)
     {
         wxPoint nodePT = mNodes[i]->GetPosition();
@@ -626,9 +647,9 @@ void wxGraphContainer::DeleteSelectedNode()
     {
         for (unsigned i=0;i<mConnections.size(); i++)
         {
-            if (mConnections[i].NodeSrc > nodeIdx) 
+            if (mConnections[i].NodeSrc > nodeIdx)
                 mConnections[i].NodeSrc--;
-            if (mConnections[i].NodeDst > nodeIdx) 
+            if (mConnections[i].NodeDst > nodeIdx)
                 mConnections[i].NodeDst--;
 
         }
@@ -730,7 +751,7 @@ wxString wxGraphContainer::BuildGraphString()
         res += _("\"\n MessageEnumBase=\"");
 	res += mMessageEnumBase.c_str();
         res += _("\"\n InitialState=\"");
-	
+
         res.Append(mInitialState);
         res += _("\"\n RaknetMessage=\"");
         res += mbRaknetMessage?_("1"):_("0");
@@ -793,7 +814,7 @@ void wxGraphContainer::ParseGraphString(TiXmlElement* pRootElem)//const wxString
         //ERR("Couldn't parse Collada XML file '%s'!\r\n",mfn.c_str());
         return ;
 	}
-		
+
     TiXmlElement* pRootElem = pXmlDoc.RootElement();
 */
 	if (pRootElem->Attribute("includes"))
@@ -848,7 +869,7 @@ void wxGraphContainer::ParseGraphString(TiXmlElement* pRootElem)//const wxString
 		mInitialState = atoi(pRootElem->Attribute("InitialState"));
 	else
 		mInitialState = 0;
-	
+
         unsigned int stateCount = 0;
 	TiXmlElement* pExtraElem = pRootElem->FirstChildElement("GraphNode");
     while(pExtraElem)
@@ -944,7 +965,7 @@ void wxGraphContainer::ParseGraphString(TiXmlElement* pRootElem)//const wxString
 		}
 		pExtraElem = pExtraElem->NextSiblingElement("Connection");
 	}
-	// 
+	//
 
 }
 
@@ -961,11 +982,11 @@ void wxGraphContainer::ReadString(const wxString pszFileName)
 	{
         return ;
 	}
-		
+
     TiXmlElement* pRootElem = pXmlDoc.RootElement();
 
 	ParseGraphString(pRootElem);
-	
+
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1103,7 +1124,7 @@ void wxGraphContainer::RebuildConnectionsFor(wxGraphNode *pNode)
 
 	RemoveAllOutgoingConnectionFor(pNode);
 	pNode->GetAllCodeConnections(mNodeCodeConnection);
-	
+
 	std::map<wxString, std::vector<wxString> >::iterator iter = mNodeCodeConnection.begin();
 	for (; iter != mNodeCodeConnection.end(); ++iter)
 	{

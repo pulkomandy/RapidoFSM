@@ -1,10 +1,32 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+ *                            COPYRIGHT
+ *
+ * This is a part of Rapido!
+ *
+ *  Copyright (C) 2006 Cedric Guillemet
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+////////////////////////////////////////////////////////////////////////////////
 // Zenith Engine
 // File Name : wxGraphNode.cpp
 // Creation : 22/03/2007
 // Author : Cedric Guillemet
-// Description : 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+// Description :
+////////////////////////////////////////////////////////////////////////////////
 
 #include "wxGraphNode.h"
 #include "wxGraphContainer.h"
@@ -17,7 +39,7 @@ EVT_SIZE(wxGraphNode::OnSize)
 EVT_LEFT_DOWN(wxGraphNode::OnLButtonDown) 	//Process a wxEVT_LEFT_DOWN event. The handler of this event should normally call event.Skip() to allow the default processing to take place as otherwise the window under mouse wouldn't get the focus.
 EVT_LEFT_UP(wxGraphNode::OnLButtonUp) 	        //Process a wxEVT_LEFT_UP event.
 EVT_MOTION(wxGraphNode::OnMouseMotion) 	        //Process a wxEVT_MOTION event.
-EVT_ERASE_BACKGROUND(wxGraphNode::OnEraseBack) 	        
+EVT_ERASE_BACKGROUND(wxGraphNode::OnEraseBack)
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +77,7 @@ void wxGraphNode::OnPaint(wxPaintEvent& )
     wxRect rc;
 
     rc = GetRect();
-    
+
     if ( (rc.GetWidth() !=  mMemBmp.GetWidth()) || (rc.GetHeight() !=  mMemBmp.GetHeight()) )
         mMemBmp.Create(rc.GetWidth(), rc.GetHeight());
 
@@ -104,7 +126,7 @@ void wxGraphNode::OnPaint(wxPaintEvent& )
         memDC.DrawText(mRightPlugs[i].mLabel, rc.GetWidth() - plugTxtSize.x , decalY);
         memDC.SetTextForeground(wxColour(240,240,240));
         memDC.DrawText(mRightPlugs[i].mLabel, rc.GetWidth() - plugTxtSize.x-1 , decalY-1);
-        
+
 
         if ((plugTxtSize.x+5)>minimalRightWidth) minimalRightWidth = plugTxtSize.x+5;
 
@@ -126,7 +148,7 @@ void wxGraphNode::OnPaint(wxPaintEvent& )
 		wxSize plugTxtSize;
 
 
-			
+
 		if ((plugTxtSize.x+5)>minimalLeftWidth) minimalLeftWidth = plugTxtSize.x+5;
 
 		if (!mLeftPlugs[i].mLabel.empty())
@@ -137,9 +159,9 @@ void wxGraphNode::OnPaint(wxPaintEvent& )
 			memDC.DrawText(mLeftPlugs[i].mLabel, 11 , decalY);
 			memDC.SetTextForeground(wxColour(240,240,240));
 			memDC.DrawText(mLeftPlugs[i].mLabel, 10 , decalY-1);
-	        
 
-			
+
+
 
 
 			memDC.SetPen(wxPen(wxColour(0,0,0,0)));
@@ -171,7 +193,7 @@ void wxGraphNode::OnPaint(wxPaintEvent& )
         SetSize(wxSize(minimalRightWidth+ThumbSizeX+minimalLeftWidth, -1));
         GetParent()->Refresh();
         //Refresh();
-        
+
     }
 
     if (mMaxHeight>rc.GetHeight())
@@ -253,19 +275,19 @@ void wxGraphNode::OnLButtonUp(wxMouseEvent& event)
 				else
 					mParent->CancelNewConnection();
 
-				
+
                 return;
 
             }
         }
-        
+
 
         // get node anchor
 
-    
+
 
         mParent->CancelNewConnection();
-        
+
         return;
     }
 
@@ -273,7 +295,7 @@ void wxGraphNode::OnLButtonUp(wxMouseEvent& event)
     {
         ReleaseMouse();
         mbMoving = false;
-		
+
     }
 
 }
@@ -329,7 +351,7 @@ wxPoint wxGraphNode::GetPlugPointByName(const wxString &name)
         wxSize plugTxtSize = dc.GetTextExtent(mRightPlugs[i].mLabel);
         if (mRightPlugs[i].mLabel == name)
         {
-            
+
             return wxPoint(rc.GetRight() +1, rc.GetTop()+decalY +2/*+ plugTxtSize.y/2*/);
         }
         decalY+=plugTxtSize.y+2;
@@ -341,7 +363,7 @@ wxPoint wxGraphNode::GetPlugPointByName(const wxString &name)
         wxSize plugTxtSize = dc.GetTextExtent(mLeftPlugs[i].mLabel);
         if (mLeftPlugs[i].mLabel == name)
         {
-            
+
             return wxPoint(rc.GetLeft(), rc.GetTop()+decalY +2/*+ plugTxtSize.y/2*/);
         }
         decalY+=plugTxtSize.y+2;
@@ -371,7 +393,7 @@ wxPoint wxGraphNode::GetPlugPointIndex(unsigned int side, unsigned int index)
             wxSize plugTxtSize = dc.GetTextExtent(mRightPlugs[i].mLabel);
             if (i == index)
             {
-                
+
                 return wxPoint(rc.GetRight() +1, rc.GetTop()+decalY +2/*+ plugTxtSize.y/2*/);
             }
             decalY+=20;//plugTxtSize.y-1;//+2;
@@ -385,7 +407,7 @@ wxPoint wxGraphNode::GetPlugPointIndex(unsigned int side, unsigned int index)
             wxSize plugTxtSize = dc.GetTextExtent(mLeftPlugs[i].mLabel);
             if (i == index)
             {
-                
+
                 return wxPoint(rc.GetLeft(), rc.GetTop()+decalY +2/*+ plugTxtSize.y/2*/);
             }
             decalY+=20;//plugTxtSize.y-1;//+2;
@@ -496,7 +518,7 @@ wxString wxGraphNode::BuildGraphString()
 
         wxString tmps;
         tmps.Printf(_("posx=\"%d\" posy=\"%d\" width=\"%d\" height=\"%d\""),
-		GetPosition().x, 
+		GetPosition().x,
 		GetPosition().y,
 		GetSize().x,
 		GetSize().y);

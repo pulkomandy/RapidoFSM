@@ -1,3 +1,25 @@
+/*
+ *                            COPYRIGHT
+ *
+ * This is a part of Rapido!
+ *
+ *  Copyright (C) 2006 Cedric Guillemet
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
 #include <wx/wx.h>
 #include <wx/window.h>
 #include <wx/grid.h>
@@ -56,7 +78,7 @@ void wxZEditNode::BuildInterface(wxGraphNode *pNode)
                         AddFolder(_("Source code"));
 			AddScriptEdit(pNode->GetCode(pNode->GetSubItem()), 2);
 		}
-		
+
 		if (mEditingNode->GetType() == GNT_STATE)
 		{
 			wxString info;
@@ -70,7 +92,7 @@ void wxZEditNode::BuildInterface(wxGraphNode *pNode)
 		// editing tab
 
 		extern wxNotebook * myNotebook;
-		
+
 		mNodeName = myNotebook->GetPageText(myNotebook->GetSelection());
                 AddFolder(_("FSM"));
                 AddTextEdit(_("Name"), &mNodeName, 199);
@@ -79,7 +101,7 @@ void wxZEditNode::BuildInterface(wxGraphNode *pNode)
                 AddTextEdit(_("State base"), &mScrollV->mStateEnumBase);
                 AddTextEdit(_("Message base"), &mScrollV->mMessageEnumBase);
                 AddTextEdit(_("Output"), &mScrollV->mOutputFileName);
-	
+
 
 		std::vector<wxString> mStateList;
 		mScrollV->FillNodeList(mStateList, GNT_STATE);
@@ -142,7 +164,7 @@ void wxZEditNode::HandleLostFocus(unsigned int aID)
 
 	if (mEditingNode->GetType() == GNT_STATE)
 	{
-		
+
 	}
 }
 
@@ -193,7 +215,7 @@ wxString GenerateEnum(std::vector<wxString> & list, const wxString& prefix)
 
 }
 
-wxString GenerateSwitchCase(std::vector<wxString> & list, const wxString& functionPrefix, 
+wxString GenerateSwitchCase(std::vector<wxString> & list, const wxString& functionPrefix,
 							const wxString& variableName, const wxString& functionParameter)
 {
         wxString res = _("	switch(")+variableName+_(")\n	{\n");
@@ -210,7 +232,7 @@ wxString GenerateSwitchCase(std::vector<wxString> & list, const wxString& functi
 	return res;
 }
 
-wxString BuildMessagesStruct(std::vector<wxString> &list, 
+wxString BuildMessagesStruct(std::vector<wxString> &list,
 							 std::vector<wxString> &code,
 							 std::vector<wxString> &comment)
 {
@@ -309,7 +331,7 @@ wxString GenerateCPP()
         mScrollV->FillCodesFromNodeList(mTickCodeList, GNT_STATE, _("On Tick"));
         mScrollV->FillCodesFromNodeList(mEnterCodeList, GNT_STATE, _("On Enter"));
         mScrollV->FillCodesFromNodeList(mLeaveCodeList, GNT_STATE, _("On Leave"));
-	
+
 
 	// build messages enum
 
@@ -318,13 +340,13 @@ wxString GenerateCPP()
 
 	wxString strTemplate;
 
-	
+
     wxFFile fp(_("CPPTemplate.template"),_("rb"));
 	if (fp.IsOpened())
 	{
 		fp.ReadAll(&strTemplate);
 	}
-	else 
+	else
         return _("CPPTemplate.template NOT FOUND!!!");
 
 
@@ -344,7 +366,7 @@ wxString GenerateCPP()
 
         mTokens[_("%%TICKSTATECASE%%")] = GenerateSwitchCase(mStateList, _("Tick"),
                 _("mState"), bHasFloatTime?_("timeEllapsed"):_(""));
-	
+
 
         mTokens[_("%%STATESENUM%%")] = enumStates;
 
@@ -404,6 +426,6 @@ wxString GenerateCPP()
         wxString GenInfos;
         GenInfos.Printf(_("Generation of %s OK!\n%d lines generated.\n"), mScrollV->mOutputFileName.c_str(), aCount);
 	return GenInfos;
-	
+
 
 }
