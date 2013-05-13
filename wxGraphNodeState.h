@@ -160,10 +160,10 @@ public:
 		{
 			(*iter)->SetValue(false);
 		}
-                mCurSelectedButton = _("");
+		mCurSelectedButton = _("");
 	}
-        virtual const wxChar* GetSubItem() { return mCurSelectedButton.c_str(); }
-        virtual wxString *GetCode(const wxChar* szSubItem=_(""))
+	virtual const wxChar* GetSubItem() { return mCurSelectedButton.c_str(); }
+	virtual wxString *GetCode(const wxChar* szSubItem=_(""))
 	{
 		wxString keyItem = szSubItem;
 		return &mEventsCode[keyItem];
@@ -174,9 +174,9 @@ public:
 
 	virtual wxString BuildGraphString();
 
-        virtual int GetAnchorIndexByName(const wxChar *szName);
-        virtual void GetAllCodeConnections(std::map< wxString, std::vector<wxString> > & aCon);
-        void GetStateAssignments(const wxChar*pSource, std::vector<wxString>& list);
+	virtual int GetAnchorIndexByName(const wxChar *szName);
+	virtual void GetAllCodeConnections(std::map< wxString, std::vector<wxString> > & aCon);
+	void GetStateAssignments(const wxChar*pSource, std::vector<wxString>& list);
 };
 
 #endif

@@ -390,7 +390,6 @@ wxPoint wxGraphNode::GetPlugPointIndex(unsigned int side, unsigned int index)
         decalY = txtSize.y+5;
         for (i=0;i<mRightPlugs.size();i++)
         {
-            wxSize plugTxtSize = dc.GetTextExtent(mRightPlugs[i].mLabel);
             if (i == index)
             {
 
@@ -404,7 +403,6 @@ wxPoint wxGraphNode::GetPlugPointIndex(unsigned int side, unsigned int index)
         decalY = txtSize.y+5;
         for (i=0;i<mLeftPlugs.size();i++)
         {
-            wxSize plugTxtSize = dc.GetTextExtent(mLeftPlugs[i].mLabel);
             if (i == index)
             {
 

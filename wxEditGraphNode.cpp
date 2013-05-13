@@ -201,33 +201,34 @@ void wxZEditNode::HandleValueChanged(unsigned int aID)
 
 wxString GenerateEnum(std::vector<wxString> & list, const wxString& prefix)
 {
-        wxString enumList = _("");
+	wxString enumList = wxT("");
+
 	for (unsigned int i=0;i<list.size();i++)
 	{
 		enumList += prefix;
 		enumList += list[i];
 		if (i != (list.size()-1))
-                        enumList += _(",\n");
+			enumList += wxT(",\n");
 		else
-                        enumList += _("\n");
+			enumList += wxT("\n");
 	}
-	return enumList;
 
+	return enumList;
 }
 
 wxString GenerateSwitchCase(std::vector<wxString> & list, const wxString& functionPrefix,
 							const wxString& variableName, const wxString& functionParameter)
 {
-        wxString res = _("	switch(")+variableName+_(")\n	{\n");
+	wxString res = wxT("	switch(")+variableName+wxT(")\n	{\n");
 
 	for (unsigned int i=0;i<list.size();i++)
 	{
-                res += _("		case ")+list[i]+_(":\n");
-                res += _("			")+functionPrefix+list[i]+_("(")+functionParameter+_(");\n");
-                res += _("			break;\n");
+		res += wxT("		case ") + list[i] + wxT(":\n");
+		res += wxT("			") + functionPrefix+list[i] + wxT("(") + functionParameter + wxT(");\n");
+		res += wxT("			break;\n");
 	}
 
-        res += _("	}");
+	res += wxT("	}");
 
 	return res;
 }
@@ -237,11 +238,11 @@ wxString BuildMessagesStruct(std::vector<wxString> &list,
 							 std::vector<wxString> &comment)
 {
 	wxString res;
-	for (unsigned int i = 0;i<list.size();i++)
+	for (unsigned int i = 0 ; i<list.size() ; i++)
 	{
-                res += _("\n\n\n/*\n")+comment[i]+_("\n*/\n");
-                res += _("typedef struct ")+list[i]+_("\n{\n");
-                res += code[i]+_("\n} ")+list[i]+_(";\n\n");
+		res += wxT("\n\n\n/*\n") + comment[i] + wxT("\n*/\n");
+		res += wxT("typedef struct ") + list[i] + wxT("\n{\n");
+		res += code[i] + wxT("\n} ") + list[i] + wxT(";\n\n");
 	}
 
 	return res;
@@ -251,11 +252,11 @@ wxString BuildFunctions(std::vector<wxString> &list, std::vector<wxString> &code
 						const wxString& prefix, const wxString& parameter, const wxString& className)
 {
 	wxString res;
-	for (unsigned int i = 0;i<list.size();i++)
+	for (unsigned int i = 0 ; i<list.size() ; i++)
 	{
 		//res += "\n/*"+""/*comment[i]*/+"*/\n";
-                res += _("inline void ")+prefix+list[i]+_("(")+parameter+_(")\n{\n\n");
-                res += code[i]+_("\n}\n");
+		res += wxT("inline void ") + prefix + list[i] + wxT("(") + parameter + wxT(")\n{\n\n");
+		res += code[i] + wxT("\n}\n");
 	}
 
 	return res;
@@ -266,9 +267,9 @@ wxString BuildMessagesFunctions(std::vector<wxString> &list, std::vector<wxStrin
 	wxString res;
 	for (unsigned int i = 0;i<list.size();i++)
 	{
-                res += _("void Handle(const ")+list[i]+_("& mes)\n{\n");
-                res += GenerateSwitchCase(stateList, _("Handle"), _("mState"), _("mes"));
-                res += _("\n}\n\n");
+		res += wxT("void Handle(const ") + list[i] + wxT("& mes)\n{\n");
+		res += GenerateSwitchCase(stateList, wxT("Handle"), wxT("mState"), wxT("mes"));
+		res += wxT("\n}\n\n");
 	}
 	return res;
 }
@@ -276,21 +277,22 @@ wxString BuildMessagesFunctions(std::vector<wxString> &list, std::vector<wxStrin
 wxString BuildRaknetPacketRead(std::vector<wxString> &meslist,const wxString& enumPrefix)
 {
 	wxString res;
-        res += _("bool HandleRaknetPacket(Packet& packet)\n{\n");
-        res += _("switch (packet->data[0])\n");
-        res += _("{\n");
-	for (unsigned int i=0;i<meslist.size();i++)
+	res += wxT("bool HandleRaknetPacket(Packet& packet)\n{\n");
+	res += wxT("switch (packet->data[0])\n");
+	res += wxT("{\n");
+
+	for (unsigned int i=0 ; i<meslist.size() ; i++)
 	{
-                res += _("case ")+enumPrefix+meslist[i]+_(":\n");
-                res += _("{\n");
-                res += meslist[i]+_(" mes;\n");//		RakNetTime time, dataLength;
-                res += _("RakNet::BitStream rakStream( packet->data+1, sizeof(")+meslist[i]+_("), false);\n");
-                res += _("rakStram.Read(mes);\n");
-                res += _("Handle(mes);\n");
-                res += _("return true;\n");
-                res += _("}\n");
+		res += wxT("case ") + enumPrefix + meslist[i] + wxT(":\n");
+		res += wxT("{\n");
+		res += meslist[i] + wxT(" mes;\n");//		RakNetTime time, dataLength;
+		res += wxT("RakNet::BitStream rakStream( packet->data+1, sizeof(") + meslist[i] + wxT("), false);\n");
+		res += wxT("rakStram.Read(mes);\n");
+		res += wxT("Handle(mes);\n");
+		res += wxT("return true;\n");
+		res += wxT("}\n");
 	}
-        res += _("}\nreturn false;\n}\n");
+	res += wxT("}\nreturn false;\n}\n");
 
 	return res;
 }
@@ -303,13 +305,13 @@ wxString MakeAllStatesHandles(std::vector<wxString> &statelist, std::vector<wxSt
 	{
 		for (unsigned int j=0;j<meslist.size();j++)
 		{
-                        res += _("void Handle")+statelist[i]+_("(const ")+meslist[j]+_("& mes)\n");
-                        res += _("{\n");
+			res += wxT("void Handle") + statelist[i] + wxT("(const ") + meslist[j] + wxT("& mes)\n");
+			res += wxT("{\n");
 
-                        wxGraphNode *pStateNode = mScrollV->GetNodeByName(statelist[i].c_str());
-                        wxString onit = _("On ")+meslist[j];
+			wxGraphNode *pStateNode = mScrollV->GetNodeByName(statelist[i].c_str());
+			wxString onit = wxT("On ") + meslist[j];
 			res += *pStateNode->GetCode(onit.c_str());
-                        res += _("\n}\n\n");
+			res += wxT("\n}\n\n");
 		}
 	}
 
@@ -328,79 +330,96 @@ wxString GenerateCPP()
 	mScrollV->FillCommentsFromNodeList(mMesCommentList, GNT_MESSAGE);
 
 
-        mScrollV->FillCodesFromNodeList(mTickCodeList, GNT_STATE, _("On Tick"));
-        mScrollV->FillCodesFromNodeList(mEnterCodeList, GNT_STATE, _("On Enter"));
-        mScrollV->FillCodesFromNodeList(mLeaveCodeList, GNT_STATE, _("On Leave"));
+	mScrollV->FillCodesFromNodeList(mTickCodeList, GNT_STATE, _("On Tick"));
+	mScrollV->FillCodesFromNodeList(mEnterCodeList, GNT_STATE, _("On Enter"));
+	mScrollV->FillCodesFromNodeList(mLeaveCodeList, GNT_STATE, _("On Leave"));
 
 
 	// build messages enum
 
-        wxString enumMessages = GenerateEnum(mMesList, _("Type_"));
-        wxString enumStates = GenerateEnum(mStateList, _(""));
+	wxString enumMessages = GenerateEnum(mMesList, wxT("Type_"));
+	wxString enumStates = GenerateEnum(mStateList, wxT(""));
 
 	wxString strTemplate;
 
 
-    wxFFile fp(_("CPPTemplate.template"),_("rb"));
-	if (fp.IsOpened())
+	wxFFile templateFile(wxT("CPPTemplate.template"), wxT("rb"));
+	if (templateFile.IsOpened())
 	{
-		fp.ReadAll(&strTemplate);
+		templateFile.ReadAll(&strTemplate);
 	}
 	else
-        return _("CPPTemplate.template NOT FOUND!!!");
+		return _("CPPTemplate.template NOT FOUND!!!");
 
 
 	std::map<wxString, wxString> mTokens;
 
 	wxString className = mScrollV->mGraphName.c_str();// gClassName.c_str();
-        mTokens[_("%%STATEMACHINENAME%%")] = className;
+	mTokens[wxT("%%STATEMACHINENAME%%")] = className;
 
 	bool bHasFloatTime = true;
 	bool bRaknetPacket = false;
 	if (bHasFloatTime)
-                mTokens[_("%%HASFLOATTIME%%")] = _("float timeEllapsed");
+		mTokens[wxT("%%HASFLOATTIME%%")] = wxT("float timeEllapsed");
 	else
-                mTokens[_("%%HASFLOATTIME%%")] = _("");
+		mTokens[wxT("%%HASFLOATTIME%%")] = wxT("");
 
-        mTokens[_("%%MESSAGESENUM%%")] = enumMessages;
+	mTokens[wxT("%%MESSAGESENUM%%")] = enumMessages;
 
-        mTokens[_("%%TICKSTATECASE%%")] = GenerateSwitchCase(mStateList, _("Tick"),
-                _("mState"), bHasFloatTime?_("timeEllapsed"):_(""));
-
-
-        mTokens[_("%%STATESENUM%%")] = enumStates;
-
-        mTokens[_("%%MESSAGEALLSTRUCTS%%")] = BuildMessagesStruct(mMesList, mMesCodeList, mMesCommentList);
-
-        mTokens[_("%%ALLTICKFUNCTIONS%%")] = BuildFunctions(mStateList, mTickCodeList, _("Tick"),
-                bHasFloatTime?_("float timeEllapsed"):_(""), className);
-
-        mTokens[_("%%ALLENTERFUNCTIONS%%")] = BuildFunctions(mStateList, mEnterCodeList, _("Enter"),
-                _(""), className);
-
-        mTokens[_("%%ALLLEAVEFUNCTIONS%%")] = BuildFunctions(mStateList, mLeaveCodeList, _("Leave"),
-                _(""), className);
+	mTokens[wxT("%%TICKSTATECASE%%")] = GenerateSwitchCase(mStateList,
+	                                                       wxT("Tick"),
+	                                                       wxT("mState"),
+	                                                       bHasFloatTime ? wxT("timeEllapsed") : wxT(""));
 
 
-        mTokens[_("%%SETSTATESWITCH%%")] = GenerateSwitchCase(mStateList, _("Leave"),
-                _("mState"), _(""))+_("\n")+
-                _("mState = newState;")+
-                GenerateSwitchCase(mStateList, _("Enter"),
-                _("newState"), _(""));
+	mTokens[wxT("%%STATESENUM%%")] = enumStates;
+
+	mTokens[wxT("%%MESSAGEALLSTRUCTS%%")] = BuildMessagesStruct(mMesList,
+	                                                            mMesCodeList,
+	                                                            mMesCommentList);
+
+	mTokens[wxT("%%ALLTICKFUNCTIONS%%")] = BuildFunctions(mStateList,
+	                                                      mTickCodeList,
+	                                                      wxT("Tick"),
+	                                                      bHasFloatTime ? wxT("float timeEllapsed") : wxT(""),
+	                                                      className);
+
+	mTokens[wxT("%%ALLENTERFUNCTIONS%%")] = BuildFunctions(mStateList,
+	                                                       mEnterCodeList,
+	                                                       wxT("Enter"),
+	                                                       wxT(""),
+	                                                       className);
+
+	mTokens[wxT("%%ALLLEAVEFUNCTIONS%%")] = BuildFunctions(mStateList,
+	                                                       mLeaveCodeList,
+	                                                       wxT("Leave"),
+	                                                       wxT(""),
+	                                                       className);
 
 
-        mTokens[_("%%ALLHANDLEMESSAGES%%")] = BuildMessagesFunctions(mMesList, mMesList, mStateList);
-        mTokens[_("%%INITIALSTATE%%")] = mStateList[mScrollV->mInitialState];
+	mTokens[wxT("%%SETSTATESWITCH%%")] = GenerateSwitchCase(mStateList, wxT("Leave"), wxT("mState"),  wxT(""))
+	                                     + wxT("\n")
+	                                     + wxT("mState = newState;")
+	                                     + GenerateSwitchCase(mStateList, wxT("Enter"), wxT("newState"), wxT(""));
 
-        mTokens[_("%%HANDLERAKNETPACKET%%")] = bRaknetPacket?BuildRaknetPacketRead(mMesList, _("Type_")):wxString::FromUTF8("");
-        mTokens[_("%%ALLSTATEMESSAGESHANDLE%%")] = MakeAllStatesHandles(mStateList, mMesList);
 
-        mTokens[_("%%INCLUDES%%")] = *mScrollV->GetIncludes();
-        mTokens[_("%%MEMBERSINIT%%")] = *mScrollV->GetMembersInit();
-        mTokens[_("%%MEMBERSDECLARE%%")] = *mScrollV->GetMemberVariables();
+	mTokens[wxT("%%ALLHANDLEMESSAGES%%")] = BuildMessagesFunctions(mMesList,
+	                                                               mMesList,
+	                                                               mStateList);
 
-        mTokens[_("%%DATE%%")] = wxDateTime::Today().FormatDate();
-        mTokens[_("%%TIME%%")] = wxDateTime::Today().FormatTime();
+	mTokens[wxT("%%INITIALSTATE%%")] = mStateList[mScrollV->mInitialState];
+
+	mTokens[wxT("%%HANDLERAKNETPACKET%%")] = bRaknetPacket ? BuildRaknetPacketRead(mMesList, wxT("Type_"))
+	                                                       : wxString::FromUTF8("");
+
+	mTokens[wxT("%%ALLSTATEMESSAGESHANDLE%%")] = MakeAllStatesHandles(mStateList, mMesList);
+
+	mTokens[wxT("%%INCLUDES%%")] = *mScrollV->GetIncludes();
+	mTokens[wxT("%%MEMBERSINIT%%")] = *mScrollV->GetMembersInit();
+	mTokens[wxT("%%MEMBERSDECLARE%%")] = *mScrollV->GetMemberVariables();
+
+	mTokens[wxT("%%DATE%%")] = wxDateTime::Today().FormatDate();
+	mTokens[wxT("%%TIME%%")] = wxDateTime::Today().FormatTime();
 
 	// replacing
 	std::map<wxString, wxString>::iterator iter = mTokens.begin();
@@ -409,23 +428,28 @@ wxString GenerateCPP()
 		strTemplate.Replace((*iter).first, (*iter).second);
 
 	// write down
-    FILE* fp2 = fopen(mScrollV->mOutputFileName.mb_str(),"wb");
-	if (fp2)
+	wxString genInfos;
+	wxFFile outputFile(mScrollV->mOutputFileName, wxT("w"));
+	if (outputFile.IsOpened()) 
 	{
-		fwrite(strTemplate.c_str(), strTemplate.Len(), 1, fp2);
-		fclose(fp2);
+		outputFile.Write(strTemplate);
+		outputFile.Flush();
+		outputFile.Close();
+
+		unsigned int newLineCount = 0;
+		for (unsigned int i = 0 ; i < strTemplate.Len() ; i++)
+		{
+			if (strTemplate[i] == '\n')
+				newLineCount++;
+		}
+		genInfos.Printf(_("Generation of %s OK!\n%u lines generated.\n"),
+		                mScrollV->mOutputFileName.c_str(), newLineCount);
+	}
+	else
+	{
+		genInfos.Printf(_("Generation of %s FAILED!\n"),
+		                mScrollV->mOutputFileName.c_str());
 	}
 
-	// Count "\n"
-	int aCount = 0;
-        for (unsigned int cnt = 0;cnt<strTemplate.Len(); cnt++)
-	{
-		if (strTemplate[cnt] == '\n')
-			aCount++;
-	}
-        wxString GenInfos;
-        GenInfos.Printf(_("Generation of %s OK!\n%d lines generated.\n"), mScrollV->mOutputFileName.c_str(), aCount);
-	return GenInfos;
-
-
+	return genInfos;
 }

@@ -68,7 +68,7 @@ public:
     }
 
 
-	// static
+    // static
 
     void AddStatic(const wxString &Lib)
     {
@@ -107,14 +107,14 @@ public:
         m_pnl->AddFoldPanelWindow(*mCurItem, aItem, wxFPB_ALIGN_WIDTH, 0, 5);
     }
     // color
-	/*
+    /*
     void AddColorPicker(const wxString &Lib, tcolor* pColor, unsigned int aID = 2)
     {
         wxZenColorPicker *aItem = new wxZenColorPicker(mCurItem->GetParent(), mHandler, Lib, pColor, aID);
         mStackControls.push_back(aItem);
         m_pnl->AddFoldPanelWindow(*mCurItem, aItem, wxFPB_ALIGN_WIDTH, 0, 5);
     }
-	*/
+    */
     // slider
     void AddSlider(const wxString &Lib, unsigned int aMin, unsigned int aMax, unsigned int *pValue, unsigned int aID = 2)
     {
@@ -189,21 +189,21 @@ public:
         wxZenTreeView *aItem = new wxZenTreeView(mCurItem->GetParent(), mHandler, Lib, aID);
         mStackControls.push_back(aItem);
         m_pnl->AddFoldPanelWindow(*mCurItem, aItem, wxFPB_ALIGN_WIDTH, 0, 5);
-		return aItem;
+        return aItem;
     }
-	/*
+    /*
     // gradient
     wxZenGradient*  AddGradient(ZAnimationTrack<tcolor> *animColor = NULL,
                     ZAnimationTrack<tfloat> *animSize = NULL,
-					ZAnimationTrack<tfloat> *animRot = NULL,
+                    ZAnimationTrack<tfloat> *animRot = NULL,
                     tfloat *aLifeTime = NULL)
     {
         wxZenGradient* aItem = new wxZenGradient(mCurItem->GetParent(), mHandler, animColor, animSize, animRot, aLifeTime);
         mStackControls.push_back(aItem);
         m_pnl->AddFoldPanelWindow(*mCurItem, aItem, wxFPB_ALIGN_WIDTH, 0, 5);
-		return aItem;
+        return aItem;
     }
-	*/
+    */
     //
     void BeginPanel();
     void AddFolder(const wxString &Lib);
@@ -267,7 +267,7 @@ private:
     wxFoldPanelBar *m_pnl;
     wxZEditHandler *mHandler;
 
-	std::list<wxZEditStackedControl* >mStackControls;
+    std::list<wxZEditStackedControl* >mStackControls;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

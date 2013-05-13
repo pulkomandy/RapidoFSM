@@ -742,62 +742,63 @@ wxGraphNode *wxGraphContainer::AddStateNode()
 
 wxString wxGraphContainer::BuildGraphString()
 {
-        wxString res = _("<GraphContainer ");
+	wxString res = wxT("<GraphContainer ");
 
-        res += _("GraphName=\"");
-	res += mGraphName.c_str();
-        res += _("\"\n StateEnumBase=\"");
-	res += mStateEnumBase.c_str();
-        res += _("\"\n MessageEnumBase=\"");
-	res += mMessageEnumBase.c_str();
-        res += _("\"\n InitialState=\"");
+	res += wxT("GraphName=\"");
+	res += mGraphName;
+	res += wxT("\"\n StateEnumBase=\"");
+	res += mStateEnumBase;
+	res += wxT("\"\n MessageEnumBase=\"");
+	res += mMessageEnumBase;
+	res += wxT("\"\n InitialState=\"");
 
-        res.Append(mInitialState);
-        res += _("\"\n RaknetMessage=\"");
-        res += mbRaknetMessage?_("1"):_("0");
-        res += _("\"\n TickHasTime=\"");
-        res += mbTickHasTime?_("1"):_("0");
-        res += _("\"\n Output=\"");
+	res += wxString::Format(wxT("%u"), mInitialState);
+	res += wxT("\"\n RaknetMessage=\"");
+	res += mbRaknetMessage ? wxT("1") : wxT("0");
+	res += wxT("\"\n TickHasTime=\"");
+	res += mbTickHasTime ? wxT("1") : wxT("0");
+	res += wxT("\"\n Output=\"");
 	res += mOutputFileName.c_str();
-        res += _("\"\n includes=\"");
+	res += wxT("\"\n includes=\"");
 	res += CodeToXML(*GetIncludes());
-        res += _("\"\n membervariables=\"");
+	res += wxT("\"\n membervariables=\"");
 	res += CodeToXML(*GetMemberVariables());
-        res += _("\"\n memberinit=\"");
+	res += wxT("\"\n memberinit=\"");
 	res += CodeToXML(*GetMembersInit());
-        res += _("\" >\n");
+	res += wxT("\" >\n");
+
 	std::vector<wxGraphNode*>::iterator iter = mNodes.begin();
 	for (;iter != mNodes.end(); ++iter)
 	{
-                res += _("<GraphNode Type=\"");
+		res += wxT("<GraphNode Type=\"");
 		switch ((*iter)->GetType())
 		{
-                    case GNT_STATE:
-                            res += _("STATE");
-                            break;
-                    case GNT_MESSAGE:
-                            res += _("MESSAGE");
-                            break;
-                    case GNT_DEFAULT:
-                            break;
+			case GNT_STATE:
+				res += wxT("STATE");
+				break;
+			case GNT_MESSAGE:
+				res += wxT("MESSAGE");
+				break;
+			case GNT_DEFAULT:
+				break;
 		}
-                res += _("\" >\n");
+		res += wxT("\" >\n");
 		res += (*iter)->BuildGraphString();
-                res += _("</GraphNode>\n");
+		res += wxT("</GraphNode>\n");
 	}
 	// connections
 
-        for (unsigned int i=0;i<mConnections.size();i++)
+	for (unsigned int i=0;i<mConnections.size();i++)
 	{
 		const NodeConnection& nc = mConnections[i];
-                wxString res2;
-                res2.Printf(_("<Connection nodesrc=\"%d\" nodedst=\"%d\" nodesrcanchor=\"%d\" nodedstanchor=\"%d\" sidesrc=\"%d\" sidedst=\"%d\" />\n"),
-                    nc.NodeSrc, nc.NodeDst, nc.NodeSrcAnchor, nc.NodeDstAnchor, nc.SideSrc, nc.SideDst);
-                res += res2;
+		wxString res2;
+		res2.Printf(_("<Connection nodesrc=\"%d\" nodedst=\"%d\" nodesrcanchor=\"%d\" nodedstanchor=\"%d\" sidesrc=\"%d\" sidedst=\"%d\" />\n"),
+		            nc.NodeSrc, nc.NodeDst, nc.NodeSrcAnchor, nc.NodeDstAnchor, nc.SideSrc, nc.SideDst);
+		res += res2;
 	}
 
 	// end
-        res += _("</GraphContainer>");
+	res += wxT("</GraphContainer>");
 
 	return res;
 }
@@ -818,36 +819,36 @@ void wxGraphContainer::ParseGraphString(TiXmlElement* pRootElem)//const wxString
     TiXmlElement* pRootElem = pXmlDoc.RootElement();
 */
 	if (pRootElem->Attribute("includes"))
-            *GetIncludes() = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("includes")));
+		*GetIncludes() = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("includes")));
 	else
-                *GetIncludes() = _("");
+		*GetIncludes() = wxT("");
 
 
 	if (pRootElem->Attribute("membervariables"))
-                *GetMemberVariables() = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("membervariables")));
+		*GetMemberVariables() = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("membervariables")));
 	else
-                *GetMemberVariables() = _("");
+		*GetMemberVariables() = wxT("");
 
 	if (pRootElem->Attribute("memberinit"))
-                *GetMembersInit() = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("memberinit")));
+		*GetMembersInit() = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("memberinit")));
 	else
-                *GetMembersInit() = _("");
+		*GetMembersInit() = wxT("");
 
 
 	if (pRootElem->Attribute("GraphName"))
-                mGraphName = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("GraphName")));
+		mGraphName = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("GraphName")));
 	else
-                mGraphName = _("");
+		mGraphName = wxT("");
 
 	if (pRootElem->Attribute("StateEnumBase"))
-                mStateEnumBase = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("StateEnumBase")));
+		mStateEnumBase = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("StateEnumBase")));
 	else
-                mStateEnumBase = _("");
+		mStateEnumBase = wxT("");
 
 	if (pRootElem->Attribute("MessageEnumBase"))
-                mMessageEnumBase = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("MessageEnumBase")));
+		mMessageEnumBase = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("MessageEnumBase")));
 	else
-                mMessageEnumBase = _("");
+		mMessageEnumBase = wxT("");
 
 	if (pRootElem->Attribute("RaknetMessage"))
 		mbRaknetMessage = (pRootElem->Attribute("RaknetMessage")[0]=='1');
@@ -861,19 +862,19 @@ void wxGraphContainer::ParseGraphString(TiXmlElement* pRootElem)//const wxString
 
 
 	if (pRootElem->Attribute("Output"))
-                mOutputFileName = wxString::FromUTF8(pRootElem->Attribute("Output"));
+		mOutputFileName = wxString::FromUTF8(pRootElem->Attribute("Output"));
 	else
-                mOutputFileName = _("res.h");
+		mOutputFileName = _("res.h");
 
 	if (pRootElem->Attribute("InitialState"))
 		mInitialState = atoi(pRootElem->Attribute("InitialState"));
 	else
 		mInitialState = 0;
 
-        unsigned int stateCount = 0;
+	unsigned int stateCount = 0;
 	TiXmlElement* pExtraElem = pRootElem->FirstChildElement("GraphNode");
-    while(pExtraElem)
-    {
+	while(pExtraElem)
+	{
 		wxGraphNode*pNode;
 		const char *szType = pExtraElem->Attribute("Type");
 		if (!strcmp(szType,"MESSAGE"))
@@ -1140,8 +1141,9 @@ void wxGraphContainer::RebuildConnectionsFor(wxGraphNode *pNode)
 		{
 			const wxString& strdst = (*iter).second[j];
 			int NodeSource = this->GetNodeIndex(pNode);
-                        int NodeDest = this->GetNodeIndexByName(strdst.c_str());
-                        int AnchorSource = pNode->GetAnchorIndexByName(strsrc.mb_str());
+			int NodeDest = this->GetNodeIndexByName(strdst.c_str());
+			int AnchorSource = pNode->GetAnchorIndexByName(strsrc);
+
 			if ( (NodeSource != -1) && (NodeDest != -1) && (AnchorSource != -1 ))
 			{
 				this->AddConnection(NodeSource,

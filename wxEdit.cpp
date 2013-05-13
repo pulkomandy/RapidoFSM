@@ -55,12 +55,12 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 wxZEdit::wxZEdit(wxWindow* parent, wxZEditHandler *aHandler)
-                     : wxSashLayoutWindow(parent, -1, wxDefaultPosition, wxDefaultSize, wxNO_BORDER)
+		: wxSashLayoutWindow(parent, -1, wxDefaultPosition, wxDefaultSize, wxNO_BORDER)
+		, mCurItem(NULL)
+		, m_pnl(NULL)
+		, mHandler(aHandler)
 {
-    m_pnl = NULL;
-    mCurItem = NULL;
-    mHandler = aHandler;
-    //SetBackgroundColour(wxColour(157, 157, 157));
+	//SetBackgroundColour(wxColour(157, 157, 157));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,8 +74,8 @@ wxZEdit::~wxZEdit()
 void wxZEdit::BeginPanel()
 {
     //SAFE_DELETE(m_pnl);
-	if (m_pnl)
-		delete m_pnl;
+	//if (m_pnl)
+	delete m_pnl;
 	m_pnl = NULL;
     mStackControls.clear();
 
@@ -88,8 +88,8 @@ void wxZEdit::BeginPanel()
 void wxZEdit::AddFolder(const wxString &Lib)
 {
     //SAFE_DELETE(mCurItem);
-	if (mCurItem)
-		delete mCurItem;
+	//if (mCurItem)
+	delete mCurItem;
 	mCurItem = NULL;
     mCurItem = new wxFoldPanel(m_pnl->AddFoldPanel(Lib, false));
 }

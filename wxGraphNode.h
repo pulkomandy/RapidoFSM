@@ -115,10 +115,12 @@ public:
     }
     void SetFinalNode();
 
-	virtual int GetAnchorIndexByName(const char *szName) { return 0; }
+	virtual int GetAnchorIndexByName(const wxChar *szName) { return 0; }
 	virtual void GetAllCodeConnections(std::map<wxString, std::vector<wxString> > & aCon) {}
-        virtual void ChangeMessageName(const wxChar *szPrevious, const wxChar *szNew){	}
-        virtual void MessageHasBeenRemoved(const wxChar *szMessageName) {}
+	virtual void ChangeMessageName(const wxChar *szPrevious, const wxChar *szNew) {}
+	virtual void MessageHasBeenRemoved(const wxChar *szMessageName) {}
+
+
 protected:
     DECLARE_EVENT_TABLE();
     virtual void OnPaint(wxPaintEvent& event);

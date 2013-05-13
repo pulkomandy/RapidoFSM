@@ -42,18 +42,18 @@ VIRE l'edition d'un nom de state (et de message?) rajoute des 0
 OK link message vers state, puis renomage du message-> on update pas le bouton
 OK Renommer un état/message après avoir fait les liens fout la merde
 
-OK On ne peut pas supprimer un lien message vers state. Il faut supprimer le message et le recréer -> ajout d'un bouton X dans l'editeur de script. On selection le "on message" qu'on veut degager et on click sur X.
+OK On ne peut pas supprimer un lien "message vers state". Il faut supprimer le message et le recréer -> ajout d'un bouton X dans l'editeur de script. On selection le "on message" qu'on veut degager et on click sur X.
 OK On peut ajouter plusieurs fois le même message à un état
-OK Le nom de fichier pour le code généré est toujours res.h
+OK Le nom de fichier pour le code généré est toujours "res.h"
 VIRE On peut avoir plusieurs états/messages avec le même nom -> a l'utilisateur de se demerder
 OK Pas de sauvegarde/restauration du layout de fenêtres
 OK La perte de focus foire un peu (le curseur peut apparaitre dans plusieurs edition de texte)
 OK La touche Suppr dans l'editeur de texte (code, commentaire, ...) supprime le noeud selectionné
 OK Pas de coloration C/C++ et zone d'édition trop petites
-OK Les paramètres du paneau de génération ne sont pas sauvés dans lxml
+OK Les paramètres du paneau de génération ne sont pas sauvés dans l'xml
 OK Pas de demande de confirmation quand on quitte avec un fichier modifié (ou quand on en ouvre un autre)
 OK Ajouter un bouton dans la toolbar pour générer le code (ne plus passer par le panneau de génération de code)
-OK A l'écriture/chargement du XML du modèle, remplacer les < >  et autres trucs qui foutent le Bronx
+OK A l'écriture/chargement du XML du modèle, remplacer les < > et autres trucs qui foutent le Bronx
 OK Ca crash quand on quitte
 OK Affichage du nom de fichier courant dans la barre système + ajouter une * quand il y a modification
 
@@ -74,15 +74,16 @@ OK Affichage du nom de fichier courant dans la barre système + ajouter une * qu
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #include <iostream>
 #include <wx/ffile.h>
+#include <wx/aboutdlg.h>
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+	#include <wx/wx.h>
 #endif
 
 #include "wxGraphContainer.h"
@@ -112,6 +113,8 @@ public:
 	// return: if OnInit() returns false, the application terminates)
 	virtual bool OnInit();
 };
+
+
 class wxZEditNode;
 // Define a new frame type: this is going to be our main frame
 wxGraphContainer *mScrollV;
@@ -122,24 +125,15 @@ void SetScriptToEdit(const wxChar *szName, wxString* pCode)
 {
 	mEditScriptPanel->SetScriptToEdit(szName, pCode);
 }
+
+
 class MyFrame : public wxFrame
 {
 public:
 	// ctor(s)
 	MyFrame(const wxString& title);
-	virtual ~MyFrame()
-	{
-		wxConfigBase *pConfig = wxConfigBase::Get();
-		wxString myPerspect = m_mgr.SavePerspective();
-		pConfig->Write(_T("/Rapido/AUIPerspective"), myPerspect);
+	virtual ~MyFrame();
 
-		wxString myWinState;
-                myWinState = wxString::Format(_("%d,%d,%d,%d"),GetSize().x, GetSize().y, GetPosition().x, GetPosition().y);
-		pConfig->Write(_T("/Rapido/MainWinState"), myWinState);
-
-		exit(0);
-		//delete mScrollV;
-	}
 	// event handlers (these functions should _not_ be virtual)
 	void OnQuit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
@@ -165,6 +159,9 @@ public:
 private:
 	// any class wishing to process wxWidgets events must use this macro
 	DECLARE_EVENT_TABLE()
+
+	void InitToolbar(wxToolBar* aToolbar);
+	void InitMenuBar(wxMenuBar* aMenuBar);
 
 	wxAuiManager m_mgr;
 public:
@@ -194,7 +191,7 @@ enum
 	// this standard value as otherwise it won't be handled properly under Mac
 	// (where it is special and put into the "Apple" menu)
 	Minimal_About = wxID_ABOUT,
-	Minimal_Delete =10008 ,
+	Minimal_Delete = 10008 ,
 };
 
 enum
@@ -256,8 +253,8 @@ IMPLEMENT_APP(MyApp)
 // ----------------------------------------------------------------------------
 // the application class
 // ----------------------------------------------------------------------------
-MyFrame *GMYframe;
-const wxChar *RapidoTitleBar = _("Rapido! v0.1.9");
+const wxChar *RapidoTitleBar = wxT("Rapido! v0.1.9");
+
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
@@ -275,8 +272,6 @@ bool MyApp::OnInit()
 	frame->Show(true);
 
 
-
-
 	return true;
 }
 
@@ -287,91 +282,41 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-: wxFrame(NULL, wxID_ANY, title)
+	: wxFrame(NULL, wxID_ANY, title)
 {
-	GMYframe = this;
 	mbModified = false;
 
 	m_mgr.SetManagedWindow(this);
 
-#if wxUSE_MENUS
-	// create a menu bar
-	wxMenu *fileMenu = new wxMenu;
-	wxMenu *nodeMenu = new wxMenu;
-	// the "About" item should be in the help menu
-	wxMenu *helpMenu = new wxMenu;
-	helpMenu->Append(Minimal_About, _T("&About...\tF1"), _T("Show about dialog"));
-
-
-	fileMenu->Append(Minimal_NewProject, _T("New Project"), _T("New FSM collection"));
-	fileMenu->Append(Minimal_NewTab, _T("New FSM\tCTRL+N"), _T("New FSM"));
-	fileMenu->AppendSeparator();
-	fileMenu->Append(Minimal_OpenProject, _T("Open\tCTRL+O"), _T("Open a Project"));
-	fileMenu->Append(Minimal_OpenFSM, _T("Merge FSM"), _T("Open a Project"));
-	fileMenu->AppendSeparator();
-	fileMenu->Append(Minimal_CloseTab, _T("Close FSM"), _T("Close FSM"));
-	fileMenu->Append(Minimal_CloseProject, _T("Close Project"), _T("Close Project"));
-
-	fileMenu->AppendSeparator();
-	fileMenu->Append(Minimal_SaveProject, _T("Save Project\tCTRL+S"), _T("Save graph file"));
-	fileMenu->Append(Minimal_SaveProjectAs, _T("Save Project As ..."), _T("Save graph file as"));
-	fileMenu->Append(Minimal_SaveFSMAs, _T("Save FSM As ..."), _T("Save graph file as"));
-
-	nodeMenu->AppendSeparator();
-	fileMenu->Append(Minimal_Quit, _T("E&xit\tAlt-F4"), _T("Quit this program"));
-
-	// now append the freshly created menu to the menu bar...
+	// Create menu bar
 	wxMenuBar *menuBar = new wxMenuBar();
-	menuBar->Append(fileMenu, _T("&File"));
-	menuBar->Append(nodeMenu, _T("Nodes"));
-	menuBar->Append(helpMenu, _T("&Help"));
 
+	InitMenuBar(menuBar);
+	SetMenuBar(menuBar); // attach this menu bar to the frame
 
-
-
-	// ... and attach this menu bar to the frame
-	SetMenuBar(menuBar);
-#endif // wxUSE_MENUS
+	// Create toolbar
+	CreateToolBar();
+	InitToolbar(GetToolBar());
 
 #if wxUSE_STATUSBAR
 	// create a status bar just for fun (by default with 1 pane only)
 	CreateStatusBar(2);
-	SetStatusText(_T("Welcome to Rapido!"));
+	SetStatusText(_("Welcome to Rapido!"));
 #endif // wxUSE_STATUSBAR
 
 	SetSize(wxSize(1024,768));
 
 	// --------------------------------------------------------------------------------
-
-
-
-
 	myNotebook = new wxNotebook( this, IDC_NOTEBOOK, wxDefaultPosition, wxSize(500, 500), 0 );
 
-	/*
-	LUA()->Init();
-	LUA()->DoFile("script1.lua");
-	//LUA()->CallFunction("DeclareNodes");
-	//delete LUA();
-
-	for (unsigned int i = 0;i<mScrollV->GetPatternCount();i++)
-	{
-	nodeMenu->Append(12345+i, wxString(mScrollV->GetPatternName(i)), _T(""));
-	}
-	*/
-
-        nodeMenu->Append(wxNode_NewMessage, wxString(_("New Message")), _T(""));
-        nodeMenu->Append(wxNode_NewState, wxString(_("New State")), _T(""));
-	nodeMenu->AppendSeparator();
-	nodeMenu->Append(Minimal_Delete, _T("Delete Selected node"));
-	/*
+/*
 	m_mgr.AddPane(mScrollV, wxAuiPaneInfo().
-		Name(wxT("Nodes")).Caption(wxT("Nodes")).
-		CenterPane());
-		*/
+	    Name(wxT("Nodes")).Caption(wxT("Nodes")).
+	    CenterPane());
+*/
 	m_mgr.AddPane(myNotebook, wxAuiPaneInfo().
-		Name(wxT("Nodes")).Caption(wxT("Nodes")).
-		CenterPane());
+	    Name(wxT("Nodes")).Caption(wxT("Nodes")).
+	    CenterPane());
 
 
 
@@ -380,52 +325,101 @@ MyFrame::MyFrame(const wxString& title)
 
 	mEditScriptPanel = new wxScriptEditPanel(this);//, &m_mgr);
 	m_mgr.AddPane(mEditScriptPanel, wxAuiPaneInfo().Name(wxT("Edit Script")).Caption(wxT("Edit Script")).Bottom());
-	// toolbar
-
-	wxToolBar* mToolBarEdit = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER);
-        mToolBarEdit->SetToolBitmapSize(wxSize(22,22));
-
-        wxBitmap tb_newMessage(_("TBNewMessage.bmp"), wxBITMAP_TYPE_BMP);
-        wxBitmap tb_newState(_("TBNewState.bmp"), wxBITMAP_TYPE_BMP);
-        wxBitmap tb_generate(_("TBGenerate.bmp"), wxBITMAP_TYPE_BMP);
-        wxBitmap tb_compileAll(_("TBCompileAll.bmp"), wxBITMAP_TYPE_BMP);
-
-    mToolBarEdit->AddTool(wxNode_NewMessage, wxT("New Message"), tb_newMessage);
-	mToolBarEdit->AddTool(wxNode_NewState, wxT("New State"), tb_newState);
-	mToolBarEdit->AddSeparator();
-	//mToolBarEdit->AddTool(wxNode_Generate, wxT("Generate"), tb_generate);
-	mToolBarEdit->AddTool(wxNode_CompileAll, wxT("Compile"), tb_compileAll);
-
-    mToolBarEdit->Realize();
-
-    m_mgr.AddPane(mToolBarEdit, wxAuiPaneInfo().
-        Name(wxT("tb_edit")).Caption(wxT("Edit Bar")).
-        ToolbarPane().Top().Row(1).
-        LeftDockable(false).RightDockable(false));
-
 
 
 	m_mgr.Update();
 
-            wxConfigBase *pConfig = wxConfigBase::Get();
-            wxString appLayout = pConfig->Read(_T("/Rapido/AUIPerspective"), _(""));
-            if (!appLayout.IsEmpty())
-            {
-                m_mgr.LoadPerspective(appLayout);
-            }
-            wxString appWinState = pConfig->Read(_T("/Rapido/MainWinState"), _(""));
-            if (!appWinState.IsEmpty())
-            {
-                wxSize appSize;
-                wxPoint appPos;
-                sscanf(appWinState.mb_str(), "%d,%d,%d,%d",&appSize.x, &appSize.y, &appPos.x, &appPos.y);
+	wxConfigBase *pConfig = wxConfigBase::Get();
+	wxString appLayout = pConfig->Read(wxT("/Rapido/AUIPerspective"), wxT(""));
+	if (!appLayout.IsEmpty())
+	{
+		m_mgr.LoadPerspective(appLayout);
+	}
+	wxString appWinState = pConfig->Read(wxT("/Rapido/MainWinState"), wxT(""));
+	if (!appWinState.IsEmpty())
+	{
+		wxSize appSize;
+		wxPoint appPos;
+		sscanf(appWinState.mb_str(), "%d,%d,%d,%d",&appSize.x, &appSize.y, &appPos.x, &appPos.y);
 
 
-                SetSize(appSize);
-                SetPosition(appPos);
-            }
+		SetSize(appSize);
+		SetPosition(appPos);
+	}
 
-			DoAddNewTab();
+	DoAddNewTab();
+}
+
+
+MyFrame::~MyFrame()
+{
+	wxConfigBase *pConfig = wxConfigBase::Get();
+	wxString myPerspect = m_mgr.SavePerspective();
+	pConfig->Write(wxT("/Rapido/AUIPerspective"), myPerspect);
+
+	wxString myWinState;
+	myWinState = wxString::Format(_("%d,%d,%d,%d"),GetSize().x, GetSize().y, GetPosition().x, GetPosition().y);
+	pConfig->Write(wxT("/Rapido/MainWinState"), myWinState);
+
+	exit(0);
+}
+
+
+void MyFrame::InitMenuBar(wxMenuBar* aMenuBar)
+{
+	wxMenu *fileMenu = new wxMenu;
+	wxMenu *nodeMenu = new wxMenu;
+	wxMenu *helpMenu = new wxMenu;
+
+	// File menu
+	fileMenu->Append(Minimal_NewProject, _("New Project"), _("New FSM collection"));
+	fileMenu->Append(Minimal_NewTab, _("New FSM\tCTRL+N"), _("New Fast State Machine"));
+	fileMenu->AppendSeparator();
+	fileMenu->Append(Minimal_OpenProject, _("Open\tCTRL+O"), _("Open a Project"));
+	fileMenu->Append(Minimal_OpenFSM, _("Merge FSM"), _("Open a Project"));
+	fileMenu->AppendSeparator();
+	fileMenu->Append(Minimal_CloseTab, _("Close FSM"), _("Close Fast State Machine"));
+	fileMenu->Append(Minimal_CloseProject, _("Close Project"), _("Close Project"));
+
+	fileMenu->AppendSeparator();
+	fileMenu->Append(Minimal_SaveProject, _("Save Project\tCTRL+S"), _("Save graph file"));
+	fileMenu->Append(Minimal_SaveProjectAs, _("Save Project As ..."), _("Save graph file as"));
+	fileMenu->Append(Minimal_SaveFSMAs, _("Save FSM As ..."), _("Save graph file as"));
+
+	fileMenu->AppendSeparator();
+	fileMenu->Append(Minimal_Quit, _("E&xit\tAlt-F4"), _("Quit this program"));
+
+	// Node menu
+	nodeMenu->Append(wxNode_NewMessage, wxString(_("New Message")), wxT(""));
+	nodeMenu->Append(wxNode_NewState, wxString(_("New State")), wxT(""));
+	nodeMenu->AppendSeparator();
+	nodeMenu->Append(Minimal_Delete, _("Delete Selected node"));
+
+	// Help menu
+	helpMenu->Append(Minimal_About, _("&About...\tF1"), _("About this application"));
+
+	aMenuBar->Append(fileMenu, _("&File"));
+	aMenuBar->Append(nodeMenu, _("Nodes"));
+	aMenuBar->Append(helpMenu, _("&Help"));
+}
+
+
+void MyFrame::InitToolbar(wxToolBar* aToolbar)
+{
+	aToolbar->SetToolBitmapSize(wxSize(22,22));
+
+	wxBitmap tb_newMessage(wxT("TBNewMessage.bmp"), wxBITMAP_TYPE_BMP);
+	wxBitmap tb_newState(wxT("TBNewState.bmp"), wxBITMAP_TYPE_BMP);
+	//wxBitmap tb_generate(wxT("TBGenerate.bmp"), wxBITMAP_TYPE_BMP);
+	wxBitmap tb_compileAll(wxT("TBCompileAll.bmp"), wxBITMAP_TYPE_BMP);
+
+	aToolbar->AddTool(wxNode_NewMessage, wxT("New Message"), tb_newMessage, wxT("New message"));
+	aToolbar->AddTool(wxNode_NewState, wxT("New State"), tb_newState, wxT("New sate"));
+	aToolbar->AddSeparator();
+	//aToolbar->AddTool(wxNode_Generate, wxT("Generate"), tb_generate, wxT("Generate"));
+	aToolbar->AddTool(wxNode_CompileAll, wxT("Compile"), tb_compileAll, wxT("Compile"));
+
+	aToolbar->Realize();
 }
 
 
@@ -437,30 +431,28 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 	Close(true);
 }
 
+
 void MyFrame::OnDelSelected(wxCommandEvent& WXUNUSED(event))
 {
 	mScrollV->DeleteSelectedNode();
 }
 
+
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-	/*
-	wxMessageBox(wxString::Format(
-	_T("Welcome to %s!\n")
-	_T("\n")
-	_T("This is the minimal wxWidgets sample\n")
-	_T("running under %s."),
-	wxVERSION_STRING,
-	wxGetOsDescription().c_str()
-	),
-	_T("About wxWidgets minimal sample"),
-	wxOK | wxICON_INFORMATION,
-	this);
-	*/
+    wxAboutDialogInfo info;
+    info.SetName(_("RapidoFSM"));
+    info.SetVersion(_("0.1.9 alpha"));
+    info.SetDescription(_("A graphical finite state machine editor in wxWidgets with code generator."));
+    info.SetCopyright(wxT("© 2006 Cedric Guillemet"));
+
+    wxAboutBox(info);
+
 #ifdef _DEBUG
 	mScrollV->DumpConnections();
 #endif
 }
+
 
 void MyFrame::OnNewNodeSelected(wxCommandEvent& event)
 {
@@ -468,30 +460,36 @@ void MyFrame::OnNewNodeSelected(wxCommandEvent& event)
 	//LUA()->CallFunction(mScrollV->GetPatternScriptFunction(idx));
 }
 
+
 void RefreshSelectedNode(wxGraphNode *pNode)
 {
 	mEditNode->BuildInterface(pNode);
 }
 
+
 void MyFrame::OnNewNodeMessage(wxCommandEvent& event)
 {
 	wxGraphNode * nGraphNode8 = mScrollV->AddMessageNode();
-        nGraphNode8->SetFunctionName(_("NewMessage"));
+	nGraphNode8->SetFunctionName(_("NewMessage"));
 	nGraphNode8->SetPosition(wxPoint(40, 40));
 }
+
 
 void MyFrame::OnNewNodeState(wxCommandEvent& event)
 {
 	wxGraphNode * nGraphNode4b = mScrollV->AddStateNode();
-        nGraphNode4b->SetFunctionName(_("NewState"));
+	nGraphNode4b->SetFunctionName(_("NewState"));
 	nGraphNode4b->SetPosition(wxPoint( 40, 40));
 }
+
 
 void MyFrame::OnGenerate(wxCommandEvent& event)
 {
 	mScrollV->SetSelectedNode(NULL);
 	mEditNode->BuildInterfaceForCodeGeneration();
 }
+
+
 /*
 void MyFrame::OnFileSaveFSM(wxCommandEvent& event)
 {
@@ -520,11 +518,13 @@ void MyFrame::OnFileSaveFSM(wxCommandEvent& event)
 	}
 }
 */
+
+
 void MyFrame::OnFileOpenFSM(wxCommandEvent& event)
 {
 	bool mbForOpening = true;
-        wxFileDialog fDialog(GetParent(), _("Choose a file"), _(""), _(""), _("*.xml"),
-		mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
+	wxFileDialog fDialog(GetParent(), _("Choose a file"), wxT(""), wxT(""), wxT("*.xml"),
+	mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
 
 	if (fDialog.ShowModal() == wxID_OK)
 	{
@@ -543,51 +543,53 @@ void MyFrame::OnFileOpenFSM(wxCommandEvent& event)
 
 }
 
+
 wxString LoadStringFromFile(const wxChar *pszFileName)
 {
 	wxString res;
-        wxFFile fp(pszFileName,_("rt"));
-        if (fp.IsOpened())
-	{
-            fp.ReadAll(&res);
-        } else {
-            wxMessageDialog m(NULL, _("Unable to open file!"));
-            m.ShowModal();
-        }
+	wxFFile fp(pszFileName, wxT("rt"));
+
+	if (fp.IsOpened()) {
+		fp.ReadAll(&res);
+	} else {
+		wxMessageDialog msg(NULL, _("Unable to open file!"));
+		msg.ShowModal();
+	}
 	return res;
 }
 
 
 void MyFrame::OnFileOpenProject(wxCommandEvent& event)
 {
-    if (!CloseProject()) {
-        return;
-    }
+	if (!CloseProject()) {
+		return;
+	}
 
 
 	bool mbForOpening = true;
-        wxFileDialog fDialog(GetParent(), _("Choose a file"), _(""), _(""), _("*.xml"),
-            mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
+	wxFileDialog fDialog(GetParent(), _("Choose a file"), wxT(""), wxT(""), wxT("*.xml"),
+	    mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
 
 	if (fDialog.ShowModal() == wxID_OK)
 	{
 		DoClearProject();
 		mFileName = fDialog.GetPath();
-        wxString res = LoadStringFromFile(mFileName);
+		wxString res = LoadStringFromFile(mFileName);
 
 		TiXmlDocument pXmlDoc;
-                if (!pXmlDoc.Parse(res.mb_str()))
+		if (!pXmlDoc.Parse(res.mb_str()))
 		{
-                    wxMessageDialog m(this, res );
-                    m.ShowModal();
-                    return ;
+			wxMessageDialog m(this, res );
+			m.ShowModal();
+			return ;
 		}
 
-                TiXmlElement* pRootElem = pXmlDoc.RootElement();
-                if (pRootElem == NULL) std::cout << "Not an XML file ?" << std::endl;
+		TiXmlElement* pRootElem = pXmlDoc.RootElement();
+		if (pRootElem == NULL) std::cout << "Not an XML file ?" << std::endl;
+
 		while(pRootElem)
 		{
-                    std::cout << "adding FSMs..." << std::endl;
+			std::cout << "adding FSMs..." << std::endl;
 			DoAddNewTab();
 			mScrollV->ParseGraphString(pRootElem);
 			myNotebook->SetPageText(myNotebook->GetSelection(), mScrollV->mGraphName);
@@ -614,6 +616,7 @@ void MyFrame::OnFileOpenProject(wxCommandEvent& event)
 
 }
 
+
 void MyFrame::OnFileSaveProject(wxCommandEvent& event)
 {
 	if (mFileName.empty())
@@ -626,28 +629,25 @@ void MyFrame::OnFileSaveProject(wxCommandEvent& event)
 		for (unsigned int i=0;i<myNotebook->GetPageCount();i++)
 		{
 			wxGraphContainer *pCont = (wxGraphContainer *)myNotebook->GetPage(i);
-			/*
+		/*
 			mString += "<";
 			mString += pCont->mGraphName;
 			mString += ">\n";
-
-*/
+		*/
 			mString += pCont->BuildGraphString();
 
-                        mString += _("\n");
-			/*
+			mString += wxT("\n");
+		/*
 			mString += pCont->mGraphName;
 			mString += ">\n";
-			*/
+		*/
+		}
 
-		}
-                FILE *fp = fopen(mFileName.mb_str(),"wt");
-		if (fp)
-		{
-			fwrite(mString.c_str(), mString.Len(), 1, fp);
-			fflush(fp);
-			fclose(fp);
-		}
+		wxFFile outputFile(mFileName, wxT("w"));
+		outputFile.Write(mString);
+		outputFile.Flush();
+		outputFile.Close();
+
 		mbModified = false;
 		UpdateTitle();
 
@@ -666,11 +666,12 @@ void MyFrame::OnFileSaveProject(wxCommandEvent& event)
 	}
 }
 
+
 void MyFrame::OnFileSaveProjectAs(wxCommandEvent& event)
 {
 	bool mbForOpening = false;
-        wxFileDialog fDialog(GetParent(), _("Choose a file"), _(""), _(""), _("*.xml"),
-		mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
+	wxFileDialog fDialog(GetParent(), _("Choose a file"), wxT(""), wxT(""), wxT("*.xml"),
+	    mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
 
 	if (fDialog.ShowModal() == wxID_OK)
 	{
@@ -679,6 +680,7 @@ void MyFrame::OnFileSaveProjectAs(wxCommandEvent& event)
 		OnFileSaveProject(event);
 	}
 }
+
 
 void MyFrame::DoAddNewTab()
 {
@@ -690,6 +692,7 @@ void MyFrame::DoAddNewTab()
 	RefreshSelectedNode(NULL);
 }
 
+
 void MyFrame::OnFileNewTab(wxCommandEvent& event)
 {
 	DoAddNewTab();
@@ -699,11 +702,13 @@ void MyFrame::OnFileNewTab(wxCommandEvent& event)
 
 }
 
+
 void MyFrame::OnFileNewProject(wxCommandEvent& event)
 {
 	OnFileCloseProject(event);
 
 }
+
 
 void MyFrame::OnNotebookChange(wxNotebookEvent& event)
 {
@@ -711,11 +716,13 @@ void MyFrame::OnNotebookChange(wxNotebookEvent& event)
 	RefreshSelectedNode(NULL);
 }
 
+
 void MyFrame::OnCloseTab(wxCommandEvent& event)
 {
-        if (wxMessageBox(_("Are you sure?\nModifications will be lost"), _(""), wxYES_NO) == wxYES)
+	if (wxMessageBox(_("Are you sure?\nModifications will be lost"), wxT(""), wxYES_NO) == wxYES)
 		myNotebook->DeletePage(myNotebook->GetSelection());
 }
+
 
 void MyFrame::OnFileCloseProject(wxCommandEvent& event)
 {
@@ -727,17 +734,18 @@ void MyFrame::OnFileCloseProject(wxCommandEvent& event)
 	}
 }
 
+
 void MyFrame::OnFileSaveFSMAs(wxCommandEvent& event)
 {
 	bool mbForOpening = false;
-        wxFileDialog fDialog(GetParent(), _("Choose a file"), _(""), _(""), _("*.xml"),
-		mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
+	wxFileDialog fDialog(GetParent(), _("Choose a file"), wxT(""), wxT(""), wxT("*.xml"),
+	    mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
 
 	if (fDialog.ShowModal() == wxID_OK)
 	{
 		wxString mString = mScrollV->BuildGraphString();
 
-                FILE *fp = fopen(mFileName.mb_str(),"wt");
+		FILE *fp = fopen(mFileName.mb_str(),"wt");
 		if (fp)
 		{
 			fwrite(mString.c_str(), mString.Len(), 1, fp);
@@ -747,11 +755,12 @@ void MyFrame::OnFileSaveFSMAs(wxCommandEvent& event)
 	}
 }
 
+
 bool MyFrame::CloseProject()
 {
 	if (mbModified)
 	{
-                if (wxMessageBox(_("Are you sure?\nModifications will be lost"), _(""), wxYES_NO) != wxYES)
+		if (wxMessageBox(_("Are you sure?\nModifications will be lost"), wxT(""), wxYES_NO) != wxYES)
 			return false;
 	}
 	DoAddNewTab();
@@ -759,27 +768,30 @@ bool MyFrame::CloseProject()
 	return true;
 }
 
+
 void MyFrame::UpdateTitle()
 {
 	wxString title = RapidoTitleBar;
-        title += _(" - ");
+	title += _(" - ");
 	if (mFileName.empty())
-                title += _("Unnamed Project");
+		title += _("Unnamed Project");
 	else
 		title += mFileName.c_str();
 	if (mbModified)
-                title += _(" * ");
+		title += _(" * ");
 	this->SetTitle(title);
 
 }
+
 
 void MyFrame::DoClearProject()
 {
 	mbModified = false;
 	myNotebook->DeleteAllPages();
-        mFileName = _("");
+	mFileName = wxT("");
 
 }
+
 
 wxString GenerateCPP();
 
@@ -798,5 +810,5 @@ void MyFrame::OnCompileAll(wxCommandEvent& event)
 	mScrollV = pCursv;
 
 
-        wxMessageBox(res, _("Code Generation"));
+	wxMessageBox(res, _("Code Generation"));
 }

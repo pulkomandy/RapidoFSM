@@ -177,9 +177,9 @@ protected:
 		if (*mValue<mMin) *mValue = mMin;
 		if (*mValue>mMax) *mValue = mMax;
 
-		char tmps[512];
-		sprintf(tmps,"%5.2f",(float)*mValue);
-		mTxt->SetValue(tmps);
+		wxString str;
+		str.Printf(wxT("%5.2f"), static_cast<float>(*mValue));
+		mTxt->SetValue(str);
 	}
 
 	wxZEditHandler *mHandler;
