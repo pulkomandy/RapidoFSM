@@ -33,11 +33,11 @@ wxString wxGraphNodeState::BuildGraphString()
 	std::map<wxString, wxString>::iterator iter = mEventsCode.begin();
 	for (;iter != mEventsCode.end() ; ++iter)
 	{
-                res += _("	<Event name=\"");
+		res += wxT("	<Event name=\"");
 		res += (*iter).first.Mid(3);
-                res += _("\" code=\"");
+		res += wxT("\" code=\"");
 		res += CodeToXML((*iter).second);
-                res += _("\" />\n");
+		res += wxT("\" />\n");
 	}
 
 	return res;
@@ -63,7 +63,7 @@ void wxGraphNodeState::GetStateAssignments(const wxChar*pSource, std::vector<wxS
 {
 	//const char *start = pSource;
         wxString finds = pSource;
-        while(int offset = finds.Find(_("SetState(")))
+        while(int offset = finds.Find(wxT("SetState(")))
         {
             finds.Remove(0,offset);
             int end = finds.Find(')');

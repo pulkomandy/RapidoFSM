@@ -29,15 +29,7 @@ class wxGraphNode;
 class wxZEditNode : public wxZEdit, public wxZEditHandler {
 public:
 
-	wxZEditNode(wxWindow* parent, wxAuiManager* mgr = NULL) :
-		wxZEdit(parent, this)
-		{
-			this->Connect(-1, 14000, (wxObjectEventFunction)&wxZEditNode::OnRefresh);
-
-			mEditingNode = NULL;
-
-			mFileExport = _("testExport");
-		}
+	wxZEditNode(wxWindow* parent, wxAuiManager* mgr = NULL);
 
 	virtual ~wxZEditNode() {}
 	void OnRefresh(wxEvent& event) {}

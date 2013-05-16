@@ -101,6 +101,7 @@ unsigned short ClassIDZMeshInstance;
 #include "wxScriptEditPanel.h"
 #include "tinyxml.h"
 
+
 // Define a new application type, each program should derive a class from wxApp
 class MyApp : public wxApp
 {
@@ -121,7 +122,7 @@ wxGraphContainer *mScrollV;
 wxNotebook * myNotebook;
 wxScriptEditPanel *mEditScriptPanel;
 wxZEditNode * mEditNode;
-void SetScriptToEdit(const wxChar *szName, wxString* pCode)
+void SetScriptToEdit(const wxString& szName, wxString* pCode)
 {
 	mEditScriptPanel->SetScriptToEdit(szName, pCode);
 }
@@ -376,7 +377,7 @@ void MyFrame::InitMenuBar(wxMenuBar* aMenuBar)
 	fileMenu->Append(Minimal_NewTab, _("New FSM\tCTRL+N"), _("New Fast State Machine"));
 	fileMenu->AppendSeparator();
 	fileMenu->Append(Minimal_OpenProject, _("Open\tCTRL+O"), _("Open a Project"));
-	fileMenu->Append(Minimal_OpenFSM, _("Merge FSM"), _("Open a Project"));
+	fileMenu->Append(Minimal_OpenFSM, _("Merge FSM"), _("Open a FSM"));
 	fileMenu->AppendSeparator();
 	fileMenu->Append(Minimal_CloseTab, _("Close FSM"), _("Close Fast State Machine"));
 	fileMenu->Append(Minimal_CloseProject, _("Close Project"), _("Close Project"));
@@ -522,25 +523,21 @@ void MyFrame::OnFileSaveFSM(wxCommandEvent& event)
 
 void MyFrame::OnFileOpenFSM(wxCommandEvent& event)
 {
-	bool mbForOpening = true;
 	wxFileDialog fDialog(GetParent(), _("Choose a file"), wxT(""), wxT(""), wxT("*.xml"),
-	mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
+	                     (wxFD_OPEN | wxFD_FILE_MUST_EXIST));
 
 	if (fDialog.ShowModal() == wxID_OK)
 	{
 		mScrollV = new wxGraphContainer(myNotebook);
 
-		myNotebook->AddPage(mScrollV, fDialog.GetFilename().c_str() );
+		myNotebook->AddPage(mScrollV, fDialog.GetFilename() );
 		myNotebook->SetSelection(myNotebook->GetPageCount()-1);
 		myNotebook->Layout();
 
 		mScrollV->Clear();
-		mScrollV->ReadString(fDialog.GetFilename().c_str());
+		mScrollV->ReadString(fDialog.GetPath());
 		//mScrollV->SetGraphName(fDialog.GetFilename());
 	}
-
-
-
 }
 
 
@@ -566,9 +563,8 @@ void MyFrame::OnFileOpenProject(wxCommandEvent& event)
 	}
 
 
-	bool mbForOpening = true;
 	wxFileDialog fDialog(GetParent(), _("Choose a file"), wxT(""), wxT(""), wxT("*.xml"),
-	    mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
+	                     (wxFD_OPEN | wxFD_FILE_MUST_EXIST));
 
 	if (fDialog.ShowModal() == wxID_OK)
 	{
@@ -643,35 +639,21 @@ void MyFrame::OnFileSaveProject(wxCommandEvent& event)
 		*/
 		}
 
-		wxFFile outputFile(mFileName, wxT("w"));
+		wxFFile outputFile(mFileName, wxT("wt"));
 		outputFile.Write(mString);
 		outputFile.Flush();
 		outputFile.Close();
 
 		mbModified = false;
 		UpdateTitle();
-
-		/*
-		bool mbForOpening = false;
-		wxFileDialog fDialog(GetParent(), "Choose a file", "", "", "*.xml",
-			mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
-
-		if (fDialog.ShowModal() == wxID_OK)
-		{
-			mFileName = fDialog.GetFilename();
-			//mScrollV->SetGraphName(fDialog.GetFilename());
-			OnFileSaveProject(event);
-		}
-		*/
 	}
 }
 
 
 void MyFrame::OnFileSaveProjectAs(wxCommandEvent& event)
 {
-	bool mbForOpening = false;
 	wxFileDialog fDialog(GetParent(), _("Choose a file"), wxT(""), wxT(""), wxT("*.xml"),
-	    mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
+	                     (wxFD_SAVE | wxFD_OVERWRITE_PROMPT));
 
 	if (fDialog.ShowModal() == wxID_OK)
 	{
@@ -737,21 +719,18 @@ void MyFrame::OnFileCloseProject(wxCommandEvent& event)
 
 void MyFrame::OnFileSaveFSMAs(wxCommandEvent& event)
 {
-	bool mbForOpening = false;
 	wxFileDialog fDialog(GetParent(), _("Choose a file"), wxT(""), wxT(""), wxT("*.xml"),
-	    mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
+	                     (wxFD_SAVE | wxFD_OVERWRITE_PROMPT));
 
 	if (fDialog.ShowModal() == wxID_OK)
 	{
 		wxString mString = mScrollV->BuildGraphString();
 
-		FILE *fp = fopen(mFileName.mb_str(),"wt");
-		if (fp)
-		{
-			fwrite(mString.c_str(), mString.Len(), 1, fp);
-			fflush(fp);
-			fclose(fp);
-		}
+		wxFFile outputFile(fDialog.GetPath(), wxT("wt"));
+		outputFile.Write(mString);
+		outputFile.Flush();
+		outputFile.Close();
+
 	}
 }
 

@@ -37,7 +37,7 @@ public:
 		mColSel2 = wxColour(0,0,0,0);
 		mColForeground = wxColour(0,0,0);
 		mbHasTumbnail = false;
-                mCurSelectedButton = _("");
+		mCurSelectedButton = wxT("");
 
 
 		AddRightPlug("To");
@@ -82,7 +82,7 @@ public:
 		if (pOther->GetType() == GNT_MESSAGE)
 		{
 			int i = mButCount;
-                        wxString onmachin =  wxString(_("On ")) + wxString(pOther->GetFunctionName());
+			wxString onmachin =  wxString(_("On ")) + wxString(pOther->GetFunctionName());
 			// check already present
 			std::list<wxToggleButton*>::iterator iter = mButs.begin();
 			for (; iter != mButs.end(); ++iter)
@@ -127,7 +127,7 @@ public:
 	{
 		wxString prev;
 		if ((szMessageName[0] == 'O') && (szMessageName[1] == 'n'))
-                        prev = _("");
+                        prev = wxT("");
 		else
                         prev = _("On ");
 
@@ -160,10 +160,10 @@ public:
 		{
 			(*iter)->SetValue(false);
 		}
-		mCurSelectedButton = _("");
+		mCurSelectedButton = wxT("");
 	}
 	virtual const wxChar* GetSubItem() { return mCurSelectedButton.c_str(); }
-	virtual wxString *GetCode(const wxChar* szSubItem=_(""))
+	virtual wxString *GetCode(const wxChar* szSubItem = wxT(""))
 	{
 		wxString keyItem = szSubItem;
 		return &mEventsCode[keyItem];

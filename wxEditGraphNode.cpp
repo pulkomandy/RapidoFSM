@@ -35,24 +35,28 @@
 #include <wx/aui/dockart.h>
 #include <wx/ffile.h>
 
-#include "wxEdit.h"
-
 #include "wxEditGraphNode.h"
 #include "wxGraphNode.h"
 #include "wxGraphContainer.h"
 #include "wxGraphNodeState.h"
 #include "wxScriptEditPanel.h"
 
-//#include "res.h"
+
 extern wxGraphContainer *mScrollV;
 
-/*
 
-*/
+wxZEditNode::wxZEditNode(wxWindow* parent, wxAuiManager* mgr)
+	: wxZEdit(parent, this)
+	, mEditingNode(NULL)
+{
+	this->Connect(-1, 14000, (wxObjectEventFunction)&wxZEditNode::OnRefresh);
+
+	mFileExport = _("testExport");
+}
 
 
 /////
-void SetScriptToEdit(const wxChar *szName, wxString* pCode);
+void SetScriptToEdit(const wxString& szName, wxString* pCode);
 void wxZEditNode::BuildInterface(wxGraphNode *pNode)
 {
     mEditingNode = pNode;
@@ -84,7 +88,7 @@ void wxZEditNode::BuildInterface(wxGraphNode *pNode)
 			wxString info;
                         info = mNodeName+_(" > ");
 			info += ((wxGraphNodeState*)mEditingNode)->mCurSelectedButton;
-			SetScriptToEdit(info.c_str(), pNode->GetCode(pNode->GetSubItem()));
+			SetScriptToEdit(info, pNode->GetCode(pNode->GetSubItem()));
 		}
 	}
 	else
@@ -128,7 +132,7 @@ void wxZEditNode::BuildInterface(wxGraphNode *pNode)
 		AddScriptEdit(mScrollV->GetMembersInit(), 14);
 
 		extern wxScriptEditPanel *mEditScriptPanel;
-                mEditScriptPanel->SetScriptToEdit(_(""), NULL);
+                mEditScriptPanel->SetScriptToEdit(wxT(""), NULL);
 	}
 	EndPanel();
 }
@@ -144,7 +148,7 @@ void wxZEditNode::BuildInterfaceForCodeGeneration()
         AddFolder(_("Generate"));
 
 
-        this->AddFileOpener(_("Export File"),_("*.h;*.cpp"), &mFileExport);
+        this->AddFileOpener(_("Export File"), wxT("*.h;*.cpp"), &mFileExport);
         AddButton(_("Generate"), 101);
 
 	EndPanel();
@@ -343,7 +347,7 @@ wxString GenerateCPP()
 	wxString strTemplate;
 
 
-	wxFFile templateFile(wxT("CPPTemplate.template"), wxT("rb"));
+	wxFFile templateFile(wxT("CPPTemplate.template"), wxT("rt"));
 	if (templateFile.IsOpened())
 	{
 		templateFile.ReadAll(&strTemplate);
@@ -429,7 +433,7 @@ wxString GenerateCPP()
 
 	// write down
 	wxString genInfos;
-	wxFFile outputFile(mScrollV->mOutputFileName, wxT("w"));
+	wxFFile outputFile(mScrollV->mOutputFileName, wxT("wt"));
 	if (outputFile.IsOpened()) 
 	{
 		outputFile.Write(strTemplate);

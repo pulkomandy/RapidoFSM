@@ -61,20 +61,20 @@ class wxGraphNode : public wxPanel //, public wxGraphNode
 {
 public:
 
-    wxGraphNode(wxGraphContainer* parent);
+	wxGraphNode(wxGraphContainer* parent);
 
-    ~wxGraphNode();
+	~wxGraphNode();
 
-    virtual void SetFunctionName(const wxChar * sFunction) { mHeader = sFunction; Refresh(); }
-    virtual const wxChar *GetFunctionName() { return mHeader.c_str(); }
+	virtual void SetFunctionName(const wxString & aFunctionName) { mHeader = aFunctionName; Refresh(); }
+	virtual const wxString &GetFunctionName() { return mHeader; }
 
-        virtual void SetCode(const char * sFunction) { mCode.FromUTF8(sFunction); Refresh(); }
-    virtual wxString *GetCode(const wxChar*szSubItem=_("")) { return &mCode; }
+	virtual void SetCode(const wxString & aCode) { mCode = aCode; Refresh(); }
+	virtual wxString *GetCode(const wxChar*szSubItem = wxT("")) { return &mCode; }
 
-        virtual void SetComment(const char * sFunction) { mComment.FromUTF8(sFunction); Refresh(); }
-    virtual wxString *GetComment() { return &mComment; }
+	virtual void SetComment(const wxString & aComment) { mComment = aComment; Refresh(); }
+	virtual wxString *GetComment() { return &mComment; }
 
-        virtual const wxChar* GetSubItem() { return _(""); }
+	virtual const wxChar* GetSubItem() { return wxT(""); }
 
     virtual void AddRightPlug(const char * sPlugName, int aCon = 0)
     {
@@ -159,7 +159,8 @@ protected:
 
     wxString mScript;
 
-	wxString mCode, mComment;
+	wxString mCode;
+	wxString mComment;
 
 	// colors
 	wxColour mTextForeground ,mBackGround ,mCol1 ,mColSel1 ,mColSel2 ,mColForeground;

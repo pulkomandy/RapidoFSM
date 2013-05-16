@@ -28,11 +28,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <wx/ffile.h>
+#include <wx/tglbtn.h>
+#include <tinyxml.h>
+
 #include "wxGraphContainer.h"
-#include <map>
 #include "wxGraphNodeMessage.h"
 #include "wxGraphNodeState.h"
-#include <tinyxml.h>
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -56,22 +57,25 @@ wxGraphContainer * GetContainer()
 
 wxString CodeToXML(const wxString & str)
 {
-	wxString res;
-	res = str;
-        res.Replace(_("\""), _("&quot;"));
-        res.Replace(_("<"), _("&lt;"));
-        res.Replace(_(">"), _("&gt;"));
+	wxString res(str);
+	//res = str;
+
+	res.Replace(wxT("\""), wxT("&quot;"));
+	res.Replace(wxT("<"), wxT("&lt;"));
+	res.Replace(wxT(">"), wxT("&gt;"));
+
 	return res;
 }
 
 wxString XMLToCode(const wxString & str)
 {
-	wxString res;
-	res = str;
+	wxString res(str);
+	//res = str;
 
-        res.Replace(_("&quot;"), _("\""));
-        res.Replace(_("&lt;"), _("<"));
-        res.Replace(_("&gt;"), _(">"));
+	res.Replace(wxT("&quot;"), wxT("\""));
+	res.Replace(wxT("&lt;"), wxT("<"));
+	res.Replace(wxT("&gt;"), wxT(">"));
+
 	return res;
 }
 
@@ -228,6 +232,13 @@ wxGraphContainer::wxGraphContainer(wxWindow* parent) :
 
 }
 
+
+wxGraphContainer::~wxGraphContainer()
+{
+	for (unsigned int i=0 ; i<mNodes.size() ; i++)
+		delete mNodes[i];
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool wxGraphContainer::GetConnected(wxGraphNode *pNodeDst, wxGraphNode **pNodeSrc, unsigned int aPlugDst, unsigned int & aPlugSrc)
@@ -258,11 +269,11 @@ wxString wxGraphContainer::BuildCall(wxGraphNode *pNode)
         if (GetConnected(pNode, &aNode, i, aPlug))
         {
             if (i>0)
-                sCall += _(", ");
+                sCall += wxT(", ");
             sCall += aNode->GetFunctionName();
-            sCall += _("(");
+            sCall += wxT("(");
             sCall +=BuildCall(aNode);
-            sCall += _(").");
+            sCall += wxT(").");
             sCall += aNode->GetLeftPlugName(aPlug);
         }
     }
@@ -297,10 +308,10 @@ wxString wxGraphContainer::BuildScript()
     wxString script ;
     if (mFinalNode)
     {
-        script+= wxString::Format(_("return %s("), mFinalNode->GetFunctionName());
+        script += wxT("return ") + mFinalNode->GetFunctionName() + wxT("(");
 
-        script+=BuildCall(mFinalNode);
-        script+= _(");\n");
+        script+= BuildCall(mFinalNode);
+        script+= wxT(");\n");
     }
 
 
@@ -888,13 +899,15 @@ void wxGraphContainer::ParseGraphString(TiXmlElement* pRootElem)//const wxString
 		TiXmlElement* pNodeElem = pExtraElem->FirstChildElement("Node");
 		if(pNodeElem)
 		{
-                    const wxString szName = wxString::FromUTF8(pNodeElem->Attribute("name"));
-                        const char *szComment = pNodeElem->Attribute("comment");
-                        const wxString szCode = wxString::FromUTF8(pNodeElem->Attribute("code"));
+			const wxString szName = wxString::FromUTF8(pNodeElem->Attribute("name"));
+			const wxString szComment = wxString::FromUTF8(pNodeElem->Attribute("comment"));
+			const wxString szCode = wxString::FromUTF8(pNodeElem->Attribute("code"));
+
 			int posx = atoi(pNodeElem->Attribute("posx"));
 			int posy = atoi(pNodeElem->Attribute("posy"));
 			int width = atoi(pNodeElem->Attribute("width"));
 			int height = atoi(pNodeElem->Attribute("height"));
+
 			if (pNode->GetType() == GNT_STATE)
 			{
 				pNode->SetSize(posx, posy, width, -1);
@@ -905,7 +918,7 @@ void wxGraphContainer::ParseGraphString(TiXmlElement* pRootElem)//const wxString
 			}
 
 			pNode->SetFunctionName(szName);
-                        pNode->SetCode(XMLToCode(szCode).mb_str());
+			pNode->SetCode(XMLToCode(szCode));
 			pNode->SetComment(szComment);
 
 
@@ -974,7 +987,7 @@ void wxGraphContainer::ReadString(const wxString pszFileName)
 {
 	wxString res;
 
-    wxFFile fp(pszFileName,_("rt"));
+    wxFFile fp(pszFileName, wxT("rt"));
     if (fp.IsOpened())
         fp.ReadAll(&res);
 

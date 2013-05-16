@@ -41,39 +41,22 @@
 #include <wx/image.h>
 #include <wx/colordlg.h>
 #include <wx/wxhtml.h>
-#include <vector>
+
 #include "wxGraphNode.h"
 class TiXmlElement;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-class wxGraphContainer : public wxNotebookPage //wxPanel //, public wxGraphContainer
+class wxGraphContainer : public wxNotebookPage //wxPanel
 {
 public:
-    wxGraphContainer(wxWindow* parent);
-    virtual ~wxGraphContainer()
-    {
-		//wxString mString = BuildGraphString();
-/*
-
-		FILE *fp = fopen("res.xml","wt");
-		if (fp)
-		{
-			fwrite(mString.c_str(), mString.Len(), 1, fp);
-			fflush(fp);
-			fclose(fp);
-		}
-		*/
-
-		// clear
-        for (unsigned int i=0;i<mNodes.size();i++)
-            delete mNodes[i];
-    }
+	wxGraphContainer(wxWindow* parent);
+	virtual ~wxGraphContainer();
 
 	void Clear()
 	{
-        for (unsigned int i=0;i<mNodes.size();i++)
-            delete mNodes[i];
+		for (unsigned int i=0;i<mNodes.size();i++)
+			delete mNodes[i];
 		mNodes.clear();
 		mConnections.clear();
 		mSelectedNode = NULL;
@@ -118,7 +101,7 @@ public:
 
 	void FillNodeList(std::vector<wxString>& mList, GraphNodeType type);
 	void FillCommentsFromNodeList(std::vector<wxString>& mList, GraphNodeType type);
-        void FillCodesFromNodeList(std::vector<wxString>& mList, GraphNodeType type, const wxChar *szSubItem = _(""));
+        void FillCodesFromNodeList(std::vector<wxString>& mList, GraphNodeType type, const wxChar *szSubItem = wxT(""));
 
 	// --
 #ifdef _DEBUG
@@ -131,7 +114,7 @@ public:
     const char * GetPatternScriptFunction(unsigned int idx) { return mPatterns[idx].mCreationScriptFunction; }
 
 	wxString BuildGraphString();
-        void ReadString(const wxString pszFileName);
+	void ReadString(const wxString pszFileName);
 
 	// global stuff
 	wxString *GetIncludes() { return &mIncludes; }
@@ -250,9 +233,9 @@ public:
         wxString mStateEnumBase, mMessageEnumBase;
 	bool mbRaknetMessage, mbTickHasTime;
 
-        virtual void ChangeMessageName(const wxChar *szPrevious, const wxChar *szNew)
+	virtual void ChangeMessageName(const wxString& szPrevious, const wxChar *szNew)
 	{
-                for (unsigned int i=0;i<mNodes.size();i++)
+		for (unsigned int i=0;i<mNodes.size();i++)
 		{
 			mNodes[i]->ChangeMessageName(szPrevious, szNew);
 		}

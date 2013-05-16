@@ -48,7 +48,7 @@ public:
 
     virtual ~wxScriptEditPanel();
 
-    void SetScriptToEdit(const wxChar *szName, wxString* pCode);
+    void SetScriptToEdit(const wxString& szName, wxString* pCode);
 	void SetToEdit(wxString *pToEdit) { mToEdit = pToEdit; }
 	//virtual void SetNewText(const wxString& text) { *mToEdit = text; }
 	

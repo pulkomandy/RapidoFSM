@@ -555,7 +555,7 @@ public:
 			mLib = new wxStaticText(this, wxID_ANY, Lib, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
 
 
-                mBox = new wxComboBox(this, 2, _(""), wxDefaultPosition, wxDefaultSize, mArray, wxCB_READONLY);
+		mBox = new wxComboBox(this, 2, wxT(""), wxDefaultPosition, wxDefaultSize, mArray, wxCB_READONLY);
 		if (mArray.GetCount())
 			mBox->SetValue(mArray[*Value]);
 		mBox->SetBackgroundColour(wxColour(197, 197, 197));
@@ -593,7 +593,7 @@ public:
 			mLib = new wxStaticText(this, wxID_ANY, Lib, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
 
 
-                mBox = new wxComboBox(this, 2, _(""), wxDefaultPosition, wxDefaultSize, mArray, wxCB_READONLY);
+		mBox = new wxComboBox(this, 2, wxT(""), wxDefaultPosition, wxDefaultSize, mArray, wxCB_READONLY);
 		mBox->SetValue(mArray[*Value]);
 		mBox->SetBackgroundColour(wxColour(197, 197, 197));
 
@@ -768,7 +768,7 @@ class wxZenFileOpen : public wxPanel, public wxZEditStackedControl
 {
 public:
 
-        wxZenFileOpen(wxWindow* parent, wxZEditHandler * aHandler, const wxString& Lib, const wxString& aExtensions, wxString *pFileName, bool aForOpening = true, unsigned int aID = 0)
+	wxZenFileOpen(wxWindow* parent, wxZEditHandler * aHandler, const wxString& Lib, const wxString& aExtensions, wxString *pFileName, bool aForOpening = true, unsigned int aID = 0)
 		: wxPanel(parent, -1, wxDefaultPosition, wxDefaultSize, wxNO_BORDER)
 	{
 		wxSizer *mSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -806,14 +806,15 @@ private:
 
 	void OnOpen(wxCommandEvent &event)
 	{
-                wxFileDialog fDialog(GetParent(), _("Choose a file"), _(""), _(""), mExtensions,
+		wxFileDialog fDialog(GetParent(), _("Choose a file"), wxT(""), wxT(""), mExtensions,
 			mbForOpening?(wxFD_OPEN|wxFD_FILE_MUST_EXIST):(wxFD_SAVE|wxFD_OVERWRITE_PROMPT));
 
 		if (fDialog.ShowModal() == wxID_OK)
 		{
-                        *mFileName = fDialog.GetPath();
+			*mFileName = fDialog.GetPath();
 			mBut->SetLabel(fDialog.GetFilename());
-			if (mHandler) mHandler->HandleValueChanged(mID);
+			if (mHandler)
+				mHandler->HandleValueChanged(mID);
 		}
 	}
 
@@ -825,7 +826,7 @@ private:
 	//tcolor *mColor;
 	bool mbForOpening;
 	wxString mExtensions;
-        wxString *mFileName;
+	wxString *mFileName;
 	wxZEditHandler *mHandler;
 };
 
@@ -1117,7 +1118,7 @@ public:
 		//mBox->SetValue(*Value);
 		mHandler = aHandler;
 
-                mRootID = mTV->AddRoot(_(""));
+                mRootID = mTV->AddRoot(wxT(""));
 	}
 
 	~wxZenTreeView() {}

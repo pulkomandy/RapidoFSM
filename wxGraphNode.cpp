@@ -506,24 +506,24 @@ wxString wxGraphNode::BuildGraphString()
 {
 	wxString res;
 
-        res = _("<Node name=\"");
+	res = wxT("<Node name=\"");
 	res += GetFunctionName();
-        res += _("\" comment=\"");
+	res += wxT("\" comment=\"");
 	res += mComment;
-        res += _("\" code=\"");
+	res += wxT("\" code=\"");
 	res += CodeToXML(mCode);
-        res += _("\" ");
+	res += wxT("\" ");
 
-        wxString tmps;
-        tmps.Printf(_("posx=\"%d\" posy=\"%d\" width=\"%d\" height=\"%d\""),
-		GetPosition().x,
-		GetPosition().y,
-		GetSize().x,
-		GetSize().y);
+	wxString tmps;
+	tmps.Printf(wxT("posx=\"%d\" posy=\"%d\" width=\"%d\" height=\"%d\""),
+	            GetPosition().x,
+	            GetPosition().y,
+	            GetSize().x,
+	            GetSize().y);
 
 	res += tmps;
 
-        res += _(" />\n");
+	res += wxT(" />\n");
 
 	return res;
 }

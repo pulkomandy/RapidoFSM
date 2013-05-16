@@ -70,7 +70,7 @@ wxScriptEditPanel::wxScriptEditPanel(wxWindow* parent)
 		mScriptEdit = wxZenScriptEdit::BuildScriptPanel(mPanel, (wxObjectEventFunction)&wxScriptEditPanel::onNewChar);
 
 
-                mLib = new wxStaticText(mPanel, wxID_ANY, _(""), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+                mLib = new wxStaticText(mPanel, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
 
 		mSizer2->Add(mDeleteLink, 0, wxEXPAND + wxALL, 0);
 		mSizer2->Add(mLib, 1, wxEXPAND + wxALL, 0);
@@ -88,7 +88,7 @@ wxScriptEditPanel::~wxScriptEditPanel()
 {
 }
 
-void wxScriptEditPanel::SetScriptToEdit(const wxChar *szName, wxString* pCode)
+void wxScriptEditPanel::SetScriptToEdit(const wxString& szName, wxString* pCode)
 {
 	if (!pCode)
 	{
