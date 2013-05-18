@@ -13,15 +13,15 @@ add_subdirectory(tinyxml)
 
 
 set(RAPIDO_SOURCES
-	minimal.cpp
-	wxEdit.cpp
-	wxEditGraphNode.cpp
-	wxGraphContainer.cpp
-	wxGraphNode.cpp
-	wxGraphNodeMessage.cpp
-	wxGraphNodeState.cpp
-	wxScriptEditPanel.cpp
-	wxStackedControls.cpp
+	src/minimal.cpp
+	src/wxEdit.cpp
+	src/wxEditGraphNode.cpp
+	src/wxGraphContainer.cpp
+	src/wxGraphNode.cpp
+	src/wxGraphNodeMessage.cpp
+	src/wxGraphNodeState.cpp
+	src/wxScriptEditPanel.cpp
+	src/wxStackedControls.cpp
 	)
 
 add_executable(rapido ${RAPIDO_SOURCES})
