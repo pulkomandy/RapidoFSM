@@ -49,20 +49,16 @@ END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-wxGraphContainer * gContainer = NULL;
-wxGraphContainer * GetContainer()
-{
-	return gContainer;
-}
 
 wxString CodeToXML(const wxString & str)
 {
 	wxString res(str);
-	//res = str;
 
-	res.Replace(wxT("\""), wxT("&quot;"));
+	res.Replace(wxT("&"), wxT("&amp"));
 	res.Replace(wxT("<"), wxT("&lt;"));
 	res.Replace(wxT(">"), wxT("&gt;"));
+	res.Replace(wxT("\""), wxT("&quot;"));
+	res.Replace(wxT("\'"), wxT("&aquot"));
 
 	return res;
 }
@@ -70,11 +66,12 @@ wxString CodeToXML(const wxString & str)
 wxString XMLToCode(const wxString & str)
 {
 	wxString res(str);
-	//res = str;
 
-	res.Replace(wxT("&quot;"), wxT("\""));
+	res.Replace(wxT("&amp"), wxT("&"));
 	res.Replace(wxT("&lt;"), wxT("<"));
 	res.Replace(wxT("&gt;"), wxT(">"));
+	res.Replace(wxT("&quot;"), wxT("\""));
+	res.Replace(wxT("&aquot"), wxT("\'"));
 
 	return res;
 }
@@ -82,18 +79,17 @@ wxString XMLToCode(const wxString & str)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 wxGraphContainer::wxGraphContainer(wxWindow* parent) :
-    wxNotebookPage(parent, -1)
+	wxNotebookPage(parent, -1)
+	, mGraphName(_("Unnamed"))
+	, mOutputFileName(wxT("res.h"))
+	, mbMoving(false)
+	, mbCreatingNewConnection(false)
+	, mbRaknetMessage(true)
+	, mbTickHasTime(true)
+	, mSelectedNode(NULL)
+	, mFinalNode(NULL)
+	, mInitialState(0)
 {
-        mOutputFileName = _("res.h");
-    gContainer = this;
-    mbMoving = false;
-    mbCreatingNewConnection = false;
-	mbRaknetMessage = mbTickHasTime = true;
-    mSelectedNode = NULL;
-    mFinalNode = NULL;
-
-	mInitialState = 0;
-
     // fake connection
 #if 0
 	wxGraphNode * nGraphNode = AddNode();

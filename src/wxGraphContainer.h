@@ -85,7 +85,7 @@ public:
     void CancelNewConnection();
 
     wxGraphNode *GetNode(wxPoint aPoint);
-        wxGraphNode *GetNodeByName(const wxString szName);
+    wxGraphNode *GetNodeByName(const wxString szName);
     void DeleteSelectedNode();
 
     void RemoveConnection(wxGraphNode *pNode, unsigned int aBorder, unsigned int aPlugIndex);

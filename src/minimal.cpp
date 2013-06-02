@@ -101,6 +101,8 @@ unsigned short ClassIDZMeshInstance;
 #include "wxScriptEditPanel.h"
 #include "tinyxml.h"
 
+#include "RapidoIO.h"
+
 
 // Define a new application type, each program should derive a class from wxApp
 class MyApp : public wxApp
@@ -163,6 +165,8 @@ private:
 
 	void InitToolbar(wxToolBar* aToolbar);
 	void InitMenuBar(wxMenuBar* aMenuBar);
+
+	void AddFSMsToProject(std::vector<wxGraphContainer*> aGraphContainerList);
 
 	wxAuiManager m_mgr;
 public:
@@ -374,18 +378,18 @@ void MyFrame::InitMenuBar(wxMenuBar* aMenuBar)
 
 	// File menu
 	fileMenu->Append(Minimal_NewProject, _("New Project"), _("New FSM collection"));
-	fileMenu->Append(Minimal_NewTab, _("New FSM\tCTRL+N"), _("New Fast State Machine"));
+	fileMenu->Append(Minimal_NewTab, _("New FSM\tCTRL+N"), _("New Finite-State Machine"));
 	fileMenu->AppendSeparator();
 	fileMenu->Append(Minimal_OpenProject, _("Open\tCTRL+O"), _("Open a Project"));
-	fileMenu->Append(Minimal_OpenFSM, _("Merge FSM"), _("Open a FSM"));
+	fileMenu->Append(Minimal_OpenFSM, _("Merge FSMs"), _("Merge Finite-State Machines to the current project"));
 	fileMenu->AppendSeparator();
-	fileMenu->Append(Minimal_CloseTab, _("Close FSM"), _("Close Fast State Machine"));
+	fileMenu->Append(Minimal_CloseTab, _("Close FSM"), _("Close Finite-State Machine"));
 	fileMenu->Append(Minimal_CloseProject, _("Close Project"), _("Close Project"));
 
 	fileMenu->AppendSeparator();
-	fileMenu->Append(Minimal_SaveProject, _("Save Project\tCTRL+S"), _("Save graph file"));
-	fileMenu->Append(Minimal_SaveProjectAs, _("Save Project As ..."), _("Save graph file as"));
-	fileMenu->Append(Minimal_SaveFSMAs, _("Save FSM As ..."), _("Save graph file as"));
+	fileMenu->Append(Minimal_SaveProject, _("Save Project\tCTRL+S"), _("Save project file"));
+	fileMenu->Append(Minimal_SaveProjectAs, _("Save Project As ..."), _("Save project file as"));
+	fileMenu->Append(Minimal_SaveFSMAs, _("Save FSM As ..."), _("Save Finite-State Machine file as"));
 
 	fileMenu->AppendSeparator();
 	fileMenu->Append(Minimal_Quit, _("E&xit\tAlt-F4"), _("Quit this program"));
@@ -520,6 +524,22 @@ void MyFrame::OnFileSaveFSM(wxCommandEvent& event)
 }
 */
 
+void MyFrame::AddFSMsToProject(std::vector<wxGraphContainer*> aGraphContainerList)
+{
+	for (std::vector<wxGraphContainer*>::iterator it = aGraphContainerList.begin(), end = aGraphContainerList.end() ; it != end ; ++it)
+	{
+		std::cout << "Adding FSM..." << std::endl;
+		mScrollV = *it;
+
+		myNotebook->AddPage(mScrollV, mScrollV->mGraphName);
+		myNotebook->SetSelection(myNotebook->GetPageCount()-1);
+		myNotebook->Layout();
+	}
+
+	RefreshSelectedNode(NULL);
+	UpdateTitle();
+}
+
 
 void MyFrame::OnFileOpenFSM(wxCommandEvent& event)
 {
@@ -528,31 +548,11 @@ void MyFrame::OnFileOpenFSM(wxCommandEvent& event)
 
 	if (fDialog.ShowModal() == wxID_OK)
 	{
-		mScrollV = new wxGraphContainer(myNotebook);
+		std::vector<wxGraphContainer*> graphContainerList;
+		graphContainerList = RapidoIO::LoadStateMachinesFromFile(myNotebook, fDialog.GetPath());
 
-		myNotebook->AddPage(mScrollV, fDialog.GetFilename() );
-		myNotebook->SetSelection(myNotebook->GetPageCount()-1);
-		myNotebook->Layout();
-
-		mScrollV->Clear();
-		mScrollV->ReadString(fDialog.GetPath());
-		//mScrollV->SetGraphName(fDialog.GetFilename());
+		AddFSMsToProject(graphContainerList);
 	}
-}
-
-
-wxString LoadStringFromFile(const wxChar *pszFileName)
-{
-	wxString res;
-	wxFFile fp(pszFileName, wxT("rt"));
-
-	if (fp.IsOpened()) {
-		fp.ReadAll(&res);
-	} else {
-		wxMessageDialog msg(NULL, _("Unable to open file!"));
-		msg.ShowModal();
-	}
-	return res;
 }
 
 
@@ -562,54 +562,19 @@ void MyFrame::OnFileOpenProject(wxCommandEvent& event)
 		return;
 	}
 
-
-	wxFileDialog fDialog(GetParent(), _("Choose a file"), wxT(""), wxT(""), wxT("*.xml"),
-	                     (wxFD_OPEN | wxFD_FILE_MUST_EXIST));
+	wxFileDialog fDialog(GetParent(), _("Choose a file"), wxT(""), wxT(""),
+	                     wxT("*.xml"), (wxFD_OPEN | wxFD_FILE_MUST_EXIST));
 
 	if (fDialog.ShowModal() == wxID_OK)
 	{
 		DoClearProject();
+
 		mFileName = fDialog.GetPath();
-		wxString res = LoadStringFromFile(mFileName);
+		std::vector<wxGraphContainer*> graphContainerList;
+		graphContainerList = RapidoIO::LoadStateMachinesFromFile(myNotebook, mFileName);
 
-		TiXmlDocument pXmlDoc;
-		if (!pXmlDoc.Parse(res.mb_str()))
-		{
-			wxMessageDialog m(this, res );
-			m.ShowModal();
-			return ;
-		}
-
-		TiXmlElement* pRootElem = pXmlDoc.RootElement();
-		if (pRootElem == NULL) std::cout << "Not an XML file ?" << std::endl;
-
-		while(pRootElem)
-		{
-			std::cout << "adding FSMs..." << std::endl;
-			DoAddNewTab();
-			mScrollV->ParseGraphString(pRootElem);
-			myNotebook->SetPageText(myNotebook->GetSelection(), mScrollV->mGraphName);
-			pRootElem = pRootElem->NextSiblingElement("GraphContainer");
-		}
-
-		RefreshSelectedNode(NULL);
-		UpdateTitle();
-
-		/*
-		mScrollV = new wxGraphContainer(myNotebook);
-
-		myNotebook->AddPage(mScrollV, fDialog.GetFilename().c_str() );
-		myNotebook->SetSelection(myNotebook->GetPageCount()-1);
-		myNotebook->Layout();
-
-		mScrollV->Clear();
-		mScrollV->ReadString(fDialog.GetFilename().c_str());
-		mScrollV->SetGraphName(fDialog.GetFilename());
-		*/
+		AddFSMsToProject(graphContainerList);
 	}
-
-
-
 }
 
 
@@ -621,28 +586,13 @@ void MyFrame::OnFileSaveProject(wxCommandEvent& event)
 	}
 	else
 	{
-		wxString mString;
-		for (unsigned int i=0;i<myNotebook->GetPageCount();i++)
+		std::vector<wxGraphContainer*> graphContainerList;
+		for (unsigned int i = 0, size = myNotebook->GetPageCount() ; i < size ; ++i)
 		{
-			wxGraphContainer *pCont = (wxGraphContainer *)myNotebook->GetPage(i);
-		/*
-			mString += "<";
-			mString += pCont->mGraphName;
-			mString += ">\n";
-		*/
-			mString += pCont->BuildGraphString();
-
-			mString += wxT("\n");
-		/*
-			mString += pCont->mGraphName;
-			mString += ">\n";
-		*/
+			graphContainerList.push_back(static_cast<wxGraphContainer*>(myNotebook->GetPage(i)));
 		}
 
-		wxFFile outputFile(mFileName, wxT("wt"));
-		outputFile.Write(mString);
-		outputFile.Flush();
-		outputFile.Close();
+		RapidoIO::SaveStateMachinesToFile(graphContainerList, mFileName);
 
 		mbModified = false;
 		UpdateTitle();
@@ -657,7 +607,6 @@ void MyFrame::OnFileSaveProjectAs(wxCommandEvent& event)
 
 	if (fDialog.ShowModal() == wxID_OK)
 	{
-		//mScrollV->SetGraphName(fDialog.GetFilename());
 		mFileName = fDialog.GetPath();
 		OnFileSaveProject(event);
 	}
@@ -666,12 +615,18 @@ void MyFrame::OnFileSaveProjectAs(wxCommandEvent& event)
 
 void MyFrame::DoAddNewTab()
 {
+	std::vector<wxGraphContainer*> graphContainerList;
+	graphContainerList.push_back(new wxGraphContainer(myNotebook));
+
+	AddFSMsToProject(graphContainerList);
+/*
 	mScrollV = new wxGraphContainer(myNotebook);
 
-	myNotebook->AddPage(mScrollV, L"Unnamed" );
+	myNotebook->AddPage(mScrollV, wxT("Unnamed"));
 	myNotebook->SetSelection(myNotebook->GetPageCount()-1);
 	myNotebook->Layout();
 	RefreshSelectedNode(NULL);
+*/
 }
 
 
@@ -680,8 +635,6 @@ void MyFrame::OnFileNewTab(wxCommandEvent& event)
 	DoAddNewTab();
 
 	mbModified = true;
-	UpdateTitle();
-
 }
 
 
@@ -712,7 +665,6 @@ void MyFrame::OnFileCloseProject(wxCommandEvent& event)
 	{
 		DoClearProject();
 		DoAddNewTab();
-		UpdateTitle();
 	}
 }
 
@@ -724,13 +676,10 @@ void MyFrame::OnFileSaveFSMAs(wxCommandEvent& event)
 
 	if (fDialog.ShowModal() == wxID_OK)
 	{
-		wxString mString = mScrollV->BuildGraphString();
-
-		wxFFile outputFile(fDialog.GetPath(), wxT("wt"));
-		outputFile.Write(mString);
-		outputFile.Flush();
-		outputFile.Close();
-
+		std::vector<wxGraphContainer*> graphContainerList;
+		graphContainerList.push_back(mScrollV);
+		
+		RapidoIO::SaveStateMachinesToFile(graphContainerList, fDialog.GetPath());
 	}
 }
 
@@ -743,7 +692,6 @@ bool MyFrame::CloseProject()
 			return false;
 	}
 	DoAddNewTab();
-	UpdateTitle();
 	return true;
 }
 
@@ -772,22 +720,16 @@ void MyFrame::DoClearProject()
 }
 
 
-wxString GenerateCPP();
-
 void MyFrame::OnCompileAll(wxCommandEvent& event)
 {
 	OnFileSaveProject(event);
 
 	wxString res;
-	wxGraphContainer *pCursv = mScrollV;
-	for (unsigned int i=0;i<myNotebook->GetPageCount();i++)
+	for (unsigned int i = 0, size = myNotebook->GetPageCount() ; i < size ; ++i)
 	{
-		wxGraphContainer *pCont = (wxGraphContainer *)myNotebook->GetPage(i);
-		mScrollV = pCont;
-		res += GenerateCPP();
+		wxGraphContainer* pCont = static_cast<wxGraphContainer*>(myNotebook->GetPage(i));
+		res += RapidoIO::GenerateCppFile(*pCont);
 	}
-	mScrollV = pCursv;
-
 
 	wxMessageBox(res, _("Code Generation"));
 }

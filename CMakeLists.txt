@@ -22,6 +22,7 @@ set(RAPIDO_SOURCES
 	src/wxGraphNodeState.cpp
 	src/wxScriptEditPanel.cpp
 	src/wxStackedControls.cpp
+	src/RapidoIO.cpp
 	)
 
 add_executable(rapido ${RAPIDO_SOURCES})
