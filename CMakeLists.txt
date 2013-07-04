@@ -7,6 +7,8 @@ include( ${wxWidgets_USE_FILE} )
 
 include_directories($(PROJECT_SOURCE_DIR)/tinyxml)
 
+add_definitions(-DTINYXML_USE_STL)
+
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${RapidoFSM_BINARY_DIR}/bin )
 
 add_subdirectory(tinyxml)

@@ -1,4 +1,3 @@
-
 set(TINYXML_SOURCES
 	tinyxml.cpp
 	tinystr.cpp

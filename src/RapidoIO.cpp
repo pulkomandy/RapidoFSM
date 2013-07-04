@@ -9,41 +9,44 @@
 #include "tinyxml.h"
 
 
+const std::string RapidoIO::ROOTNODE_VALUE = "RapidoFSM_storage";
+
+
 std::vector<wxGraphContainer*> RapidoIO::LoadStateMachinesFromFile(wxWindow* aParent, const wxString& aFileName)
+{
+	TiXmlDocument xmlDocument(aFileName.fn_str());
+	std::vector<wxGraphContainer*> stateMachineList;
+
+	if (!xmlDocument.LoadFile()) {
+		wxMessageBox(wxString::Format(_("Can't load XML file \"%s\""),
+		                              aFileName.c_str()), _("Error message"),
+		                              wxOK | wxICON_ERROR, NULL);
+		return stateMachineList;
+	}
+
+
+	TiXmlElement* xmlElement = xmlDocument.RootElement();
+	if (xmlElement != NULL) {
+		std::string rootElementValue(xmlElement->Value());
+		if (rootElementValue.compare(ROOTNODE_VALUE) == 0)
+			stateMachineList = CreateStateMachinesFromXmlDocument(aParent, xmlDocument);
+		else
+			stateMachineList = CreateStateMachinesFromLegacyXmlDocument(aParent, xmlDocument);
+	}
+
+	return stateMachineList;
+}
+
+
+std::vector<wxGraphContainer*> RapidoIO::CreateStateMachinesFromLegacyXmlDocument(wxWindow* aParent, TiXmlDocument& aXmlDocument)
 {
 	std::vector<wxGraphContainer*> stateMachineList;
 
-	wxString xmlFileStr;
-	wxFFile xmlFile(aFileName, wxT("rt"));
-
-	if (xmlFile.IsOpened())
-		xmlFile.ReadAll(&xmlFileStr);
-	else {
-		wxMessageBox(wxString::Format(_("Can't open file \"%s\""),
-		                              aFileName.c_str()), _("Error message"),
-		                              wxOK | wxICON_ERROR, aParent);
-		return stateMachineList;
-	}
-
-	TiXmlDocument xmlDoc;
-	if (!xmlDoc.Parse(xmlFileStr.mb_str()))
-	{
-		wxMessageDialog m(NULL, xmlFileStr);
-		m.ShowModal();
-		return stateMachineList;
-	}
-
-	TiXmlElement* xmlElement = xmlDoc.RootElement();
-	if (xmlElement == NULL) {
-		wxMessageBox(wxString::Format(_("File \"%s\" is not a valid XML file"),
-		                              aFileName.c_str()), _("Error message"),
-		                              wxOK | wxICON_ERROR, aParent);
-	}
-
-	while(xmlElement)
+	TiXmlElement* xmlElement = aXmlDocument.RootElement();
+	while(xmlElement != NULL)
 	{
 		wxGraphContainer* graphContainer = new wxGraphContainer(aParent);
-		graphContainer->ParseGraphString(xmlElement);
+		graphContainer->ParseLegacyXmlElement(xmlElement);
 		stateMachineList.push_back(graphContainer);
 
 		xmlElement = xmlElement->NextSiblingElement("GraphContainer");
@@ -53,20 +56,50 @@ std::vector<wxGraphContainer*> RapidoIO::LoadStateMachinesFromFile(wxWindow* aPa
 }
 
 
-void RapidoIO::SaveStateMachinesToFile(std::vector<wxGraphContainer*> aList, const wxString& aFileName)
+std::vector<wxGraphContainer*> RapidoIO::CreateStateMachinesFromXmlDocument(wxWindow* aParent, TiXmlDocument& aXmlDocument)
 {
-	wxString outputFileStr;
+	std::vector<wxGraphContainer*> stateMachineList;
 
-	for (std::vector<wxGraphContainer*>::iterator it = aList.begin(), end = aList.end() ; it != end ; ++it)
+	TiXmlElement* xmlRootElement = aXmlDocument.RootElement();
+	TiXmlElement* xmlElement = xmlRootElement->FirstChildElement("finiteStateMachine");
+	while(xmlElement)
 	{
-		outputFileStr += (*it)->BuildGraphString();
-		outputFileStr += wxT("\n");
+		wxGraphContainer* graphContainer = new wxGraphContainer(aParent);
+		graphContainer->ParseXmlElement(xmlElement);
+		stateMachineList.push_back(graphContainer);
+
+		xmlElement = xmlElement->NextSiblingElement("finiteStateMachine");
 	}
 
-	wxFFile outputFile(aFileName, wxT("wt"));
-	outputFile.Write(outputFileStr);
-	outputFile.Flush();
-	outputFile.Close();
+	return stateMachineList;
+}
+
+
+void RapidoIO::SaveStateMachinesToFile(std::vector<wxGraphContainer*> aList, const wxString& aFileName, bool use_legacyFileFormat)
+{
+	TiXmlDocument xmlDocument(aFileName.fn_str());
+
+	if (use_legacyFileFormat) {
+
+		for (std::vector<wxGraphContainer*>::iterator it = aList.begin(), end = aList.end() ; it != end ; ++it)
+			xmlDocument.LinkEndChild((*it)->CreateLegacyXmlNodeWithChildren());
+
+	} else {
+
+		TiXmlDocument xmlDocument(aFileName.fn_str());
+
+		xmlDocument.InsertEndChild(TiXmlDeclaration("1.0", "UTF-8", "yes"));
+
+		TiXmlElement* rootElement = new TiXmlElement(ROOTNODE_VALUE.c_str());
+
+		for (std::vector<wxGraphContainer*>::iterator it = aList.begin(), end = aList.end() ; it != end ; ++it)
+			rootElement->LinkEndChild((*it)->CreateXmlNodeWithChildren());
+
+		xmlDocument.LinkEndChild(rootElement);
+
+	}
+
+	xmlDocument.SaveFile();
 }
 
 
@@ -107,7 +140,7 @@ wxString RapidoIO::GenerateCppFile(wxGraphContainer& aFsmGraph)
 
 	std::map<wxString, wxString> templateMap;
 
-	wxString className = aFsmGraph.mGraphName.c_str();
+	wxString className = aFsmGraph.GetGraphName();
 	templateMap[wxT("%%STATEMACHINENAME%%")] = className;
 
 	bool bHasFloatTime = true;
@@ -177,7 +210,7 @@ wxString RapidoIO::GenerateCppFile(wxGraphContainer& aFsmGraph)
 
 	// Write down
 	wxString genInfos;
-	wxFFile outputFile(aFsmGraph.mOutputFileName, wxT("wt"));
+	wxFFile outputFile(aFsmGraph.GetOutputFileName(), wxT("wt"));
 	if (outputFile.IsOpened()) 
 	{
 		outputFile.Write(strTemplate);
@@ -191,12 +224,12 @@ wxString RapidoIO::GenerateCppFile(wxGraphContainer& aFsmGraph)
 				newLineCount++;
 		}
 		genInfos.Printf(_("Generation of %s OK!\n%u lines generated.\n"),
-		                aFsmGraph.mOutputFileName.c_str(), newLineCount);
+		                aFsmGraph.GetOutputFileName().c_str(), newLineCount);
 	}
 	else
 	{
 		genInfos.Printf(_("Generation of %s FAILED!\n"),
-		                aFsmGraph.mOutputFileName.c_str());
+		                aFsmGraph.GetOutputFileName().c_str());
 	}
 
 	return genInfos;

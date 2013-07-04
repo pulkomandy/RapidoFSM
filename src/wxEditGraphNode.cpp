@@ -177,7 +177,7 @@ void wxZEditNode::HandleValueChanged(unsigned int aID)
 	{
 		extern wxNotebook * myNotebook;
 		myNotebook->SetPageText(myNotebook->GetSelection(), mNodeName.c_str());
-		mScrollV->mGraphName = mNodeName.c_str();
+		mScrollV->SetGraphName(mNodeName);
 	}
 	else
 

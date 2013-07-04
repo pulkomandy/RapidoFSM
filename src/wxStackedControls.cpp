@@ -52,38 +52,38 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE(wxZenTextEditRoot, wxPanel)
-EVT_COMMAND_KILL_FOCUS(3, wxZenTextEditRoot::LostFocus)
+	EVT_COMMAND_KILL_FOCUS(3, wxZenTextEditRoot::LostFocus)
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE(wxZenSlider, wxPanel)
-EVT_SCROLL(wxZenSlider::Scroll)
+	EVT_SCROLL(wxZenSlider::Scroll)
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE(wxZenCheckBox, wxPanel)
-EVT_CHECKBOX(2, wxZenCheckBox::OnCheck)
+	EVT_CHECKBOX(2, wxZenCheckBox::OnCheck)
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE(wxZenCheckBoxBitField, wxPanel)
-EVT_CHECKBOX(2, wxZenCheckBoxBitField::OnCheck)
+	EVT_CHECKBOX(2, wxZenCheckBoxBitField::OnCheck)
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE(wxZenComboBox, wxPanel)
-EVT_COMBOBOX(2, wxZenComboBox::OnSelChange)
+	EVT_COMBOBOX(2, wxZenComboBox::OnSelChange)
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 BEGIN_EVENT_TABLE(wxZenRadioBox, wxPanel)
-EVT_RADIOBOX(2, wxZenRadioBox::OnSelChange)
+	EVT_RADIOBOX(2, wxZenRadioBox::OnSelChange)
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,19 +95,19 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE(wxZenFileOpen, wxPanel)
-EVT_BUTTON(2, wxZenFileOpen::OnOpen)
+	EVT_BUTTON(2, wxZenFileOpen::OnOpen)
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE(wxZenDirectoryOpen, wxPanel)
-EVT_BUTTON(2, wxZenDirectoryOpen::OnOpen)
+	EVT_BUTTON(2, wxZenDirectoryOpen::OnOpen)
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE(wxZenButton, wxPanel)
-EVT_BUTTON(2, wxZenButton::OnClick)
+	EVT_BUTTON(2, wxZenButton::OnClick)
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,13 +118,13 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE(wxZenToggleButton, wxPanel)
-EVT_TOGGLEBUTTON(2, wxZenToggleButton::OnToggle)
+	EVT_TOGGLEBUTTON(2, wxZenToggleButton::OnToggle)
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE(wxZenToggleButtonPlugin, wxPanel)
-EVT_TOGGLEBUTTON(2, wxZenToggleButtonPlugin::OnToggle)
+	EVT_TOGGLEBUTTON(2, wxZenToggleButtonPlugin::OnToggle)
 END_EVENT_TABLE()
 
 wxZenToggleButtonPlugin* wxZenToggleButtonPlugin::gLastClickedToggleButton = NULL;
@@ -135,13 +135,13 @@ wxZenToggleButtonPlugin* wxZenToggleButtonPlugin::gLastClickedToggleButton = NUL
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE(wxZenTextList, wxPanel)
-EVT_LISTBOX_DCLICK(2, wxZenTextList::OnDblClick)
-EVT_LISTBOX(2, wxZenTextList::OnClick)
+	EVT_LISTBOX_DCLICK(2, wxZenTextList::OnDblClick)
+	EVT_LISTBOX(2, wxZenTextList::OnClick)
 END_EVENT_TABLE()
 
 
 BEGIN_EVENT_TABLE(wxZenTreeView, wxPanel)
-EVT_TREE_SEL_CHANGED(2, wxZenTreeView::OnTVSelChanged)
+	EVT_TREE_SEL_CHANGED(2, wxZenTreeView::OnTVSelChanged)
 END_EVENT_TABLE()
 
 

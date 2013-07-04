@@ -196,7 +196,7 @@ enum
 	// this standard value as otherwise it won't be handled properly under Mac
 	// (where it is special and put into the "Apple" menu)
 	Minimal_About = wxID_ABOUT,
-	Minimal_Delete = 10008 ,
+	Minimal_Delete = 10008
 };
 
 enum
@@ -225,23 +225,23 @@ enum
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
-EVT_MENU(Minimal_About, MyFrame::OnAbout)
-EVT_MENU(Minimal_Delete, MyFrame::OnDelSelected)
-EVT_MENU_RANGE(wxNode_NewMessage,wxNode_NewMessage, MyFrame::OnNewNodeMessage)
-EVT_MENU_RANGE(wxNode_NewState,wxNode_NewState, MyFrame::OnNewNodeState)
-EVT_MENU_RANGE(wxNode_Generate,wxNode_Generate, MyFrame::OnGenerate)
-EVT_MENU(wxNode_CompileAll, MyFrame::OnCompileAll)
+	EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
+	EVT_MENU(Minimal_About, MyFrame::OnAbout)
+	EVT_MENU(Minimal_Delete, MyFrame::OnDelSelected)
+	EVT_MENU_RANGE(wxNode_NewMessage,wxNode_NewMessage, MyFrame::OnNewNodeMessage)
+	EVT_MENU_RANGE(wxNode_NewState,wxNode_NewState, MyFrame::OnNewNodeState)
+	EVT_MENU_RANGE(wxNode_Generate,wxNode_Generate, MyFrame::OnGenerate)
+	EVT_MENU(wxNode_CompileAll, MyFrame::OnCompileAll)
 
-EVT_MENU(Minimal_SaveProject, MyFrame::OnFileSaveProject)
-EVT_MENU(Minimal_OpenProject, MyFrame::OnFileOpenProject)
-EVT_MENU(Minimal_SaveProjectAs, MyFrame::OnFileSaveProjectAs)
-EVT_MENU(Minimal_NewTab, MyFrame::OnFileNewTab)
-EVT_MENU(Minimal_NewProject, MyFrame::OnFileNewProject)
-EVT_NOTEBOOK_PAGE_CHANGED(IDC_NOTEBOOK, MyFrame::OnNotebookChange)
-EVT_MENU(Minimal_CloseTab, MyFrame::OnCloseTab)
-EVT_MENU(Minimal_OpenFSM, MyFrame::OnFileOpenFSM)
-EVT_MENU(Minimal_SaveFSMAs, MyFrame::OnFileSaveFSMAs)
+	EVT_MENU(Minimal_SaveProject, MyFrame::OnFileSaveProject)
+	EVT_MENU(Minimal_OpenProject, MyFrame::OnFileOpenProject)
+	EVT_MENU(Minimal_SaveProjectAs, MyFrame::OnFileSaveProjectAs)
+	EVT_MENU(Minimal_NewTab, MyFrame::OnFileNewTab)
+	EVT_MENU(Minimal_NewProject, MyFrame::OnFileNewProject)
+	EVT_NOTEBOOK_PAGE_CHANGED(IDC_NOTEBOOK, MyFrame::OnNotebookChange)
+	EVT_MENU(Minimal_CloseTab, MyFrame::OnCloseTab)
+	EVT_MENU(Minimal_OpenFSM, MyFrame::OnFileOpenFSM)
+	EVT_MENU(Minimal_SaveFSMAs, MyFrame::OnFileSaveFSMAs)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -531,7 +531,7 @@ void MyFrame::AddFSMsToProject(std::vector<wxGraphContainer*> aGraphContainerLis
 		std::cout << "Adding FSM..." << std::endl;
 		mScrollV = *it;
 
-		myNotebook->AddPage(mScrollV, mScrollV->mGraphName);
+		myNotebook->AddPage(mScrollV, mScrollV->GetGraphName());
 		myNotebook->SetSelection(myNotebook->GetPageCount()-1);
 		myNotebook->Layout();
 	}

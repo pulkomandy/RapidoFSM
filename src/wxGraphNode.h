@@ -45,75 +45,78 @@
 #include <list>
 #include <map>
 
+#include "tinyxml.h"
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 class wxGraphContainer;
+
 enum GraphNodeType
 {
-	GNT_DEFAULT,
 	GNT_MESSAGE,
 	GNT_STATE
 };
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-class wxGraphNode : public wxPanel //, public wxGraphNode
+class wxGraphNode : public wxPanel
 {
 public:
 
 	wxGraphNode(wxGraphContainer* parent);
 
-	~wxGraphNode();
+	virtual ~wxGraphNode();
 
 	virtual void SetFunctionName(const wxString & aFunctionName) { mHeader = aFunctionName; Refresh(); }
 	virtual const wxString &GetFunctionName() { return mHeader; }
 
 	virtual void SetCode(const wxString & aCode) { mCode = aCode; Refresh(); }
-	virtual wxString *GetCode(const wxChar*szSubItem = wxT("")) { return &mCode; }
+	virtual wxString *GetCode(const wxString& szSubItem = wxT("")) { return &mCode; }
 
 	virtual void SetComment(const wxString & aComment) { mComment = aComment; Refresh(); }
 	virtual wxString *GetComment() { return &mComment; }
 
-	virtual const wxChar* GetSubItem() { return wxT(""); }
+	virtual const wxString GetSubItem() { return wxT(""); }
 
-    virtual void AddRightPlug(const char * sPlugName, int aCon = 0)
-    {
-        mRightPlugs.push_back(NodePlug(wxString::FromUTF8(sPlugName),aCon));
-    }
+	virtual void AddRightPlug(const char * sPlugName, int aCon = 0)
+	{
+		mRightPlugs.push_back(NodePlug(wxString::FromUTF8(sPlugName),aCon));
+	}
 
-    virtual void AddLeftPlug(const char * sPlugName, int aCon = 0)
-    {
-        mLeftPlugs.push_back(NodePlug(wxString::FromUTF8(sPlugName), aCon));
-    }
+	virtual void AddLeftPlug(const char * sPlugName, int aCon = 0)
+	{
+		mLeftPlugs.push_back(NodePlug(wxString::FromUTF8(sPlugName), aCon));
+	}
 
-    virtual unsigned int GetNbRightPlugs() { return mRightPlugs.size(); }
-    virtual unsigned int GetNbLeftPlugs() { return mLeftPlugs.size(); }
-    virtual const wxChar * GetRightPlugName(unsigned int aPlugIndex) { return mRightPlugs[aPlugIndex].mLabel.c_str(); }
-    virtual const wxChar * GetLeftPlugName(unsigned int aPlugIndex) { return mLeftPlugs[aPlugIndex].mLabel.c_str(); }
+	virtual unsigned int GetNbRightPlugs() { return mRightPlugs.size(); }
+	virtual unsigned int GetNbLeftPlugs() { return mLeftPlugs.size(); }
+	virtual const wxChar * GetRightPlugName(unsigned int aPlugIndex) { return mRightPlugs[aPlugIndex].mLabel.c_str(); }
+	virtual const wxChar * GetLeftPlugName(unsigned int aPlugIndex) { return mLeftPlugs[aPlugIndex].mLabel.c_str(); }
 
 	virtual void LoseFocus() {}
 	virtual bool OnAddNewConnection(wxGraphNode *pOther)
 	{
 		return false;
 	}
-	virtual GraphNodeType GetType()
+	virtual GraphNodeType GetType() = 0;
+
+	virtual TiXmlNode* CreateLegacyXmlNodeWithChildren();
+	virtual TiXmlNode* CreateXmlNodeWithChildren();
+	virtual void ParseXmlElement(TiXmlElement *aXmlElement);
+
+	virtual void AddThumbnail(unsigned int sizeX, unsigned int sizeY);
+
+	wxPoint GetPlugPointByName(const wxString &name);
+	wxPoint GetPlugPointIndex(unsigned int side, unsigned int index);
+	void SetSelected(bool bSel) { mbSelected = bSel; }
+	bool GetAnchor(wxPoint pos, int & aSide, int & aNumber, int &MaxCon);
+
+	void SetScript(const char *script)
 	{
-		return GNT_DEFAULT;
+		mScript = wxString::FromUTF8(script);
 	}
-
-	virtual wxString BuildGraphString();
-    virtual void AddThumbnail(unsigned int sizeX, unsigned int sizeY);
-
-    wxPoint GetPlugPointByName(const wxString &name);
-    wxPoint GetPlugPointIndex(unsigned int side, unsigned int index);
-    void SetSelected(bool bSel) { mbSelected = bSel; }
-    bool GetAnchor(wxPoint pos, int & aSide, int & aNumber, int &MaxCon);
-
-    void SetScript(const char *script)
-    {
-        mScript = wxString::FromUTF8(script);
-    }
-    void SetFinalNode();
+	void SetFinalNode();
 
 	virtual int GetAnchorIndexByName(const wxChar *szName) { return 0; }
 	virtual void GetAllCodeConnections(std::map<wxString, std::vector<wxString> > & aCon) {}
@@ -122,42 +125,44 @@ public:
 
 
 protected:
-    DECLARE_EVENT_TABLE();
-    virtual void OnPaint(wxPaintEvent& event);
-    void OnLButtonDown(wxMouseEvent& event);
-    void OnLButtonUp(wxMouseEvent& event);
-    void OnMouseMotion(wxMouseEvent& event);
-    void OnSize(wxSizeEvent& event);
-    void OnEraseBack(wxEraseEvent& event);
+	DECLARE_EVENT_TABLE()
 
-    wxString mHeader;
+	virtual void OnPaint(wxPaintEvent& event);
+	void OnLButtonDown(wxMouseEvent& event);
+	void OnLButtonUp(wxMouseEvent& event);
+	void OnMouseMotion(wxMouseEvent& event);
+	void OnSize(wxSizeEvent& event);
+	void OnEraseBack(wxEraseEvent& event);
 
-    typedef struct NodePlug
-    {
-        NodePlug(const wxString &aLabel, int aConnectionPossibility)
-        {
-            mLabel = aLabel;
-            mConnectionPossibility = aConnectionPossibility;
-        }
+	wxString mHeader;
 
-        wxString mLabel;
-        int mConnectionPossibility; //  0=infinite 1 = only one
-    } NodePlug;
+	typedef struct NodePlug
+	{
+		NodePlug(const wxString &aLabel, int aConnectionPossibility)
+		{
+			mLabel = aLabel;
+			mConnectionPossibility = aConnectionPossibility;
+		}
 
-    std::vector<NodePlug> mRightPlugs, mLeftPlugs;
-    wxSize mThumbSize;
-    bool mbHasTumbnail;
+		wxString mLabel;
+		int mConnectionPossibility; //  0=infinite 1 = only one
+	} NodePlug;
 
-    bool mbMoving;
-    wxPoint mSvgPtr;
-    wxBitmap mMemBmp;
-    wxMemoryDC memDC;
-    bool mbSelected;
+	std::vector<NodePlug> mRightPlugs;
+	std::vector<NodePlug> mLeftPlugs;
+	wxSize mThumbSize;
+	bool mbHasTumbnail;
 
-    wxGraphContainer *mParent;
-    bool mbCreatingNewConnection;
+	bool mbMoving;
+	wxPoint mSvgPtr;
+	wxBitmap mMemBmp;
+	wxMemoryDC memDC;
+	bool mbSelected;
 
-    wxString mScript;
+	wxGraphContainer *mParent;
+	bool mbCreatingNewConnection;
+
+	wxString mScript;
 
 	wxString mCode;
 	wxString mComment;

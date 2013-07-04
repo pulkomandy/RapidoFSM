@@ -27,62 +27,37 @@
 // Description :
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <sstream>
+
 #include <wx/ffile.h>
 #include <wx/tglbtn.h>
-#include <tinyxml.h>
+
+#include "tinyxml.h"
 
 #include "wxGraphContainer.h"
 #include "wxGraphNodeMessage.h"
 #include "wxGraphNodeState.h"
+#include "RapidoIO.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE(wxGraphContainer, wxNotebookPage) //wxPanel)
-EVT_PAINT(wxGraphContainer::OnPaint)
-EVT_ERASE_BACKGROUND(wxGraphContainer::OnEraseBack)
-EVT_SCROLLWIN(wxGraphContainer::OnScroll)
-EVT_SIZE(wxGraphContainer::OnSize)
-EVT_LEFT_DOWN(wxGraphContainer::OnLButtonDown) 	    //Process a wxEVT_LEFT_DOWN event. The handler of this event should normally call event.Skip() to allow the default processing to take place as otherwise the window under mouse wouldn't get the focus.
-EVT_LEFT_UP(wxGraphContainer::OnLButtonUp) 	        //Process a wxEVT_LEFT_UP event.
-EVT_MOTION(wxGraphContainer::OnMouseMotion) 	        //Process a wxEVT_MOTION event.
+	EVT_PAINT(wxGraphContainer::OnPaint)
+	EVT_ERASE_BACKGROUND(wxGraphContainer::OnEraseBack)
+	EVT_SCROLLWIN(wxGraphContainer::OnScroll)
+	EVT_SIZE(wxGraphContainer::OnSize)
+	EVT_LEFT_DOWN(wxGraphContainer::OnLButtonDown)      //Process a wxEVT_LEFT_DOWN event. The handler of this event should normally call event.Skip() to allow the default processing to take place as otherwise the window under mouse wouldn't get the focus.
+	EVT_LEFT_UP(wxGraphContainer::OnLButtonUp)          //Process a wxEVT_LEFT_UP event.
+	EVT_MOTION(wxGraphContainer::OnMouseMotion)         //Process a wxEVT_MOTION event.
 END_EVENT_TABLE()
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-wxString CodeToXML(const wxString & str)
-{
-	wxString res(str);
-
-	res.Replace(wxT("&"), wxT("&amp"));
-	res.Replace(wxT("<"), wxT("&lt;"));
-	res.Replace(wxT(">"), wxT("&gt;"));
-	res.Replace(wxT("\""), wxT("&quot;"));
-	res.Replace(wxT("\'"), wxT("&aquot"));
-
-	return res;
-}
-
-wxString XMLToCode(const wxString & str)
-{
-	wxString res(str);
-
-	res.Replace(wxT("&amp"), wxT("&"));
-	res.Replace(wxT("&lt;"), wxT("<"));
-	res.Replace(wxT("&gt;"), wxT(">"));
-	res.Replace(wxT("&quot;"), wxT("\""));
-	res.Replace(wxT("&aquot"), wxT("\'"));
-
-	return res;
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 wxGraphContainer::wxGraphContainer(wxWindow* parent) :
 	wxNotebookPage(parent, -1)
 	, mGraphName(_("Unnamed"))
-	, mOutputFileName(wxT("res.h"))
 	, mbMoving(false)
+	, mOutputFileName(wxT("res.h"))
 	, mbCreatingNewConnection(false)
 	, mbRaknetMessage(true)
 	, mbTickHasTime(true)
@@ -745,141 +720,299 @@ wxGraphNode *wxGraphContainer::AddStateNode()
     return nGN;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-wxString wxGraphContainer::BuildGraphString()
+TiXmlNode* wxGraphContainer::CreateLegacyXmlNodeWithChildren()
 {
-	wxString res = wxT("<GraphContainer ");
+	TiXmlElement* currentXmlElement = new TiXmlElement("GraphContainer");
 
-	res += wxT("GraphName=\"");
-	res += mGraphName;
-	res += wxT("\"\n StateEnumBase=\"");
-	res += mStateEnumBase;
-	res += wxT("\"\n MessageEnumBase=\"");
-	res += mMessageEnumBase;
-	res += wxT("\"\n InitialState=\"");
+	// Add attributes
+	currentXmlElement->SetAttribute("GraphName", mGraphName.ToUTF8());
+	currentXmlElement->SetAttribute("StateEnumBase", mStateEnumBase.ToUTF8());
+	currentXmlElement->SetAttribute("MessageEnumBase", mMessageEnumBase.ToUTF8());
+	currentXmlElement->SetAttribute("InitialState", wxString::Format(wxT("%u"), mInitialState).ToUTF8());
+	currentXmlElement->SetAttribute("RaknetMessage", mbRaknetMessage);
+	currentXmlElement->SetAttribute("TickHasTime", mbTickHasTime);
+	currentXmlElement->SetAttribute("Output", mOutputFileName.ToUTF8());
+	currentXmlElement->SetAttribute("includes", mIncludes.ToUTF8());
+	currentXmlElement->SetAttribute("membervariables", mMemberVariables.ToUTF8());
+	currentXmlElement->SetAttribute("memberinit", mMembersInit.ToUTF8());
 
-	res += wxString::Format(wxT("%u"), mInitialState);
-	res += wxT("\"\n RaknetMessage=\"");
-	res += mbRaknetMessage ? wxT("1") : wxT("0");
-	res += wxT("\"\n TickHasTime=\"");
-	res += mbTickHasTime ? wxT("1") : wxT("0");
-	res += wxT("\"\n Output=\"");
-	res += mOutputFileName.c_str();
-	res += wxT("\"\n includes=\"");
-	res += CodeToXML(*GetIncludes());
-	res += wxT("\"\n membervariables=\"");
-	res += CodeToXML(*GetMemberVariables());
-	res += wxT("\"\n memberinit=\"");
-	res += CodeToXML(*GetMembersInit());
-	res += wxT("\" >\n");
-
-	std::vector<wxGraphNode*>::iterator iter = mNodes.begin();
-	for (;iter != mNodes.end(); ++iter)
+	// Add children
+	for (std::vector<wxGraphNode*>::iterator it = mNodes.begin(), end = mNodes.end() ; it != end ; ++it)
 	{
-		res += wxT("<GraphNode Type=\"");
-		switch ((*iter)->GetType())
-		{
-			case GNT_STATE:
-				res += wxT("STATE");
-				break;
-			case GNT_MESSAGE:
-				res += wxT("MESSAGE");
-				break;
-			case GNT_DEFAULT:
-				break;
-		}
-		res += wxT("\" >\n");
-		res += (*iter)->BuildGraphString();
-		res += wxT("</GraphNode>\n");
-	}
-	// connections
-
-	for (unsigned int i=0;i<mConnections.size();i++)
-	{
-		const NodeConnection& nc = mConnections[i];
-		wxString res2;
-		res2.Printf(_("<Connection nodesrc=\"%d\" nodedst=\"%d\" nodesrcanchor=\"%d\" nodedstanchor=\"%d\" sidesrc=\"%d\" sidedst=\"%d\" />\n"),
-		            nc.NodeSrc, nc.NodeDst, nc.NodeSrcAnchor, nc.NodeDstAnchor, nc.SideSrc, nc.SideDst);
-		res += res2;
+		currentXmlElement->LinkEndChild((*it)->CreateLegacyXmlNodeWithChildren());
 	}
 
-	// end
-	res += wxT("</GraphContainer>");
+	// Add connections
+	for (std::vector<NodeConnection>::iterator it = mConnections.begin(), end = mConnections.end() ; it != end ; ++it)
+	{
+		TiXmlElement* connectionXmlElement = new TiXmlElement("Connection");
 
-	return res;
+		connectionXmlElement->SetAttribute("nodesrc", wxString::Format(wxT("%u"), it->NodeSrc).ToUTF8());
+		connectionXmlElement->SetAttribute("nodedst", wxString::Format(wxT("%u"), it->NodeDst).ToUTF8());
+		connectionXmlElement->SetAttribute("nodesrcanchor", wxString::Format(wxT("%u"), it->NodeSrcAnchor).ToUTF8());
+		connectionXmlElement->SetAttribute("nodedstanchor", wxString::Format(wxT("%u"), it->NodeDstAnchor).ToUTF8());
+		connectionXmlElement->SetAttribute("sidesrc", wxString::Format(wxT("%u"), it->SideSrc).ToUTF8());
+		connectionXmlElement->SetAttribute("sidedst", wxString::Format(wxT("%u"), it->SideDst).ToUTF8());
+
+		currentXmlElement->LinkEndChild(connectionXmlElement);
+	}
+
+	return currentXmlElement;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void wxGraphContainer::ParseGraphString(TiXmlElement* pRootElem)//const wxString &aStr)
+////////////////////////////////////////////////////////////////////////////////
+
+TiXmlNode* wxGraphContainer::CreateXmlNodeWithChildren()
 {
-	/*
-	TiXmlDocument pXmlDoc;
-	if (!pXmlDoc.Parse(aStr.c_str()))
+	TiXmlElement* currentXmlElement = new TiXmlElement("finiteStateMachine");
+
+	// Add attributes
+	currentXmlElement->SetAttribute("name", mGraphName.ToUTF8());
+	currentXmlElement->SetAttribute("stateEnumBase", mStateEnumBase.ToUTF8());
+	currentXmlElement->SetAttribute("messageEnumBase", mMessageEnumBase.ToUTF8());
+	currentXmlElement->SetAttribute("initialState", wxString::Format(wxT("%u"), mInitialState).ToUTF8());
+	currentXmlElement->SetAttribute("TickHasTime", mbTickHasTime);
+	currentXmlElement->SetAttribute("hasRaknetMessage", mbRaknetMessage);
+	currentXmlElement->SetAttribute("outputFileName", mOutputFileName.ToUTF8());
+
+	// Add includes
+	if (!GetIncludes()->IsEmpty())
 	{
-		//delete [] xmlbuf;
-        //ERR("Couldn't parse Collada XML file '%s'!\r\n",mfn.c_str());
-        return ;
+		TiXmlElement* codeXmlElement = new TiXmlElement("includes");
+		TiXmlText* codeXmlText = new TiXmlText(mIncludes.ToUTF8());
+		codeXmlText->SetCDATA(true);
+		codeXmlElement->LinkEndChild(codeXmlText);
+
+		currentXmlElement->LinkEndChild(codeXmlElement);
 	}
 
-    TiXmlElement* pRootElem = pXmlDoc.RootElement();
-*/
-	if (pRootElem->Attribute("includes"))
-		*GetIncludes() = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("includes")));
+	// Add variables
+	if (!GetMemberVariables()->IsEmpty())
+	{
+		TiXmlElement* codeXmlElement = new TiXmlElement("variables");
+		TiXmlText* codeXmlText = new TiXmlText(mMemberVariables.ToUTF8());
+		codeXmlText->SetCDATA(true);
+		codeXmlElement->LinkEndChild(codeXmlText);
+
+		currentXmlElement->LinkEndChild(codeXmlElement);
+	}
+
+	// Add initializations
+	if (!GetMembersInit()->IsEmpty())
+	{
+		TiXmlElement* codeXmlElement = new TiXmlElement("initializations");
+		TiXmlText* codeXmlText = new TiXmlText(mMembersInit.ToUTF8());
+		codeXmlText->SetCDATA(true);
+		codeXmlElement->LinkEndChild(codeXmlText);
+
+		currentXmlElement->LinkEndChild(codeXmlElement);
+	}
+
+	// Add children
+	for (std::vector<wxGraphNode*>::iterator it = mNodes.begin(), end = mNodes.end() ; it != end ; ++it)
+	{
+		currentXmlElement->LinkEndChild((*it)->CreateXmlNodeWithChildren());
+	}
+
+	// Add connections
+	for (std::vector<NodeConnection>::iterator it = mConnections.begin(), end = mConnections.end() ; it != end ; ++it)
+	{
+		TiXmlElement* connectionXmlElement = new TiXmlElement("connection");
+
+		connectionXmlElement->SetAttribute("nodeSrc", wxString::Format(wxT("%u"), it->NodeSrc).ToUTF8());
+		connectionXmlElement->SetAttribute("nodeDst", wxString::Format(wxT("%u"), it->NodeDst).ToUTF8());
+		connectionXmlElement->SetAttribute("nodeSrcAnchor", wxString::Format(wxT("%u"), it->NodeSrcAnchor).ToUTF8());
+		connectionXmlElement->SetAttribute("nodeDstAnchor", wxString::Format(wxT("%u"), it->NodeDstAnchor).ToUTF8());
+		connectionXmlElement->SetAttribute("sideSrc", wxString::Format(wxT("%u"), it->SideSrc).ToUTF8());
+		connectionXmlElement->SetAttribute("sideDst", wxString::Format(wxT("%u"), it->SideDst).ToUTF8());
+
+		currentXmlElement->LinkEndChild(connectionXmlElement);
+	}
+
+	return currentXmlElement;
+}
+
+void wxGraphContainer::ParseXmlElement(TiXmlElement *aRootElement)
+{
+	TiXmlHandle elementHandle(aRootElement);
+
+
+	// Read attribute ----
+	if (aRootElement->Attribute("name"))
+		mGraphName = wxString::FromUTF8(aRootElement->Attribute("name"));
+	else
+		mGraphName = wxT("");
+
+	if (aRootElement->Attribute("stateEnumBase"))
+		mStateEnumBase = wxString::FromUTF8(aRootElement->Attribute("stateEnumBase"));
+	else
+		mStateEnumBase = wxT("");
+
+	if (aRootElement->Attribute("messageEnumBase"))
+		mMessageEnumBase = wxString::FromUTF8(aRootElement->Attribute("messageEnumBase"));
+	else
+		mMessageEnumBase = wxT("");
+
+	if (aRootElement->Attribute("initialState"))
+	{
+		std::stringstream strStream(std::string(aRootElement->Attribute("initialState")));
+		strStream >> mInitialState;
+	}
+	else
+		mInitialState = 0;
+
+	if (aRootElement->Attribute("TickHasTime"))
+		mbTickHasTime = !wxString::FromUTF8(aRootElement->Attribute("TickHasTime")).IsSameAs(wxT("0"));
+	else
+		mbTickHasTime = false;
+
+	if (aRootElement->Attribute("hasRaknetMessage"))
+		mbRaknetMessage = !wxString::FromUTF8(aRootElement->Attribute("hasRaknetMessage")).IsSameAs(wxT("0"));
+	else
+		mbRaknetMessage = false;
+
+
+	if (aRootElement->Attribute("outputFileName"))
+		mOutputFileName = wxString::FromUTF8(aRootElement->Attribute("outputFileName"));
+	else
+		mOutputFileName = wxT("res.h");
+
+	// Read includes ----
+	TiXmlText* includesText = elementHandle.FirstChild("includes").FirstChild().ToText();
+	if (includesText)
+		mIncludes = wxString::FromUTF8(includesText->Value());
+	else
+		mIncludes = wxT("");
+
+	// Read variables ----
+	TiXmlText* variablesText = elementHandle.FirstChild("variables").FirstChild().ToText();
+	if (variablesText)
+		mMemberVariables = wxString::FromUTF8(variablesText->Value());
+	else
+		mMemberVariables = wxT("");
+
+	// Read initializations ----
+	TiXmlText* initializationsText = elementHandle.FirstChild("initalizations").FirstChild().ToText();
+	if (initializationsText)
+		mMembersInit = wxString::FromUTF8(initializationsText->Value());
+	else
+		mMembersInit = wxT("");
+
+
+	// Create nodes ----
+	TiXmlElement* nodeElement = aRootElement->FirstChildElement("node");
+	while(nodeElement)
+	{
+		wxGraphNode* newNode = NULL;
+		const std::string nodeType(nodeElement->Attribute("type"));
+		if (nodeType.compare("STATE") == 0)
+			newNode = AddStateNode();
+		else
+			newNode = AddMessageNode();
+
+		newNode->ParseXmlElement(nodeElement);
+
+		nodeElement = nodeElement->NextSiblingElement("node");
+	}
+
+
+	// Create connections ----
+	TiXmlElement* connectionElement = aRootElement->FirstChildElement("connection");
+	while(connectionElement != NULL)
+	{
+		int nodeSrc = 0;
+		connectionElement->Attribute("nodeSrc", &nodeSrc);
+		int nodeDst = 0;
+		connectionElement->Attribute("nodeDst", &nodeDst);
+		int nodeSrcAnchor = 0;
+		connectionElement->Attribute("nodeSrcAnchor", &nodeSrcAnchor);
+		int nodeDstAnchor = 0;
+		connectionElement->Attribute("nodeDstAnchor", &nodeDstAnchor);
+		int sideSrc = 0;
+		connectionElement->Attribute("sideSrc", &sideSrc);
+		int sideDst = 0;
+		connectionElement->Attribute("sideDst", &sideDst);
+
+
+		NodeConnection connection(nodeSrc, nodeDst, nodeSrcAnchor, nodeDstAnchor, sideSrc, sideDst);
+		if (!ConnectionExists(connection))
+		{
+			mConnections.push_back(connection);
+
+			if  ( ( (mNodes[nodeSrc]->GetType() == GNT_STATE) && (mNodes[nodeDst]->GetType() == GNT_MESSAGE) ) ||
+				( (mNodes[nodeDst]->GetType() == GNT_STATE) && (mNodes[nodeSrc]->GetType() == GNT_MESSAGE) ) )
+			{
+				mNodes[nodeSrc]->OnAddNewConnection(mNodes[nodeDst]);
+			}
+		}
+		connectionElement = connectionElement->NextSiblingElement("connection");
+	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+void wxGraphContainer::ParseLegacyXmlElement(TiXmlElement* aRootElement)
+{
+
+	if (aRootElement->Attribute("includes"))
+		*GetIncludes() = wxString::FromUTF8(aRootElement->Attribute("includes"));
 	else
 		*GetIncludes() = wxT("");
 
 
-	if (pRootElem->Attribute("membervariables"))
-		*GetMemberVariables() = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("membervariables")));
+	if (aRootElement->Attribute("membervariables"))
+		*GetMemberVariables() = wxString::FromUTF8(aRootElement->Attribute("membervariables"));
 	else
 		*GetMemberVariables() = wxT("");
 
-	if (pRootElem->Attribute("memberinit"))
-		*GetMembersInit() = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("memberinit")));
+	if (aRootElement->Attribute("memberinit"))
+		*GetMembersInit() = wxString::FromUTF8(aRootElement->Attribute("memberinit"));
 	else
 		*GetMembersInit() = wxT("");
 
 
-	if (pRootElem->Attribute("GraphName"))
-		mGraphName = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("GraphName")));
+	if (aRootElement->Attribute("GraphName"))
+		mGraphName = wxString::FromUTF8(aRootElement->Attribute("GraphName"));
 	else
 		mGraphName = wxT("");
 
-	if (pRootElem->Attribute("StateEnumBase"))
-		mStateEnumBase = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("StateEnumBase")));
+	if (aRootElement->Attribute("StateEnumBase"))
+		mStateEnumBase = wxString::FromUTF8(aRootElement->Attribute("StateEnumBase"));
 	else
 		mStateEnumBase = wxT("");
 
-	if (pRootElem->Attribute("MessageEnumBase"))
-		mMessageEnumBase = XMLToCode(wxString::FromUTF8(pRootElem->Attribute("MessageEnumBase")));
+	if (aRootElement->Attribute("MessageEnumBase"))
+		mMessageEnumBase = wxString::FromUTF8(aRootElement->Attribute("MessageEnumBase"));
 	else
 		mMessageEnumBase = wxT("");
 
-	if (pRootElem->Attribute("RaknetMessage"))
-		mbRaknetMessage = (pRootElem->Attribute("RaknetMessage")[0]=='1');
+	if (aRootElement->Attribute("RaknetMessage"))
+		mbRaknetMessage = !wxString::FromUTF8(aRootElement->Attribute("RaknetMessage")).IsSameAs(wxT("0"));
 	else
 		mbRaknetMessage = false;
 
-	if (pRootElem->Attribute("TickHasTime"))
-		mbTickHasTime = (pRootElem->Attribute("TickHasTime")[0]=='1');
+	if (aRootElement->Attribute("TickHasTime"))
+		mbTickHasTime = !wxString::FromUTF8(aRootElement->Attribute("TickHasTime")).IsSameAs(wxT("0"));
 	else
 		mbTickHasTime = false;
 
 
-	if (pRootElem->Attribute("Output"))
-		mOutputFileName = wxString::FromUTF8(pRootElem->Attribute("Output"));
+	if (aRootElement->Attribute("Output"))
+		mOutputFileName = wxString::FromUTF8(aRootElement->Attribute("Output"));
 	else
 		mOutputFileName = _("res.h");
 
-	if (pRootElem->Attribute("InitialState"))
-		mInitialState = atoi(pRootElem->Attribute("InitialState"));
+	if (aRootElement->Attribute("InitialState"))
+		mInitialState = atoi(aRootElement->Attribute("InitialState"));
 	else
 		mInitialState = 0;
 
 	unsigned int stateCount = 0;
-	TiXmlElement* pExtraElem = pRootElem->FirstChildElement("GraphNode");
+	TiXmlElement* pExtraElem = aRootElement->FirstChildElement("GraphNode");
 	while(pExtraElem)
 	{
 		wxGraphNode*pNode;
@@ -914,7 +1047,7 @@ void wxGraphContainer::ParseGraphString(TiXmlElement* pRootElem)//const wxString
 			}
 
 			pNode->SetFunctionName(szName);
-			pNode->SetCode(XMLToCode(szCode));
+			pNode->SetCode(szCode);
 			pNode->SetComment(szComment);
 
 
@@ -922,17 +1055,17 @@ void wxGraphContainer::ParseGraphString(TiXmlElement* pRootElem)//const wxString
 			TiXmlElement* pEventElem = pExtraElem->FirstChildElement("Event");
 			while(pEventElem)
 			{
-                            const wxString szEventName = wxString::FromUTF8(pEventElem->Attribute("name"));
-                                const wxString szEventCode = wxString::FromUTF8(pEventElem->Attribute("code"));
+				const wxString szEventName = wxString::FromUTF8(pEventElem->Attribute("name"));
+				const wxString szEventCode = wxString::FromUTF8(pEventElem->Attribute("code"));
 
-                                if (szEventName.length()==0)
+				if (szEventName.length()==0)
 				{
 					*pNode->GetCode() = szEventCode;
 				}
 				else
 				{
-                                        wxString onmachin = wxString(_("On "))+szEventName;
-                                        *pNode->GetCode(onmachin.c_str()) = XMLToCode(szEventCode);
+					wxString onmachin = wxString(_("On "))+szEventName;
+					*pNode->GetCode(onmachin.c_str()) = szEventCode;
 				}
 				pEventElem = pEventElem->NextSiblingElement();
 			}
@@ -948,9 +1081,9 @@ void wxGraphContainer::ParseGraphString(TiXmlElement* pRootElem)//const wxString
 	}
 
 	// connections
-	pExtraElem = pRootElem->FirstChildElement("Connection");
-    while(pExtraElem)
-    {
+	pExtraElem = aRootElement->FirstChildElement("Connection");
+	while(pExtraElem)
+	{
 
 		int nodesrc, nodedst, nodesrcanchor, nodedstanchor, sidesrc, sidedst;
 		nodesrc = atoi(pExtraElem->Attribute("nodesrc"));
@@ -975,29 +1108,9 @@ void wxGraphContainer::ParseGraphString(TiXmlElement* pRootElem)//const wxString
 		}
 		pExtraElem = pExtraElem->NextSiblingElement("Connection");
 	}
-	//
-
 }
 
-void wxGraphContainer::ReadString(const wxString pszFileName)
-{
-	wxString res;
 
-    wxFFile fp(pszFileName, wxT("rt"));
-    if (fp.IsOpened())
-        fp.ReadAll(&res);
-
-	TiXmlDocument pXmlDoc;
-    if (!pXmlDoc.Parse(res.mb_str()))
-	{
-        return ;
-	}
-
-    TiXmlElement* pRootElem = pXmlDoc.RootElement();
-
-	ParseGraphString(pRootElem);
-
-}
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void wxGraphContainer::FillNodeList(std::vector<wxString>& mList, GraphNodeType type)

@@ -30,16 +30,17 @@
 
 #include "wxGraphNode.h"
 #include "wxGraphContainer.h"
+#include "RapidoIO.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE(wxGraphNode, wxPanel)
-EVT_PAINT(wxGraphNode::OnPaint)
-EVT_SIZE(wxGraphNode::OnSize)
-EVT_LEFT_DOWN(wxGraphNode::OnLButtonDown) 	//Process a wxEVT_LEFT_DOWN event. The handler of this event should normally call event.Skip() to allow the default processing to take place as otherwise the window under mouse wouldn't get the focus.
-EVT_LEFT_UP(wxGraphNode::OnLButtonUp) 	        //Process a wxEVT_LEFT_UP event.
-EVT_MOTION(wxGraphNode::OnMouseMotion) 	        //Process a wxEVT_MOTION event.
-EVT_ERASE_BACKGROUND(wxGraphNode::OnEraseBack)
+	EVT_PAINT(wxGraphNode::OnPaint)
+	EVT_SIZE(wxGraphNode::OnSize)
+	EVT_LEFT_DOWN(wxGraphNode::OnLButtonDown)      //Process a wxEVT_LEFT_DOWN event. The handler of this event should normally call event.Skip() to allow the default processing to take place as otherwise the window under mouse wouldn't get the focus.
+	EVT_LEFT_UP(wxGraphNode::OnLButtonUp)          //Process a wxEVT_LEFT_UP event.
+	EVT_MOTION(wxGraphNode::OnMouseMotion)         //Process a wxEVT_MOTION event.
+	EVT_ERASE_BACKGROUND(wxGraphNode::OnEraseBack)
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,12 +48,12 @@ END_EVENT_TABLE()
 wxGraphNode::wxGraphNode(wxGraphContainer * parent)
     : wxPanel((wxGraphContainer*)(parent), -1, wxDefaultPosition, wxDefaultSize, wxNO_BORDER)
 {
-    mHeader = _("Header");
-    mbHasTumbnail = false;
-    mbMoving = false;
-    mbSelected = false;
-    mParent = (wxGraphContainer*)parent;
-    mbCreatingNewConnection = false;
+	mHeader = _("Header");
+	mbHasTumbnail = false;
+	mbMoving = false;
+	mbSelected = false;
+	mParent = (wxGraphContainer*)parent;
+	mbCreatingNewConnection = false;
 
 	mTextForeground = wxColour(240,240,40);
 	mBackGround = wxColour(107,107,107);
@@ -143,8 +144,8 @@ void wxGraphNode::OnPaint(wxPaintEvent& )
     if (decalY>mMaxHeight) mMaxHeight = decalY;
 
     decalY = txtSize.y+5;
-    for (i=0;i<mLeftPlugs.size();i++)
-    {
+	for (i=0;i<mLeftPlugs.size();i++)
+	{
 		wxSize plugTxtSize;
 
 
@@ -171,12 +172,12 @@ void wxGraphNode::OnPaint(wxPaintEvent& )
 		}
 		else
 		{
-                        plugTxtSize = memDC.GetTextExtent(_("AA")) + wxSize(10,0);
+			plugTxtSize = memDC.GetTextExtent(_("AA")) + wxSize(10,0);
 		}
 
-        decalY+=20;//plugTxtSize.y+2;
+	decalY+=20;//plugTxtSize.y+2;
 
-    }
+	}
     if (decalY>mMaxHeight) mMaxHeight = decalY;
 
     if (mbHasTumbnail)
@@ -254,49 +255,45 @@ void wxGraphNode::OnLButtonDown(wxMouseEvent& event)
 
 void wxGraphNode::OnLButtonUp(wxMouseEvent& event)
 {
-    if (mbCreatingNewConnection)
-    {
-        ReleaseMouse();
-        mbCreatingNewConnection = false;
+	if (mbCreatingNewConnection)
+	{
+		ReleaseMouse();
+		mbCreatingNewConnection = false;
 
-        // get node
-        wxGraphNode *pNodeDest= mParent->GetNode(wxPoint(event.m_x, event.m_y)+GetPosition());
-        if (pNodeDest)
-        {
-            int aSide, aNumber, aMaxCon;
-            if (pNodeDest->GetAnchor(wxPoint(event.m_x, event.m_y)+GetPosition()-pNodeDest->GetPosition(), aSide, aNumber, aMaxCon))
-            {
-                if (aMaxCon ==1)
-                {
-                    mParent->RemoveConnection(pNodeDest, aSide, aNumber);
-                }
+		// get node
+		wxGraphNode *pNodeDest= mParent->GetNode(wxPoint(event.m_x, event.m_y)+GetPosition());
+		if (pNodeDest)
+		{
+			int aSide, aNumber, aMaxCon;
+			if (pNodeDest->GetAnchor(wxPoint(event.m_x, event.m_y)+GetPosition()-pNodeDest->GetPosition(), aSide, aNumber, aMaxCon))
+			{
+				if (aMaxCon ==1)
+				{
+					mParent->RemoveConnection(pNodeDest, aSide, aNumber);
+				}
 				if (pNodeDest->OnAddNewConnection(mParent->mNewConnectionSourceNode))
 					mParent->EndNewConnection(pNodeDest, aSide, aNumber);
 				else
 					mParent->CancelNewConnection();
 
 
-                return;
+				return;
 
-            }
-        }
+			}
+		}
 
+		// get node anchor
 
-        // get node anchor
+		mParent->CancelNewConnection();
 
+		return;
+	}
 
-
-        mParent->CancelNewConnection();
-
-        return;
-    }
-
-    if (mbMoving)
-    {
-        ReleaseMouse();
-        mbMoving = false;
-
-    }
+	if (mbMoving)
+	{
+		ReleaseMouse();
+		mbMoving = false;
+	}
 
 }
 
@@ -424,16 +421,16 @@ void wxGraphNode::OnEraseBack(wxEraseEvent& )
 
 bool wxGraphNode::GetAnchor(wxPoint pos, int & aSide, int & aNumber, int &MaxCon)
 {
-    wxSize txtSize; // for header
-    txtSize = memDC.GetTextExtent(mHeader) + wxSize(0,8);
-    wxRect rc = GetRect();
+	wxSize txtSize; // for header
+	txtSize = memDC.GetTextExtent(mHeader) + wxSize(0,8);
+	wxRect rc = GetRect();
 
-    int decalY = txtSize.y+5;
-    int minimalLeftWidth = 0;
-    unsigned int i;
+	int decalY = txtSize.y+5;
+	int minimalLeftWidth = 0;
+	unsigned int i;
 
-    for (i=0;i<mRightPlugs.size();i++)
-    {
+	for (i=0;i<mRightPlugs.size();i++)
+	{
 
 		if (!mRightPlugs[i].mLabel.empty())
 		{
@@ -452,14 +449,13 @@ bool wxGraphNode::GetAnchor(wxPoint pos, int & aSide, int & aNumber, int &MaxCon
 			}
 		}
 
+		decalY+=20;//plugTxtSize.y+2;
+	}
 
-        decalY+=20;//plugTxtSize.y+2;
-    }
 
-
-    decalY = txtSize.y+5;
-    for (i=0;i<mLeftPlugs.size();i++)
-    {
+	decalY = txtSize.y+5;
+	for (i=0;i<mLeftPlugs.size();i++)
+	{
 		if (!mLeftPlugs[i].mLabel.empty())
 		{
 			wxSize plugTxtSize = memDC.GetTextExtent(mLeftPlugs[i].mLabel) + wxSize(10,0);
@@ -480,12 +476,11 @@ bool wxGraphNode::GetAnchor(wxPoint pos, int & aSide, int & aNumber, int &MaxCon
 			}
 		}
 
+		decalY+=20;//plugTxtSize.y+2;
 
-        decalY+=20;//plugTxtSize.y+2;
+	}
 
-    }
-
-    return false;
+	return false;
 }
 
 
@@ -498,32 +493,89 @@ void wxGraphNode::SetFinalNode()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-wxString CodeToXML(const wxString & str);
-wxString XMLToCode(const wxString & str);
 
-
-wxString wxGraphNode::BuildGraphString()
+TiXmlNode* wxGraphNode::CreateLegacyXmlNodeWithChildren()
 {
-	wxString res;
+	TiXmlElement* graphNodeXmlElement = new TiXmlElement("GraphNode");
+	graphNodeXmlElement->SetAttribute("Type", "");
 
-	res = wxT("<Node name=\"");
-	res += GetFunctionName();
-	res += wxT("\" comment=\"");
-	res += mComment;
-	res += wxT("\" code=\"");
-	res += CodeToXML(mCode);
-	res += wxT("\" ");
+	TiXmlElement* nodeXmlElement = new TiXmlElement("Node");
+	nodeXmlElement->SetAttribute("name", GetFunctionName().ToUTF8());
+	nodeXmlElement->SetAttribute("comment", mComment.ToUTF8());
+	nodeXmlElement->SetAttribute("code", mCode.ToUTF8());
 
-	wxString tmps;
-	tmps.Printf(wxT("posx=\"%d\" posy=\"%d\" width=\"%d\" height=\"%d\""),
-	            GetPosition().x,
-	            GetPosition().y,
-	            GetSize().x,
-	            GetSize().y);
+	nodeXmlElement->SetAttribute("posx",GetPosition().x);
+	nodeXmlElement->SetAttribute("posy", GetPosition().y);
+	nodeXmlElement->SetAttribute("width", GetSize().GetWidth());
+	nodeXmlElement->SetAttribute("height", GetSize().GetHeight());
 
-	res += tmps;
+	graphNodeXmlElement->LinkEndChild(nodeXmlElement);
 
-	res += wxT(" />\n");
+	return graphNodeXmlElement;
+}
 
-	return res;
+
+TiXmlNode* wxGraphNode::CreateXmlNodeWithChildren()
+{
+	TiXmlElement* nodeXmlElement = new TiXmlElement("node");
+
+	// Add attributes
+	nodeXmlElement->SetAttribute("name", GetFunctionName().ToUTF8());
+	nodeXmlElement->SetAttribute("type", "");
+
+	TiXmlElement* viewXmlElement = new TiXmlElement("view");
+	viewXmlElement->SetAttribute("posX",GetPosition().x);
+	viewXmlElement->SetAttribute("posY", GetPosition().y);
+	viewXmlElement->SetAttribute("width", GetSize().GetWidth());
+	viewXmlElement->SetAttribute("height", GetSize().GetHeight());
+
+	nodeXmlElement->LinkEndChild(viewXmlElement);
+
+	if (!mComment.IsEmpty())
+	{
+		TiXmlElement* commentXmlElement = new TiXmlElement("comment");
+		TiXmlText* commentXmlText = new TiXmlText(mComment.ToUTF8());
+		commentXmlText->SetCDATA(true);
+		commentXmlElement->LinkEndChild(commentXmlText);
+
+		nodeXmlElement->LinkEndChild(commentXmlElement);
+	}
+
+	if (!mCode.IsEmpty())
+	{
+		TiXmlElement* codeXmlElement = new TiXmlElement("code");
+		TiXmlText* codeXmlText = new TiXmlText(mCode.ToUTF8());
+		codeXmlText->SetCDATA(true);
+		codeXmlElement->LinkEndChild(codeXmlText);
+
+		nodeXmlElement->LinkEndChild(codeXmlElement);
+	}
+
+	return nodeXmlElement;
+}
+
+
+void wxGraphNode::ParseXmlElement(TiXmlElement *aXmlElement)
+{
+	if (aXmlElement == NULL)
+		return;
+
+	TiXmlHandle elementHandle(aXmlElement);
+
+	// Read attributes
+	mHeader = wxString::FromUTF8(aXmlElement->Attribute("name"));
+
+	// Read comments
+	TiXmlText* commentXmlText = elementHandle.FirstChildElement("comment").FirstChild().ToText();
+	if (commentXmlText)
+		mComment = wxString::FromUTF8(commentXmlText->Value());
+	else
+		mComment = wxT("");
+
+	// Read code
+	TiXmlText* codeXmlText = elementHandle.FirstChildElement("code").FirstChild().ToText();
+	if (codeXmlText)
+		mCode = wxString::FromUTF8(codeXmlText->Value());
+	else
+		mCode = wxT("");
 }

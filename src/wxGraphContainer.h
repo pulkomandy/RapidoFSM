@@ -42,6 +42,8 @@
 #include <wx/colordlg.h>
 #include <wx/wxhtml.h>
 
+#include <tinyxml.h>
+
 #include "wxGraphNode.h"
 class TiXmlElement;
 
@@ -65,13 +67,6 @@ public:
 	}
 
 	wxGraphNode *GetSelectedNode() const { return mSelectedNode; }
-
-    wxGraphNode *AddNode()
-    {
-        wxGraphNode *nGN = new wxGraphNode(this);
-        mNodes.push_back(nGN);
-        return nGN;
-    }
 
     wxGraphNode *AddMessageNode();
 	wxGraphNode *AddStateNode();
@@ -109,27 +104,29 @@ public:
 #endif
 
 
-    unsigned int GetPatternCount() { return mPatterns.size(); }
-    const char * GetPatternName(unsigned int idx) { return mPatterns[idx].mPatternName; }
-    const char * GetPatternScriptFunction(unsigned int idx) { return mPatterns[idx].mCreationScriptFunction; }
+	unsigned int GetPatternCount() { return mPatterns.size(); }
+	const char * GetPatternName(unsigned int idx) { return mPatterns[idx].mPatternName; }
+	const char * GetPatternScriptFunction(unsigned int idx) { return mPatterns[idx].mCreationScriptFunction; }
 
-	wxString BuildGraphString();
-	void ReadString(const wxString pszFileName);
+	TiXmlNode* CreateLegacyXmlNodeWithChildren();
+	TiXmlNode* CreateXmlNodeWithChildren();
+	void ParseLegacyXmlElement(TiXmlElement* aRootElement);
+	void ParseXmlElement(TiXmlElement *aRootElement);
 
 	// global stuff
 	wxString *GetIncludes() { return &mIncludes; }
 	wxString *GetMemberVariables() { return &mMemberVariables; }
 	wxString *GetMembersInit() { return &mMembersInit; }
 
-        int GetNodeIndexByName(const wxChar *szName);
+	int GetNodeIndexByName(const wxChar *szName);
 	int GetNodeIndex(wxGraphNode *pNode);
 
 	void RemoveAllOutgoingConnectionFor(wxGraphNode *pNode);
 	void RemoveAllIncomingConnectionFor(wxGraphNode *pNode);
 
-    void AddConnection(unsigned int aNodeSrc, unsigned int aNodeDst,
-            unsigned int aNodeSrcAnchor, unsigned int aNodeDstAnchor,
-            unsigned int aSideSrc, unsigned int aSideDst);
+	void AddConnection(unsigned int aNodeSrc, unsigned int aNodeDst,
+	                   unsigned int aNodeSrcAnchor, unsigned int aNodeDstAnchor,
+	                   unsigned int aSideSrc, unsigned int aSideDst);
 
 	void RebuildConnectionsFor(wxGraphNode *pNode);
 private:
@@ -219,19 +216,21 @@ private:
     std::vector<Pattern> mPatterns;
     void AddNodePattern(const char *szPatternName, const char *szCreationScriptFunction);
 
+	wxString mGraphName;
+
 public:
 	wxGraphNode *mNewConnectionSourceNode;
-	void ParseGraphString(TiXmlElement* pRootElem);//const wxString &aStr);
 
-/*
-	const wxString& GetGraphName() { return mGraphName; }
-	void SetGraphName(const wxString& gname) { mGraphName = gname; }
-*/
-	wxString mGraphName;
-        wxString mOutputFileName;
+	const wxString& GetGraphName() const { return mGraphName; }
+	void SetGraphName(const wxString& aName) { mGraphName = aName; }
 
-        wxString mStateEnumBase, mMessageEnumBase;
-	bool mbRaknetMessage, mbTickHasTime;
+	wxString mOutputFileName;
+	const wxString& GetOutputFileName() const { return mOutputFileName; }
+
+	wxString mStateEnumBase;
+	wxString mMessageEnumBase;
+	bool mbRaknetMessage;
+	bool mbTickHasTime;
 
 	virtual void ChangeMessageName(const wxString& szPrevious, const wxChar *szNew)
 	{
@@ -240,9 +239,10 @@ public:
 			mNodes[i]->ChangeMessageName(szPrevious, szNew);
 		}
 	}
-        virtual void MessageHasBeenRemoved(const wxChar *szMessageName)
+
+	virtual void MessageHasBeenRemoved(const wxChar *szMessageName)
 	{
-                for (unsigned int i=0;i<mNodes.size();i++)
+		for (unsigned int i=0;i<mNodes.size();i++)
 		{
 			mNodes[i]->MessageHasBeenRemoved(szMessageName);
 		}
