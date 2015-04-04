@@ -1,0 +1,4 @@
+[submodule "wxFoldbar"]
+	path = wxFoldbar
+	url = https://github.com/pulkomandy/wxFoldbar
+	branch = master

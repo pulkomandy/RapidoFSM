@@ -14,7 +14,7 @@ const std::string RapidoIO::ROOTNODE_VALUE = "RapidoFSM_storage";
 
 std::vector<wxGraphContainer*> RapidoIO::LoadStateMachinesFromFile(wxWindow* aParent, const wxString& aFileName)
 {
-	TiXmlDocument xmlDocument(aFileName.fn_str());
+	TiXmlDocument xmlDocument(aFileName.c_str());
 	std::vector<wxGraphContainer*> stateMachineList;
 
 	if (!xmlDocument.LoadFile()) {
@@ -77,7 +77,7 @@ std::vector<wxGraphContainer*> RapidoIO::CreateStateMachinesFromXmlDocument(wxWi
 
 void RapidoIO::SaveStateMachinesToFile(std::vector<wxGraphContainer*> aList, const wxString& aFileName, bool use_legacyFileFormat)
 {
-	TiXmlDocument xmlDocument(aFileName.fn_str());
+	TiXmlDocument xmlDocument(aFileName.c_str());
 
 	if (use_legacyFileFormat) {
 
@@ -86,7 +86,7 @@ void RapidoIO::SaveStateMachinesToFile(std::vector<wxGraphContainer*> aList, con
 
 	} else {
 
-		TiXmlDocument xmlDocument(aFileName.fn_str());
+		TiXmlDocument xmlDocument(aFileName.c_str());
 
 		xmlDocument.InsertEndChild(TiXmlDeclaration("1.0", "UTF-8", "yes"));
 
