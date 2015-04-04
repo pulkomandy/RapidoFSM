@@ -669,10 +669,8 @@ void wxGraphContainer::DumpConnections()
     for (std::vector<NodeConnection>::iterator iter = mConnections.begin();iter != mConnections.end(); ++iter)
     {
         NodeConnection& con = (*iter);
-        char tmps[512];
-        sprintf(tmps,"%d,%d,%d,%d,%d,%d\n",con.NodeSrc, con.NodeDst, con.NodeSrcAnchor, con.NodeDstAnchor,
+        wxLogDebug("%d,%d,%d,%d,%d,%d\n",con.NodeSrc, con.NodeDst, con.NodeSrcAnchor, con.NodeDstAnchor,
             con.SideSrc, con.SideDst);
-        OutputDebugString(tmps);
     }
 }
 #endif
