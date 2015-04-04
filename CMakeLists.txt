@@ -10,7 +10,7 @@ include_directories("$(PROJECT_SOURCE_DIR)/wxFoldbar/include")
 
 add_definitions(-DTINYXML_USE_STL)
 
-set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${RapidoFSM_BINARY_DIR}/bin )
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${RapidoFSM_SOURCE_DIR}/dist )
 
 add_subdirectory(tinyxml)
 add_subdirectory(wxFoldbar)
@@ -36,4 +36,3 @@ target_link_libraries(rapido
 	tinyXML
 	wxFoldbar
 )
-
